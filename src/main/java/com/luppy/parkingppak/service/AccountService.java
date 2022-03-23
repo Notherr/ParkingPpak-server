@@ -3,7 +3,7 @@ package com.luppy.parkingppak.service;
 import com.luppy.parkingppak.domain.Account;
 import com.luppy.parkingppak.domain.AccountRepository;
 import com.luppy.parkingppak.domain.dto.AccountDto;
-import com.luppy.parkingppak.domain.dto.SessionRequestDto;
+import com.luppy.parkingppak.domain.dto.LoginRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,12 +19,14 @@ public class AccountService {
     private final AccountRepository accountRepository;
 
     @Transactional
-    public AccountDto createAccount(AccountDto dto) {
+    public AccountDto joinAccount(AccountDto dto) {
 
+        // 메일이 존재하면 예외처리.
         Optional<Account> expected = accountRepository.findByEmail(dto.getEmail());
 
-        if(expected.isEmpty()) return null;
+        if(expected.isPresent()) return null;
         else {
+
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(dto.getPassword());
             Account account = Account.builder()
@@ -45,8 +47,9 @@ public class AccountService {
         }
     }
 
+    /*
     @Transactional
-    public AccountDto authenticate(SessionRequestDto dto) {
+    public AccountDto login(LoginRequestDto dto) {
         Optional<Account> expected = accountRepository.findByEmail(dto.getEmail());
 
         if (expected.isEmpty()) return null;
@@ -64,6 +67,6 @@ public class AccountService {
                         .build();
             }
         }
-
     }
+     */
 }

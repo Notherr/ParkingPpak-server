@@ -3,7 +3,7 @@ package com.luppy.parkingppak.domain.dto;
 import lombok.Data;
 
 @Data
-public class SessionRequestDto {
+public class LoginRequestDto {
     private String email;
     private String password;
 }

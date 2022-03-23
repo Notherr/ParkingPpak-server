@@ -5,8 +5,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
+import java.util.Date;
 
 public class JwtUtil {
+
+    //30분.
+    private Long tokenValidTime = 30 * 60 * 1000L;
 
     public String createToken(Long id, String name) {
 
@@ -16,6 +20,8 @@ public class JwtUtil {
         String token = Jwts.builder()
                 .claim("accountId", id)
                 .claim("name", name)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + tokenValidTime))
                 .signWith(key, SignatureAlgorithm.ES256)
                 .compact();
 
