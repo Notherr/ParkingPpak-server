@@ -18,6 +18,10 @@ repositories {
 	mavenCentral()
 }
 
+bootJar {
+	mainClass = 'com.luppy.parkingppak.ParkingppakApplication'
+}
+
 dependencies {
 	implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -31,8 +35,11 @@ dependencies {
 			'io.jsonwebtoken:jjwt-jackson:0.11.2' // or 'io.jsonwebtoken:jjwt-gson:0.11.2' for gson
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
+	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
 tasks.named('test') {
