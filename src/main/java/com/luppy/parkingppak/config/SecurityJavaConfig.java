@@ -1,6 +1,7 @@
 package com.luppy.parkingppak.config;
 
 import com.luppy.parkingppak.config.jwt.JwtAuthenticationFilter;
+import com.luppy.parkingppak.config.jwt.JwtAuthorizationFilter;
 import com.luppy.parkingppak.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,7 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager()))
                 .authorizeRequests()
                 .antMatchers("/api/accounts/**").hasRole("ACCOUNT")
                 .anyRequest().permitAll();
