@@ -3,7 +3,6 @@ package com.luppy.parkingppak.service;
 import com.luppy.parkingppak.domain.Account;
 import com.luppy.parkingppak.domain.AccountRepository;
 import com.luppy.parkingppak.domain.dto.AccountDto;
-import com.luppy.parkingppak.domain.dto.LoginRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,19 +32,18 @@ public class AccountService {
                     .email(dto.getEmail())
                     .name(dto.getName())
                     .password(encodedPassword)
-                    .oilType(dto.getOilType())
-                    .card(dto.getCard())
                     .build();
 
             Account savedAccount = accountRepository.save(account);
             return AccountDto.builder()
                     .email(savedAccount.getEmail())
                     .name(savedAccount.getName())
-                    .oilType(savedAccount.getOilType())
-                    .card(savedAccount.getCard())
                     .build();
         }
     }
+
+
+
 
     /*
     @Transactional

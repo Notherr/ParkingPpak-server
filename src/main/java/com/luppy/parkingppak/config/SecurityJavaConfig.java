@@ -5,9 +5,7 @@ import com.luppy.parkingppak.config.jwt.JwtAuthorizationFilter;
 import com.luppy.parkingppak.domain.AccountRepository;
 import com.luppy.parkingppak.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -29,10 +27,10 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .headers().frameOptions().disable();
-        http
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http
+                .headers().frameOptions().disable()
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtUtil, accountRepository))
                 .authorizeRequests()
