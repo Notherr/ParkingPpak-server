@@ -1,13 +1,12 @@
 package com.luppy.parkingppak.controller;
 
 import com.luppy.parkingppak.domain.dto.AccountDto;
-import com.luppy.parkingppak.domain.dto.LoginRequestDto;
-import com.luppy.parkingppak.domain.dto.LoginResponseDto;
 import com.luppy.parkingppak.service.AccountService;
-import com.luppy.parkingppak.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,7 +27,7 @@ public class AccountController {
     @PostMapping("/accounts/cards/{email}/{card}")
     public ResponseEntity<?> registerCard(@PathVariable String email, @PathVariable String card) {
 
-        String registeredCard = accountService.registerCard(email, card);
+        Optional<String> registeredCard = accountService.registerCard(email, card);
 
         return ResponseEntity.ok().body(registeredCard);
     }
@@ -36,7 +35,7 @@ public class AccountController {
     @PostMapping("/accounts/oil-type/{email}/{oilType}")
     public ResponseEntity<?> registerOilType(@PathVariable String email, @PathVariable String oilType) {
 
-        String registeredOilType = accountService.registerOilType(email);
+        Optional<String> registeredOilType = accountService.registerOilType(email,oilType);
 
         return ResponseEntity.ok().body(registeredOilType);
     }
@@ -44,7 +43,7 @@ public class AccountController {
     @PostMapping("/accounts/navi/{email}/{navi}")
     public ResponseEntity<?> registerNavi(@PathVariable String email, @PathVariable String navi) {
 
-        String registeredNavi = accountService.registerNavi(email);
+        Optional<String> registeredNavi = accountService.registerNavi(email,navi);
 
         return ResponseEntity.ok().body(registeredNavi);
     }

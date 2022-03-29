@@ -42,6 +42,46 @@ public class AccountService {
         }
     }
 
+    @Transactional
+    public Optional<String> registerCard(String email, String card) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+
+        if(account.isEmpty()) return Optional.empty();
+        else return account
+                .map(it -> {
+                    it.setCard(card);
+                    return it;
+                })
+                .map(accountRepository::save)
+                .map(Account::getCard);
+    }
+
+    public Optional<String> registerOilType(String email, String oilType) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+
+        if(account.isEmpty()) return Optional.empty();
+        else return account
+                .map(it -> {
+                    it.setOilType(oilType);
+                    return it;
+                })
+                .map(accountRepository::save)
+                .map(Account::getOilType);
+    }
+
+    public Optional<String> registerNavi(String email, String navi) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+
+        if(account.isEmpty()) return Optional.empty();
+        else return account
+                .map(it -> {
+                    it.setNavi(navi);
+                    return it;
+                })
+                .map(accountRepository::save)
+                .map(Account::getNavi);
+    }
+
 
 
 

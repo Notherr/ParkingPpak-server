@@ -26,6 +26,7 @@ public class Account {
     private String password;
     private String oilType;
     private String card;
+    private String navi;
     private Boolean verified;
 
 }
