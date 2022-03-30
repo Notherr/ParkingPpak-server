@@ -15,7 +15,8 @@ services:
   app:
     image: 'parkingppak:latest'
     build:
-      context: ../../../
+      context: .
+      dockerfile: Dockerfile
     container_name: app
     ports:
       - "8080:8080"
