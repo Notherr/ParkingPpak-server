@@ -15,6 +15,11 @@ public class AccountController {
 
     private final AccountService accountService;
 
+    @GetMapping("/test")
+    public String test(){
+        return "test";
+    }
+
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody AccountDto dto) {
 
@@ -24,7 +29,7 @@ public class AccountController {
         else return ResponseEntity.ok().body(registeredAccount);
     }
 
-    @PostMapping("/accounts/cards/{email}/{card}")
+    @PutMapping("/accounts/cards/{email}/{card}")
     public ResponseEntity<?> registerCard(@PathVariable String email, @PathVariable String card) {
 
         Optional<String> registeredCard = accountService.registerCard(email, card);
@@ -32,7 +37,7 @@ public class AccountController {
         return ResponseEntity.ok().body(registeredCard);
     }
 
-    @PostMapping("/accounts/oil-type/{email}/{oilType}")
+    @PutMapping("/accounts/oil-type/{email}/{oilType}")
     public ResponseEntity<?> registerOilType(@PathVariable String email, @PathVariable String oilType) {
 
         Optional<String> registeredOilType = accountService.registerOilType(email,oilType);
@@ -40,7 +45,7 @@ public class AccountController {
         return ResponseEntity.ok().body(registeredOilType);
     }
 
-    @PostMapping("/accounts/navi/{email}/{navi}")
+    @PutMapping("/accounts/navi/{email}/{navi}")
     public ResponseEntity<?> registerNavi(@PathVariable String email, @PathVariable String navi) {
 
         Optional<String> registeredNavi = accountService.registerNavi(email,navi);
