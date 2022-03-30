@@ -25,16 +25,19 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors().disable()
                 .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http
                 .formLogin().disable()
                 .httpBasic().disable()
-                .headers().frameOptions().disable()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                .headers().frameOptions().disable();
+        http
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtUtil, accountRepository))
                 .authorizeRequests()
-                .antMatchers("/api/accounts/**").hasRole("ACCOUNT")
-                .anyRequest().permitAll();
+                //.antMatchers("/api/accounts/**").access("hasRole('ACCOUNT')")
+                .antMatchers("/api/accounts/**").authenticated()
+                .anyRequest().permitAll()
+                .and()
+                .formLogin();
     }
 }
