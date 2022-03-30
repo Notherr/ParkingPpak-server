@@ -52,29 +52,6 @@ public class AccountController {
 
         return ResponseEntity.ok().body(registeredNavi);
     }
-    /*
-
-    각각의 정보를 조회하는 api를 하나씩 만들어주는 것이 비효율적이라 생각이 듬.
-    로그인 시, 모든 정보를 한번에 반환해 주는 것이 좋을까 ?
-
-    @GetMapping("/accounts/cards/{email}")
-    public ResponseEntity<?> getCard(@PathVariable String email) {
-
-        String card = accountService.getCard(email);
-
-        return
-    }
-
-    @GetMapping("/accounts/oil-type/{email}")
-    public ResponseEntity<?> getOilType(@PathVariable String email) {
-        accountService.getOilType(email);
-    }
-
-    @GetMapping("/accounts/navi/{email}")
-    public ResponseEntity<?> getNavi(@PathVariable String email) {
-        accountService.getNavi(email);
-    }
-*/
 
     /*
     @PostMapping("/login")
