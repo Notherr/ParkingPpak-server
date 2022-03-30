@@ -16,6 +16,7 @@ import java.util.Optional;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
     public AccountDto joinAccount(AccountDto dto) {
@@ -25,9 +26,7 @@ public class AccountService {
 
         if(expected.isPresent()) return null;
         else {
-
-            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = passwordEncoder.encode(dto.getPassword());
+            String encodedPassword = bCryptPasswordEncoder.encode(dto.getPassword());
             Account account = Account.builder()
                     .email(dto.getEmail())
                     .name(dto.getName())
