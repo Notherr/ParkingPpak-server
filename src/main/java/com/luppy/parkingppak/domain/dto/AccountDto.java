@@ -10,7 +10,7 @@ public class AccountDto {
     private String email;
     private String name;
     private String password;
-    private String oilType;
-    private String card;
+    // private String oilType;
+    // private String card;
     private Boolean verified;
 }

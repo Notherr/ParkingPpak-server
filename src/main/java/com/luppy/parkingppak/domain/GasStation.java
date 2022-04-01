@@ -10,23 +10,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Entity
-public class Account {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class GasStation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
+    private String compName;
     private String name;
-    private String password;
-    private String oilType;
-    private String card;
-    private String navi;
-    private Boolean verified;
-
+    private String uniqueId;
+    private double xCoor;
+    private double yCoor;
 }

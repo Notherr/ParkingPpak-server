@@ -3,7 +3,6 @@ package com.luppy.parkingppak.service;
 import com.luppy.parkingppak.domain.Account;
 import com.luppy.parkingppak.domain.AccountRepository;
 import com.luppy.parkingppak.domain.dto.AccountDto;
-import com.luppy.parkingppak.domain.dto.LoginRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +16,7 @@ import java.util.Optional;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
     public AccountDto joinAccount(AccountDto dto) {
@@ -26,26 +26,63 @@ public class AccountService {
 
         if(expected.isPresent()) return null;
         else {
-
-            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = passwordEncoder.encode(dto.getPassword());
+            String encodedPassword = bCryptPasswordEncoder.encode(dto.getPassword());
             Account account = Account.builder()
                     .email(dto.getEmail())
                     .name(dto.getName())
                     .password(encodedPassword)
-                    .oilType(dto.getOilType())
-                    .card(dto.getCard())
                     .build();
 
             Account savedAccount = accountRepository.save(account);
             return AccountDto.builder()
                     .email(savedAccount.getEmail())
                     .name(savedAccount.getName())
-                    .oilType(savedAccount.getOilType())
-                    .card(savedAccount.getCard())
                     .build();
         }
     }
+
+    @Transactional
+    public Optional<String> registerCard(String email, String card) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+
+        if(account.isEmpty()) return Optional.empty();
+        else return account
+                .map(it -> {
+                    it.setCard(card);
+                    return it;
+                })
+                .map(accountRepository::save)
+                .map(Account::getCard);
+    }
+
+    public Optional<String> registerOilType(String email, String oilType) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+
+        if(account.isEmpty()) return Optional.empty();
+        else return account
+                .map(it -> {
+                    it.setOilType(oilType);
+                    return it;
+                })
+                .map(accountRepository::save)
+                .map(Account::getOilType);
+    }
+
+    public Optional<String> registerNavi(String email, String navi) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+
+        if(account.isEmpty()) return Optional.empty();
+        else return account
+                .map(it -> {
+                    it.setNavi(navi);
+                    return it;
+                })
+                .map(accountRepository::save)
+                .map(Account::getNavi);
+    }
+
+
+
 
     /*
     @Transactional
