@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: parking-ppak-deployment
+  labels:
+    app: parking-ppak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: parking-ppak
+  template:
+    metadata:
+      labels:
+        app: parking-ppak
+    spec:
+      containers:
+        - name: parking-ppak
+          image: parkingacr.azurecr.io/parkingppak:latest
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://db:5432/postgresdb"
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: datasource-credentials
+                  key: psql_user
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: datasource-credentials
+                  key: psql_password
+            - name: SPRING_JPA_DATABASE-PLATFORM
+              value: "org.hibernate.dialect.PostgreSQLDialect"
+            - name: SPRING_JPA_PROPERTIES_HIBERNATE_SHOW_SQL
+              value: "true"
+            - name: SPRINGDOC_SWAGGER-UI
+              value: "/api-docs"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: parking-ppak
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: "TCP"
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: parking-ppak
