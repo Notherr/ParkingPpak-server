@@ -1,5 +1,7 @@
 package com.luppy.parkingppak.domain;
 
+import com.luppy.parkingppak.domain.enumclass.NaviType;
+import com.luppy.parkingppak.domain.enumclass.OilType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,8 +25,10 @@ public class Account {
     private String email;
     private String name;
     private String password;
-    private String oilType;
-    private String navi;
+    @Enumerated(EnumType.STRING)
+    private OilType oilType;
+    @Enumerated(EnumType.STRING)
+    private NaviType naviType;
     private Boolean verified;
 
     @OneToOne
