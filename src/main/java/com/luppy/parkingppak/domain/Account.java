@@ -5,10 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -25,8 +24,16 @@ public class Account {
     private String name;
     private String password;
     private String oilType;
-    private String card;
     private String navi;
     private Boolean verified;
 
+    @OneToOne
+    private Card card;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
+    private List<Travel> travelList = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="account_parkinglot_list")
+    private List<ParkingLot> parkingLotList = new ArrayList<>();
 }
