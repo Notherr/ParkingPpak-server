@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum CardCompType {
+public enum CardCompName {
 
     SINHAN1("신한카드 Mr.Life"),
     SINHAN2("신한카드 Deep Dream"),

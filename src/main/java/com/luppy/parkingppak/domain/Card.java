@@ -1,6 +1,6 @@
 package com.luppy.parkingppak.domain;
 
-import com.luppy.parkingppak.domain.enumclass.CardCompType;
+import com.luppy.parkingppak.domain.enumclass.CardCompName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +20,6 @@ public class Card {
     private Long id;
     private String name;
     @Enumerated(EnumType.STRING)
-    private CardCompType compName;
+    private CardCompName compName;
     private String content;
 }
