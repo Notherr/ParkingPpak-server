@@ -2,7 +2,11 @@ package com.luppy.parkingppak.service;
 
 import com.luppy.parkingppak.domain.Account;
 import com.luppy.parkingppak.domain.AccountRepository;
+import com.luppy.parkingppak.domain.Card;
+import com.luppy.parkingppak.domain.CardRepository;
 import com.luppy.parkingppak.domain.dto.AccountDto;
+import com.luppy.parkingppak.domain.enumclass.NaviType;
+import com.luppy.parkingppak.domain.enumclass.OilType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +20,7 @@ import java.util.Optional;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final CardRepository cardRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
@@ -42,43 +47,60 @@ public class AccountService {
     }
 
     @Transactional
-    public Optional<String> registerCard(String email, String card) {
+    public Optional<Card> registerCard(String email, String card) {
         Optional<Account> account = accountRepository.findByEmail(email);
+        Card selectedCard = cardRepository.findByName(card);
 
         if(account.isEmpty()) return Optional.empty();
+        if(selectedCard == null) return Optional.empty();
         else return account
-                .map(it -> {
-                    it.setCard(card);
+                .map(it ->{
+                    it.setCard(selectedCard);
                     return it;
                 })
                 .map(accountRepository::save)
                 .map(Account::getCard);
     }
 
-    public Optional<String> registerOilType(String email, String oilType) {
+    public Optional<OilType> registerOilType(String email, String oilType) {
         Optional<Account> account = accountRepository.findByEmail(email);
 
         if(account.isEmpty()) return Optional.empty();
         else return account
                 .map(it -> {
-                    it.setOilType(oilType);
+                    switch(oilType) {
+                        case "LPG": it.setOilType(OilType.LPG);
+                        case "휘발유": it.setOilType(OilType.GASOLINE);
+                        case "경유": it.setOilType(OilType.VIA);
+                        case "고급유": it.setOilType(OilType.PREMIUM);
+                        case "전기": it.setOilType(OilType.ELECTRIC);
+                    }
+
+                    it.setOilType(OilType.LPG);
                     return it;
                 })
                 .map(accountRepository::save)
                 .map(Account::getOilType);
     }
 
-    public Optional<String> registerNavi(String email, String navi) {
+    public Optional<NaviType> registerNavi(String email, String navi) {
         Optional<Account> account = accountRepository.findByEmail(email);
 
         if(account.isEmpty()) return Optional.empty();
         else return account
                 .map(it -> {
-                    it.setNavi(navi);
+
+                    switch(navi){
+                        case "카카오내비": it.setNaviType(NaviType.KAKAONAVI);
+                        case "네이버지도": it.setNaviType(NaviType.NAVER);
+                        case "구글지도": it.setNaviType(NaviType.GOOGLE);
+                        case "카카오맵": it.setNaviType(NaviType.KAKAOMAP);
+                        case "티맵": it.setNaviType(NaviType.TMAP);
+                    }
                     return it;
                 })
                 .map(accountRepository::save)
-                .map(Account::getNavi);
+                .map(Account::getNaviType);
     }
 
 
