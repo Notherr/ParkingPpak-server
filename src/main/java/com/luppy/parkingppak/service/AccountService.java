@@ -9,7 +9,6 @@ import com.luppy.parkingppak.domain.enumclass.NaviType;
 import com.luppy.parkingppak.domain.enumclass.OilType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +61,7 @@ public class AccountService {
                 .map(Account::getCard);
     }
 
+    @Transactional
     public Optional<OilType> registerOilType(String email, String oilType) {
         Optional<Account> account = accountRepository.findByEmail(email);
 
@@ -83,6 +83,7 @@ public class AccountService {
                 .map(Account::getOilType);
     }
 
+    @Transactional
     public Optional<NaviType> registerNavi(String email, String navi) {
         Optional<Account> account = accountRepository.findByEmail(email);
 
