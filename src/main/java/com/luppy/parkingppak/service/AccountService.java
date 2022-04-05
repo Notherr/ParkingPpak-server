@@ -5,10 +5,12 @@ import com.luppy.parkingppak.domain.AccountRepository;
 import com.luppy.parkingppak.domain.Card;
 import com.luppy.parkingppak.domain.CardRepository;
 import com.luppy.parkingppak.domain.dto.AccountDto;
+import com.luppy.parkingppak.domain.dto.LoginRequestDto;
 import com.luppy.parkingppak.domain.enumclass.NaviType;
 import com.luppy.parkingppak.domain.enumclass.OilType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -107,26 +109,21 @@ public class AccountService {
 
 
 
-    /*
+
     @Transactional
     public AccountDto login(LoginRequestDto dto) {
         Optional<Account> expected = accountRepository.findByEmail(dto.getEmail());
 
         if (expected.isEmpty()) return null;
         else {
-            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-            if (!passwordEncoder.matches(dto.getPassword(), expected.get().getPassword())) return null;
+            if (!bCryptPasswordEncoder.matches(dto.getPassword(), expected.get().getPassword())) return null;
             else {
                 return AccountDto.builder()
                         .id(expected.get().getId())
                         .email(expected.get().getEmail())
                         .name(expected.get().getName())
-                        .oilType(expected.get().getOilType())
-                        .card(expected.get().getCard())
                         .build();
             }
         }
     }
-     */
 }
