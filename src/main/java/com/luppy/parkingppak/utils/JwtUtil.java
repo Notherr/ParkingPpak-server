@@ -12,8 +12,8 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    //30분.
-    private final Long tokenValidTime = 30 * 60 * 1000L;
+    //하루
+    private final Long tokenValidTime = 1000L * 60 * 60 * 24;
     private final String secret = "12345678901234567890123456789012";
 
 
