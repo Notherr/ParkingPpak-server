@@ -34,7 +34,7 @@ public class Account {
     @OneToOne
     private Card card;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account")
     private List<Travel> travelList = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
