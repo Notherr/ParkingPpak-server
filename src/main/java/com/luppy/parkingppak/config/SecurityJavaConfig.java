@@ -1,6 +1,5 @@
 package com.luppy.parkingppak.config;
 
-import com.luppy.parkingppak.config.jwt.JwtAuthenticationFilter;
 import com.luppy.parkingppak.config.jwt.JwtAuthorizationFilter;
 import com.luppy.parkingppak.domain.AccountRepository;
 import com.luppy.parkingppak.utils.JwtUtil;
@@ -31,7 +30,7 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .headers().frameOptions().disable();
         http
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil))
+                //.addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtUtil, accountRepository))
                 .authorizeRequests()
                 //.antMatchers("/api/accounts/**").access("hasRole('ACCOUNT')")

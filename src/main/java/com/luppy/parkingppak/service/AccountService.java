@@ -48,6 +48,23 @@ public class AccountService {
     }
 
     @Transactional
+    public AccountDto login(LoginRequestDto dto) {
+        Optional<Account> expected = accountRepository.findByEmail(dto.getEmail());
+
+        if (expected.isEmpty()) return null;
+        else {
+            if (!bCryptPasswordEncoder.matches(dto.getPassword(), expected.get().getPassword())) return null;
+            else {
+                return AccountDto.builder()
+                        .id(expected.get().getId())
+                        .email(expected.get().getEmail())
+                        .name(expected.get().getName())
+                        .build();
+            }
+        }
+    }
+
+    @Transactional
     public Optional<Card> registerCard(String email, String card) {
         Optional<Account> account = accountRepository.findByEmail(email);
         Card selectedCard = cardRepository.findByName(card);
@@ -104,26 +121,5 @@ public class AccountService {
                 })
                 .map(accountRepository::save)
                 .map(Account::getNaviType);
-    }
-
-
-
-
-
-    @Transactional
-    public AccountDto login(LoginRequestDto dto) {
-        Optional<Account> expected = accountRepository.findByEmail(dto.getEmail());
-
-        if (expected.isEmpty()) return null;
-        else {
-            if (!bCryptPasswordEncoder.matches(dto.getPassword(), expected.get().getPassword())) return null;
-            else {
-                return AccountDto.builder()
-                        .id(expected.get().getId())
-                        .email(expected.get().getEmail())
-                        .name(expected.get().getName())
-                        .build();
-            }
-        }
     }
 }
