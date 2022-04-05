@@ -3,13 +3,10 @@ package com.luppy.parkingppak.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
 import java.security.Key;
-import java.security.PrivateKey;
 import java.util.Date;
 
 @Component

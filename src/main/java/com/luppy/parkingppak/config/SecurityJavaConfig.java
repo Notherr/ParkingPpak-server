@@ -36,9 +36,9 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //.antMatchers("/api/accounts/**").access("hasRole('ACCOUNT')")
                 .antMatchers("/api/accounts/**").authenticated()
-                .anyRequest().permitAll()
-                .and()
-                .formLogin()
-                .loginPage("/login");
+                .anyRequest().permitAll();
+                //.and()
+                //.formLogin()
+                //.loginPage("/login");
     }
 }
