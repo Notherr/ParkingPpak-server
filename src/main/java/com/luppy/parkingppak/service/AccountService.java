@@ -8,9 +8,9 @@ import com.luppy.parkingppak.domain.dto.AccountDto;
 import com.luppy.parkingppak.domain.dto.LoginRequestDto;
 import com.luppy.parkingppak.domain.enumclass.NaviType;
 import com.luppy.parkingppak.domain.enumclass.OilType;
+import com.luppy.parkingppak.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +23,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final CardRepository cardRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Transactional
     public AccountDto joinAccount(AccountDto dto) {
@@ -65,8 +66,10 @@ public class AccountService {
     }
 
     @Transactional
-    public Optional<Card> registerCard(String email, String card) {
-        Optional<Account> account = accountRepository.findByEmail(email);
+    public Optional<Card> registerCard(String jwt, String card) {
+        String jwtToken = jwt.replace("Bearer ", "");
+
+        Optional<Account> account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken)));
         Card selectedCard = cardRepository.findByName(card);
 
         if(account.isEmpty()) return Optional.empty();
@@ -81,21 +84,32 @@ public class AccountService {
     }
 
     @Transactional
-    public Optional<OilType> registerOilType(String email, String oilType) {
-        Optional<Account> account = accountRepository.findByEmail(email);
+    public Optional<OilType> registerOilType(String jwt, String oilType) {
+
+        String jwtToken = jwt.replace("Bearer ", "");
+
+        Optional<Account> account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken)));
 
         if(account.isEmpty()) return Optional.empty();
         else return account
                 .map(it -> {
                     switch(oilType) {
-                        case "LPG": it.setOilType(OilType.LPG);
-                        case "휘발유": it.setOilType(OilType.GASOLINE);
-                        case "경유": it.setOilType(OilType.VIA);
-                        case "고급유": it.setOilType(OilType.PREMIUM);
-                        case "전기": it.setOilType(OilType.ELECTRIC);
+                        case "LPG":
+                            it.setOilType(OilType.LPG);
+                            break;
+                        case "휘발유":
+                            it.setOilType(OilType.GASOLINE);
+                            break;
+                        case "경유":
+                            it.setOilType(OilType.VIA);
+                            break;
+                        case "고급유":
+                            it.setOilType(OilType.PREMIUM);
+                            break;
+                        case "전기":
+                            it.setOilType(OilType.ELECTRIC);
+                            break;
                     }
-
-                    it.setOilType(OilType.LPG);
                     return it;
                 })
                 .map(accountRepository::save)
@@ -103,19 +117,32 @@ public class AccountService {
     }
 
     @Transactional
-    public Optional<NaviType> registerNavi(String email, String navi) {
-        Optional<Account> account = accountRepository.findByEmail(email);
+    public Optional<NaviType> registerNaviType(String jwt, String naviType) {
+
+        String jwtToken = jwt.replace("Bearer ", "");
+
+        Optional<Account> account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken)));
 
         if(account.isEmpty()) return Optional.empty();
         else return account
                 .map(it -> {
 
-                    switch(navi){
-                        case "카카오내비": it.setNaviType(NaviType.KAKAONAVI);
-                        case "네이버지도": it.setNaviType(NaviType.NAVER);
-                        case "구글지도": it.setNaviType(NaviType.GOOGLE);
-                        case "카카오맵": it.setNaviType(NaviType.KAKAOMAP);
-                        case "티맵": it.setNaviType(NaviType.TMAP);
+                    switch(naviType){
+                        case "카카오내비":
+                            it.setNaviType(NaviType.KAKAONAVI);
+                            break;
+                        case "네이버지도":
+                            it.setNaviType(NaviType.NAVER);
+                            break;
+                        case "구글지도":
+                            it.setNaviType(NaviType.GOOGLE);
+                            break;
+                        case "카카오맵":
+                            it.setNaviType(NaviType.KAKAOMAP);
+                            break;
+                        case "티맵":
+                            it.setNaviType(NaviType.TMAP);
+                            break;
                     }
                     return it;
                 })

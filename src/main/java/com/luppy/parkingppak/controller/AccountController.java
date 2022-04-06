@@ -27,9 +27,10 @@ public class AccountController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtil jwtUtil;
 
-    @GetMapping("/test")
-    public String test(){
-        return "test";
+    @GetMapping("/test/{test2}")
+    public String test(@RequestHeader("Authorization") String test, @PathVariable String test2){
+        System.out.println(test2);
+        return test;
     }
 
     @PostMapping("/join")
@@ -65,28 +66,27 @@ public class AccountController {
         }
     }
 
-    @PutMapping("/accounts/cards/{email}/{card}")
-    public ResponseEntity<?> registerCard(@PathVariable String email, @PathVariable String card) {
+    @PutMapping("/accounts/cards/{card}")
+    public ResponseEntity<?> registerCard(@RequestHeader("Authorization") String jwt, @PathVariable String card) {
 
-        Optional<Card> registeredCard = accountService.registerCard(email, card);
+        Optional<Card> registeredCard = accountService.registerCard(jwt, card);
 
         return ResponseEntity.ok().body(registeredCard);
     }
 
-    @PutMapping("/api/accounts/oil-type/{email}/{oilType}")
-    public ResponseEntity<?> registerOilType(@PathVariable String email, @PathVariable String oilType) {
+    @PutMapping("/accounts/oil-type/{oilType}")
+    public ResponseEntity<?> registerOilType(@RequestHeader("Authorization") String jwt, @PathVariable String oilType) {
 
-        Optional<OilType> registeredOilType = accountService.registerOilType(email,oilType);
+        Optional<OilType> registeredOilType = accountService.registerOilType(jwt, oilType);
 
         return ResponseEntity.ok().body(registeredOilType);
     }
 
-    @PutMapping("/accounts/navi/{email}/{navi}")
-    public ResponseEntity<?> registerNavi(@PathVariable String email, @PathVariable String navi) {
+    @PutMapping("/accounts/navi-type/{naviType}")
+    public ResponseEntity<?> registerNaviType(@RequestHeader("Authorization") String jwt, @PathVariable String naviType) {
 
-        Optional<NaviType> registeredNavi = accountService.registerNavi(email,navi);
+        Optional<NaviType> registeredNavi = accountService.registerNaviType(jwt ,naviType);
 
         return ResponseEntity.ok().body(registeredNavi);
     }
-
 }
