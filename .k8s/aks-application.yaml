@@ -22,13 +22,16 @@ spec:
           imagePullPolicy: Always
           env:
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:postgresql://db:5432/postgresdb"
+              valueFrom:
+                secretKeyRef:
+                  name: datasource-credentials
+                  key: psql_host
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: datasource-credentials
                   key: psql_user
-            - name: SPRING_DATASOURCE_PASSWORD
+            - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: datasource-credentials
