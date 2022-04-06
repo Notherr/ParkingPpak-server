@@ -9,12 +9,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.webjars.NotFoundException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
@@ -39,14 +41,22 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String jwt = request.getHeader("Authorization").replace("Bearer ", "");
 
         if(jwtUtil.validateToken(jwt)){
-            String accountName = jwtUtil.getAccountName(jwt);
+            String accountId = jwtUtil.getAccountId(jwt);
 
-            if (accountName != null) {
-                Account account = accountRepository.findByName(accountName);
+            if (accountId != null) {
+                Optional<Account> account = accountRepository.findById(Long.valueOf(accountId));
 
-                AccountDetails accountDetails = new AccountDetails(account);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(accountDetails, null, accountDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                if(account.isEmpty()) throw new NotFoundException("인가에 실패하였습니다.");
+                else {
+                    Account account1 = Account.builder()
+                            .id(account.get().getId())
+                            .email(account.get().getEmail())
+                            .name(account.get().getName())
+                            .build();
+                    AccountDetails accountDetails = new AccountDetails(account1);
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(accountDetails, null, accountDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
         }
         chain.doFilter(request,response);
