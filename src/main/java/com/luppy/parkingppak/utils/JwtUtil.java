@@ -24,8 +24,8 @@ public class JwtUtil {
 
         Key key = Keys.hmacShaKeyFor(secret.getBytes());
 
-        Claims claims = Jwts.claims().setSubject(name);
-        claims.put("accountId", id);
+        Claims claims = Jwts.claims().setSubject(String.valueOf(id));
+        claims.put("accountName", name);
 
         String token = Jwts.builder()
                 .setClaims(claims)
@@ -37,11 +37,12 @@ public class JwtUtil {
         return token;
     }
 
-    // 토큰에서 회원 정보 추출
-    public String getAccountName(String jwt) {
+
+    public String getAccountId(String jwt) {
         Key key = Keys.hmacShaKeyFor(secret.getBytes());
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody().getSubject();
     }
+
 
     // 토큰의 유효성 + 만료일자 확인
     public boolean validateToken(String jwt) {
