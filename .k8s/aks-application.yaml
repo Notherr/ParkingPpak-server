@@ -21,12 +21,12 @@ spec:
             - containerPort: 8080
           imagePullPolicy: Always
           env:
-            - name: SPRING_DATASOURCE_URL
+            - name: POSTGRES_HOST
               valueFrom:
                 secretKeyRef:
                   name: datasource-credentials
                   key: psql_host
-            - name: SPRING_DATASOURCE_USERNAME
+            - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
                   name: datasource-credentials
@@ -49,10 +49,8 @@ kind: Service
 metadata:
   name: parking-ppak
 spec:
-  type: ClusterIP
   ports:
     - protocol: "TCP"
       port: 8080
-      targetPort: 8080
   selector:
     app: parking-ppak
