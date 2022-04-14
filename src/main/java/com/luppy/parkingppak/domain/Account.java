@@ -1,14 +1,15 @@
 package com.luppy.parkingppak.domain;
 
+import com.luppy.parkingppak.domain.enumclass.NaviType;
+import com.luppy.parkingppak.domain.enumclass.OilType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -24,8 +25,19 @@ public class Account {
     private String email;
     private String name;
     private String password;
-    private String oilType;
-    private String card;
+    @Enumerated(EnumType.STRING)
+    private OilType oilType;
+    @Enumerated(EnumType.STRING)
+    private NaviType naviType;
     private Boolean verified;
 
+    @OneToOne
+    private Card card;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account")
+    private List<Travel> travelList = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="account_parkinglot_list")
+    private List<ParkingLot> parkingLotList = new ArrayList<>();
 }

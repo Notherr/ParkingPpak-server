@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 //UsernamePasswordAuthenticationFilter -> /login url로 username, password post 요청시 동작.
+/*
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -52,6 +53,5 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.addHeader("Authorization", "Bearer "+jwtToken);
     }
-
-
 }
+*/
