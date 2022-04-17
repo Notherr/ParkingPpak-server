@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: jenkins
-          image: parkingacr.azurecr.io/jenkins:latest
+          image: trion/jenkins-docker-client:latest
           ports:
             - name: httpport
               containerPort: 8080

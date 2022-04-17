@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: parking-ppak
-          image: parkingacr.azurecr.io/parkingppak:latest
+          image: "parkingacr.azurecr.io/parkingppak:$(VERSION)"
           ports:
             - containerPort: 8080
           imagePullPolicy: Always
