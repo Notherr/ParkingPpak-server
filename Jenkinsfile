@@ -28,7 +28,7 @@ pipeline {
                 sh 'docker build -t ${registry} .'
                 echo 'tag with git commit'
                 echo 'VERSION is ${VERSION}'
-                sh 'docker tag parkingppak:latest parking_ppak_server:${VERSION}'
+                sh 'docker tag ${registry}:latetst parking_ppak_server:${VERSION}'
                 sh 'echo $VERSION > .build_id/commit_id.log'
             }
         }
