@@ -28,7 +28,7 @@ pipeline {
                 sh 'docker build -t ${registry} .'
                 echo 'tag with git commit'
                 echo 'VERSION is ${VERSION}'
-                sh 'docker tag ${registry}:latetst parking_ppak_server:${VERSION}'
+                sh 'docker tag ${registry}:latest ${registry}:${VERSION}'
                 sh 'echo $VERSION > .build_id/commit_id.log'
             }
         }
@@ -36,7 +36,7 @@ pipeline {
         stage('Docker push'){
             steps{
                 echo 'Pushing docker image ...'
-                sh 'docker push parkingacr.azureacr.io/parkingppak:${VERSION}'
+                sh 'docker push ${registry}:${VERSION}'
             }
         }
 
