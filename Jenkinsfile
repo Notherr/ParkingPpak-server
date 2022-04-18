@@ -1,8 +1,7 @@
 pipeline {
 
     environment {
-        registry = 'hyungjungu/parking_ppak_server'
-        registryCredential = 'dockerhub'
+        VERSION = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
     }
 
     agent any
@@ -27,8 +26,8 @@ pipeline {
                 echo 'Building docker image...'
                 sh 'docker build .'
                 echo 'tag with git commit'
-                sh 'export VERSION=$(git rev-parse HEAD)'
-                sh 'docker tag parkingppak:latest parking_ppak_server:$VERSION'
+                echo 'VERSION is ${VERSION}'
+                sh 'docker tag parkingppak:latest parking_ppak_server:${VERSION}'
                 sh 'echo $VERSION > .build_id/commit_id.log'
             }
         }
@@ -36,7 +35,7 @@ pipeline {
         stage('Docker push'){
             steps{
                 echo 'Pushing docker image ...'
-                sh 'docker push parkingacr.azureacr.io/parkingppak:$(VERSION)'
+                sh 'docker push parkingacr.azureacr.io/parkingppak:${VERSION}'
             }
         }
 
