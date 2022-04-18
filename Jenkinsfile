@@ -2,6 +2,7 @@ pipeline {
 
     environment {
         VERSION = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+        registry = "parkingacr.azurecr.io/parkingppak"
     }
 
     agent any
@@ -24,7 +25,7 @@ pipeline {
         stage('Docker build'){
             steps{
                 echo 'Building docker image...'
-                sh 'docker build .'
+                sh 'docker build -t ${registry} .'
                 echo 'tag with git commit'
                 echo 'VERSION is ${VERSION}'
                 sh 'docker tag parkingppak:latest parking_ppak_server:${VERSION}'
