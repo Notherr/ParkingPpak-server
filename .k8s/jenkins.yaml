@@ -14,6 +14,9 @@ spec:
     spec:
       containers:
         - name: jenkins
+          env:
+            - name: DOCKER_HOST
+              value: "tcp://dind-daemon:2375"
           image: trion/jenkins-docker-client:latest
           ports:
             - name: httpport
@@ -21,11 +24,17 @@ spec:
             - name: jnlp-port
               containerPort: 50000
           volumeMounts:
-            - name: jenkins-vol
-              mountPath: /var/jenkins_vol
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
+            - name: docker-socket
+              mountPath: /var/run/docker.sock
+
       volumes:
-        - name: jenkins-vol
+        - name: jenkins-home
           emptyDir: {}
+        - name: docker-socket
+          hostPath:
+            path: /var/run/docker/sock
 
 ---
 apiVersion: v1
