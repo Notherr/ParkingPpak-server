@@ -30,6 +30,7 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private NaviType naviType;
     private Boolean verified;
+    private String provider;
 
     @OneToOne
     private Card card;
