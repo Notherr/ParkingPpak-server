@@ -1,5 +1,6 @@
-package com.luppy.parkingppak.config.auth;
+package com.luppy.parkingppak.config.oauth;
 
+import com.luppy.parkingppak.config.auth.AccountDetails;
 import com.luppy.parkingppak.domain.Account;
 import com.luppy.parkingppak.domain.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -26,23 +28,32 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2UserService delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
-        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
-        Account account = saveOrUpdate(attributes);
+        String provider = userRequest.getClientRegistration().getClientId();
+        String providerId = oAuth2User.getAttribute("sub");
+        String name = oAuth2User.getAttribute("name");
+        String email = oAuth2User.getAttribute("email");
 
-        httpSession.setAttribute("account", new SessionUser(account));
+        Optional<Account> account = accountRepository.findByEmail(email);
 
-        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(account.getRolekey())),
-                attributes.getAttributes(),
-                attributes.getNameAttributeKey());
-    }
+        if(account.isEmpty()){
+            //회원가입.
+            Account newAccount = Account.builder()
+                    .email(email)
+                    .name(name)
+                    .password(null)
+                    .provider(provider)
+                    .build();
+            accountRepository.save(newAccount);
 
-    private Account saveOrUpdate(OAuthAttributes attributes) {
-        Account account = accountRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
-                .orElse(attributes.toEntity());
-
-        return accountRepository.save(account);
+            return new AccountDetails(newAccount, oAuth2User.getAttributes());
+        }else {
+            Account account1 = Account.builder()
+                    .email(account.get().getEmail())
+                    .name(account.get().getName())
+                    .password(account.get().getPassword())
+                    .provider(account.get().getProvider())
+                    .build();
+            return new AccountDetails(account1, oAuth2User.getAttributes());
+        }
     }
 }

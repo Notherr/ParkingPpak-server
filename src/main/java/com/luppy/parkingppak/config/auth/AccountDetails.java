@@ -3,15 +3,23 @@ package com.luppy.parkingppak.config.auth;
 import com.luppy.parkingppak.domain.Account;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
+import java.util.Map;
 
-public class AccountDetails implements UserDetails {
+public class AccountDetails implements UserDetails, OAuth2User {
 
     private Account account;
+    private Map<String, Object> attributes;
 
     public AccountDetails(Account account) {
         this.account = account;
+    }
+
+    public AccountDetails(Account account, Map<String, Object> attributes) {
+        this.account = account;
+        this.attributes = attributes;
     }
 
     public Account getAccount() {
@@ -51,5 +59,15 @@ public class AccountDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }
