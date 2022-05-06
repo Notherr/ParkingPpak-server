@@ -1,9 +1,13 @@
 package com.luppy.parkingppak.domain.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Response<T> {
 
@@ -53,7 +57,4 @@ public class Response<T> {
                 .message("틀린 패스워드 입니다.")
                 .build();
     }
-
-
-
 }
