@@ -47,9 +47,9 @@ public class AccountController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "로그인 성공.", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))}),
-            @ApiResponse(responseCode = "4000", description = "로그인 실패. : 가입되지 않은 이메일입니다.", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))}),
-            @ApiResponse(responseCode = "4001", description = "로그인 실패. : 틀린 패스워드 입니다.", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))})
+            @ApiResponse(responseCode = "200", description = "로그인 성공."),
+            @ApiResponse(responseCode = "4000", description = "로그인 실패. : 가입되지 않은 이메일입니다."),
+            @ApiResponse(responseCode = "4001", description = "로그인 실패. : 틀린 패스워드 입니다.")
     })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto dto) {
@@ -75,7 +75,7 @@ public class AccountController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "카드등록 성공.", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))})
+            @ApiResponse(responseCode = "200", description = "카드등록 성공.")
     })
     @PutMapping("/accounts/cards/{card}")
     public ResponseEntity<?> registerCard(@RequestHeader("Authorization") String jwt, @PathVariable String card) {
@@ -86,7 +86,7 @@ public class AccountController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "유류정보등록 성공.", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))})
+            @ApiResponse(responseCode = "200", description = "유류정보등록 성공.")
     })
     @PutMapping("/accounts/oil-type/{oilType}")
     public ResponseEntity<?> registerOilType(@RequestHeader("Authorization") String jwt, @PathVariable String oilType) {
@@ -97,7 +97,7 @@ public class AccountController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "네비게이션앱정보등록 성공.", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))})
+            @ApiResponse(responseCode = "200", description = "네비게이션앱정보등록 성공.")
     })
     @PutMapping("/accounts/navi-type/{naviType}")
     public ResponseEntity<?> registerNaviType(@RequestHeader("Authorization") String jwt, @PathVariable String naviType) {
