@@ -8,8 +8,11 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 class ParkingppakApplicationTests {
 
+	/*
 	@Test
 	void contextLoads() {
 	}
+
+	 */
 
 }
