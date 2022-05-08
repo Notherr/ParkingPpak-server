@@ -11,7 +11,7 @@ public class AccountDto {
     @Schema(hidden = true)
     private Long id;
 
-    @Schema(example = "1234@google.com")
+    @Schema(example = "96x60812@gmail.com")
     private String email;
 
     @Schema(example = "1234")
