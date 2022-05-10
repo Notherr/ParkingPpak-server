@@ -28,6 +28,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - OPINET_TOKEN=F2204261
+
 
   db:
     image: 'postgres:13.1-alpine'
@@ -43,7 +45,7 @@ services:
     image: jenkins/jenkins:latest
     container_name: jenkins
     ports:
-      - "8081:8080"
+      - "8082:8080"
       - "50000:50000"
     volumes:
       - jenkins:/var/jenkins_home
