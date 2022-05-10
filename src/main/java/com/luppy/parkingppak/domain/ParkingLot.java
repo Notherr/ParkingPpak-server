@@ -1,5 +1,6 @@
 package com.luppy.parkingppak.domain;
 
+import com.luppy.parkingppak.init.data.ParkingLotData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Data
@@ -21,23 +24,60 @@ public class ParkingLot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String address;
+    // 고유 코드
+    private int parkingCode;
+    // 종류 e.g. 노외 주차장
     private String type;
-    private int basicTime;
-    private int basicCharge;
-    private int addUnitCharge;
-    private int addUnitTime;
-    //일일 주차권 적용 시간.
-    private String dayTicketTime;
-    // 일일 주차권 요금.
-    private int dayTicket;
+    // 전화 번호
+    private String phoneNumber;
+    // 유무료 구분
+    private Boolean payYN;
+    // 주중 운영 시간
+    private String weekdayBegin;
+    private String weekdayEnd;
+    // 주말 운영 시간
+    private String weekendBegin;
+    private String weekendEnd;
+    // 공휴일 운영 시간
+    private String holidayBegin;
+    private String holidayEnd;
+    // 최종 데이터 동기화 시간
+    private LocalDateTime syncTime;
+    // 기본 주차 요금
+    private int rates;
+    // 기본 주차 시간 (분 단위)
+    private int timeRates;
+    // 추가 단위 요금
+    private int addRates;
+    // 추가 단위 시간 (분 단위)
+    private int addTimeRates;
+    // 주차장 위치 좌표
     private double xCoor;
     private double yCoor;
-    private String phoneNumber;
-    private String openDay;
-    private String wkdayOperOpenHM;
-    private String wkdayOperCloseHM;
-    private String satOperOpenHM;
-    private String satOperCloseHM;
-    private String holOperOpenHM;
-    private String holOperCloseHM;
+
+    public ParkingLot parkingLotMapper(ParkingLotData.Row row) {
+        this.parkingCode = Integer.parseInt(row.getPARKING_CODE());
+        this.type = row.getPARKING_TYPE_NM();
+        this.phoneNumber = row.getTEL();
+        this.payYN = row.getPAY_YN().equals("Y");
+        this.weekdayBegin = row.getWEEKDAY_BEGIN_TIME();
+        this.weekdayEnd = row.getWEEKDAY_END_TIME();
+        this.weekendBegin = row.getWEEKEND_BEGIN_TIME();
+        this.weekendEnd = row.getWEEKEND_END_TIME();
+        this.holidayBegin = row.getHOLIDAY_BEGIN_TIME();
+        this.holidayEnd = row.getHOLIDAY_END_TIME();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.syncTime = LocalDateTime.parse(row.getSYNC_TIME(),formatter);
+
+        this.rates = (int)Float.parseFloat(row.getRATES());
+        this.timeRates = (int)Float.parseFloat(row.getTIME_RATE());
+        this.addRates = (int)Float.parseFloat(row.getADD_RATES());
+        this.addTimeRates = (int)Float.parseFloat(row.getADD_TIME_RATE());
+        this.xCoor = Double.parseDouble(row.getLNG());
+        this.yCoor = Double.parseDouble(row.getLAT());
+        return this;
+    }
+
 }
