@@ -97,23 +97,7 @@ public class AccountService {
         if(account.isEmpty()) return Optional.empty();
         else return account
                 .map(it -> {
-                    switch(oilType) {
-                        case "LPG":
-                            it.setOilType(OilType.LPG);
-                            break;
-                        case "GASOLINE":
-                            it.setOilType(OilType.GASOLINE);
-                            break;
-                        case "VIA":
-                            it.setOilType(OilType.VIA);
-                            break;
-                        case "PREMIUM":
-                            it.setOilType(OilType.PREMIUM);
-                            break;
-                        case "ELECTRIC":
-                            it.setOilType(OilType.ELECTRIC);
-                            break;
-                    }
+                    it.setOilType(OilType.valueOf(oilType));
                     return it;
                 })
                 .map(accountRepository::save)
@@ -133,24 +117,7 @@ public class AccountService {
         if(account.isEmpty()) return Optional.empty();
         else return account
                 .map(it -> {
-
-                    switch(naviType){
-                        case "KAKAONAVI":
-                            it.setNaviType(NaviType.KAKAONAVI);
-                            break;
-                        case "NAVER":
-                            it.setNaviType(NaviType.NAVER);
-                            break;
-                        case "GOOGLE":
-                            it.setNaviType(NaviType.GOOGLE);
-                            break;
-                        case "KAKAOMAP":
-                            it.setNaviType(NaviType.KAKAOMAP);
-                            break;
-                        case "TMAP":
-                            it.setNaviType(NaviType.TMAP);
-                            break;
-                    }
+                    it.setNaviType(NaviType.valueOf(naviType));
                     return it;
                 })
                 .map(accountRepository::save)
