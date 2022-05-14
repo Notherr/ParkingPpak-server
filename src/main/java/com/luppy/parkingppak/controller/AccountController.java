@@ -77,10 +77,10 @@ public class AccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "카드등록 성공.")
     })
-    @PutMapping("/accounts/cards/{card}")
-    public ResponseEntity<?> registerCard(@RequestHeader("Authorization") String jwt, @PathVariable String card) {
+    @PutMapping("/accounts/card-type/{cardType}")
+    public ResponseEntity<?> registerCard(@RequestHeader("Authorization") String jwt, @PathVariable String cardType) {
 
-        Optional<Card> registeredCard = accountService.registerCard(jwt, card);
+        Optional<Card> registeredCard = accountService.registerCard(jwt, cardType);
 
         return ResponseEntity.ok().body(registeredCard);
     }

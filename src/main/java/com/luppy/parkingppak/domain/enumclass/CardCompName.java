@@ -1,3 +1,4 @@
+
 package com.luppy.parkingppak.domain.enumclass;
 
 import lombok.AllArgsConstructor;

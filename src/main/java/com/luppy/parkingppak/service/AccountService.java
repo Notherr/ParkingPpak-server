@@ -6,6 +6,7 @@ import com.luppy.parkingppak.domain.Card;
 import com.luppy.parkingppak.domain.CardRepository;
 import com.luppy.parkingppak.domain.dto.AccountDto;
 import com.luppy.parkingppak.domain.dto.LoginRequestDto;
+import com.luppy.parkingppak.domain.enumclass.CardCompName;
 import com.luppy.parkingppak.domain.enumclass.NaviType;
 import com.luppy.parkingppak.domain.enumclass.OilType;
 import com.luppy.parkingppak.utils.JwtUtil;
@@ -66,11 +67,14 @@ public class AccountService {
     }
 
     @Transactional
-    public Optional<Card> registerCard(String jwt, String card) {
+    public Optional<Card> registerCard(String jwt, String cardType) {
         String jwtToken = jwt.replace("Bearer ", "");
 
         Optional<Account> account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken)));
-        Card selectedCard = cardRepository.findByName(card);
+        Card selectedCard = cardRepository.findByCompName(CardCompName.valueOf(cardType));
+
+        System.out.println(account);
+        System.out.println(selectedCard);
 
         if(account.isEmpty()) return Optional.empty();
         if(selectedCard == null) return Optional.empty();
