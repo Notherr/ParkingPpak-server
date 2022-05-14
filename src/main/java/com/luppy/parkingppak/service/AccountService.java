@@ -97,16 +97,16 @@ public class AccountService {
                         case "LPG":
                             it.setOilType(OilType.LPG);
                             break;
-                        case "휘발유":
+                        case "GASOLINE":
                             it.setOilType(OilType.GASOLINE);
                             break;
-                        case "경유":
+                        case "VIA":
                             it.setOilType(OilType.VIA);
                             break;
-                        case "고급유":
+                        case "PREMIUM":
                             it.setOilType(OilType.PREMIUM);
                             break;
-                        case "전기":
+                        case "ELECTRIC":
                             it.setOilType(OilType.ELECTRIC);
                             break;
                     }
@@ -123,24 +123,27 @@ public class AccountService {
 
         Optional<Account> account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken)));
 
+        System.out.println(account);
+        System.out.println(naviType);
+
         if(account.isEmpty()) return Optional.empty();
         else return account
                 .map(it -> {
 
                     switch(naviType){
-                        case "카카오내비":
+                        case "KAKAONAVI":
                             it.setNaviType(NaviType.KAKAONAVI);
                             break;
-                        case "네이버지도":
+                        case "NAVER":
                             it.setNaviType(NaviType.NAVER);
                             break;
-                        case "구글지도":
+                        case "GOOGLE":
                             it.setNaviType(NaviType.GOOGLE);
                             break;
-                        case "카카오맵":
+                        case "KAKAOMAP":
                             it.setNaviType(NaviType.KAKAOMAP);
                             break;
-                        case "티맵":
+                        case "TMAP":
                             it.setNaviType(NaviType.TMAP);
                             break;
                     }
