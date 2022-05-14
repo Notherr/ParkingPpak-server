@@ -23,7 +23,10 @@ bootJar {
 }
 
 dependencies {
-	implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
+	implementation "org.apache.mahout:mahout-hdfs:0.13.0"
+	implementation "org.apache.mahout:mahout-math:0.13.0"
+	implementation "org.apache.mahout:mahout-mr:0.13.0"
+	implementation "org.springdoc:springdoc-openapi-ui:1.6.6"
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
