@@ -16,8 +16,6 @@ public class Response<T> {
     private T data;
     private String message;
 
-    //상황에 따른 message와 statusCode를 만들어주자.
-
     public static <T> Response<T> JOIN_OK(T data){
         return (Response<T>) Response.builder()
                 .statusCode(200)

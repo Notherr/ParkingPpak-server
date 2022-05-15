@@ -6,6 +6,7 @@ import com.luppy.parkingppak.domain.Card;
 import com.luppy.parkingppak.domain.CardRepository;
 import com.luppy.parkingppak.domain.dto.AccountDto;
 import com.luppy.parkingppak.domain.dto.LoginRequestDto;
+import com.luppy.parkingppak.domain.enumclass.CardCompName;
 import com.luppy.parkingppak.domain.enumclass.NaviType;
 import com.luppy.parkingppak.domain.enumclass.OilType;
 import com.luppy.parkingppak.utils.JwtUtil;
@@ -66,11 +67,14 @@ public class AccountService {
     }
 
     @Transactional
-    public Optional<Card> registerCard(String jwt, String card) {
+    public Optional<Card> registerCard(String jwt, String cardType) {
         String jwtToken = jwt.replace("Bearer ", "");
 
         Optional<Account> account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken)));
-        Card selectedCard = cardRepository.findByName(card);
+        Card selectedCard = cardRepository.findByCompName(CardCompName.valueOf(cardType));
+
+        System.out.println(account);
+        System.out.println(selectedCard);
 
         if(account.isEmpty()) return Optional.empty();
         if(selectedCard == null) return Optional.empty();
@@ -93,23 +97,7 @@ public class AccountService {
         if(account.isEmpty()) return Optional.empty();
         else return account
                 .map(it -> {
-                    switch(oilType) {
-                        case "LPG":
-                            it.setOilType(OilType.LPG);
-                            break;
-                        case "휘발유":
-                            it.setOilType(OilType.GASOLINE);
-                            break;
-                        case "경유":
-                            it.setOilType(OilType.VIA);
-                            break;
-                        case "고급유":
-                            it.setOilType(OilType.PREMIUM);
-                            break;
-                        case "전기":
-                            it.setOilType(OilType.ELECTRIC);
-                            break;
-                    }
+                    it.setOilType(OilType.valueOf(oilType));
                     return it;
                 })
                 .map(accountRepository::save)
@@ -123,27 +111,13 @@ public class AccountService {
 
         Optional<Account> account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken)));
 
+        System.out.println(account);
+        System.out.println(naviType);
+
         if(account.isEmpty()) return Optional.empty();
         else return account
                 .map(it -> {
-
-                    switch(naviType){
-                        case "카카오내비":
-                            it.setNaviType(NaviType.KAKAONAVI);
-                            break;
-                        case "네이버지도":
-                            it.setNaviType(NaviType.NAVER);
-                            break;
-                        case "구글지도":
-                            it.setNaviType(NaviType.GOOGLE);
-                            break;
-                        case "카카오맵":
-                            it.setNaviType(NaviType.KAKAOMAP);
-                            break;
-                        case "티맵":
-                            it.setNaviType(NaviType.TMAP);
-                            break;
-                    }
+                    it.setNaviType(NaviType.valueOf(naviType));
                     return it;
                 })
                 .map(accountRepository::save)
