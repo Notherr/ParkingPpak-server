@@ -42,7 +42,7 @@ public class Response<T> {
 
     public static <T> Response<T> NOT_JOIN_ERROR(){
         return (Response<T>) Response.builder()
-                .statusCode(4000)
+                .statusCode(400)
                 .data(null)
                 .message("가입되지 않은 이메일입니다.")
                 .build();
@@ -50,7 +50,7 @@ public class Response<T> {
 
     public static <T> Response<T> PASSWORD_ERROR(){
         return (Response<T>) Response.builder()
-                .statusCode(4001)
+                .statusCode(401)
                 .data(null)
                 .message("틀린 패스워드 입니다.")
                 .build();

@@ -56,10 +56,10 @@ public class AccountController {
 
         Optional<Account> account = accountRepository.findByEmail(dto.getEmail());
 
-        if (account.isEmpty()) return ResponseEntity.status(4000).body(Response.NOT_JOIN_ERROR());
+        if (account.isEmpty()) return ResponseEntity.status(400).body(Response.NOT_JOIN_ERROR());
         else {
             if (!bCryptPasswordEncoder.matches(dto.getPassword(), account.get().getPassword())) {
-                return ResponseEntity.status(4001).body(Response.PASSWORD_ERROR());
+                return ResponseEntity.status(401).body(Response.PASSWORD_ERROR());
             }
 
             String jwtToken = "Bearer " + jwtUtil.createToken(account.get().getId(), account.get().getName());
