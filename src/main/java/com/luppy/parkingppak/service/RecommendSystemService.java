@@ -1,5 +1,7 @@
 package com.luppy.parkingppak.service;
 
+import com.luppy.parkingppak.domain.ParkingLogRepository;
+import com.luppy.parkingppak.domain.ParkingLot;
 import com.luppy.parkingppak.domain.Travel;
 import com.luppy.parkingppak.domain.TravelRepository;
 import com.luppy.parkingppak.domain.dto.RecommendedGasStationDto;
@@ -23,25 +25,34 @@ import java.util.List;
 @Service
 public class RecommendSystemService {
     private final TravelRepository travelRepository;
+    private final ParkingLogRepository parkingLogRepository;
     private final JwtUtil jwtUtil;
 
     public RecommendedParkingLotDto recommendParkingLot(String jwt){
         //추천 시스템 실행 및 결과값 반환.
-        // Step 1. jwt로 유저의 이용 내역 및 찜 목록 데이터 셋 만들기.
+        // Step 0. jwt로 유저의 이용 내역 및 찜 목록 데이터 셋 만들기(전처리).
 
         String jwtToken = jwt.replace("Bearer ", "");
         List<Travel> travelList = travelRepository.findAllByIdAndGasStation(Long.valueOf(jwtUtil.getAccountId(jwtToken)), null);
 
+        //주차장 전체 데이터로 만들어야함.
+        List<ParkingLot> parkingLotList = parkingLogRepository.findAll();
 
-        DataModel dataModel = null;
+        DataModel dataModel = (DataModel) parkingLotList;
 
-        // Step 2. 데이터셋을 추천 시시스템 모델에 넣고 결과 값 얻기.
+        // Step 1. 유사도 계산.
         ItemSimilarity itemSimilarity = new LogLikelihoodSimilarity(dataModel);
+
+        // Step 2. 추천 시스템 만들기.
         GenericItemBasedRecommender recommender = new GenericBooleanPrefItemBasedRecommender(dataModel, itemSimilarity);
 
+
+        // Step 3. 추천 받기. (itemId와 가장 유사한 것들 추천 해줌)
         Long itemId = 1L;
         try {
-            List<RecommendedItem> recommendedItems = recommender.mostSimilarItems(itemId, 10);
+            List<RecommendedItem> recommendedItems = recommender.mostSimilarItems(itemId, 2);
+            return (RecommendedParkingLotDto) recommendedItems;
+
         } catch (TasteException e) {
             e.printStackTrace();
         }
@@ -56,7 +67,7 @@ public class RecommendSystemService {
         List<Travel> travelList = travelRepository.findAllByIdAndParkingLot(Long.valueOf(jwtUtil.getAccountId(jwtToken)), null);
 
 
-        //추천 시스템 실행 및 결과값 반화.
+        //추천 시스템 실행 및 결과값 반환.
         return null;
     }
 }
