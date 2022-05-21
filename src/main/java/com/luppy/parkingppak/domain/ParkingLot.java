@@ -24,6 +24,9 @@ public class ParkingLot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 주차장 이름
+    private String parkingName;
+
     private String address;
     // 고유 코드
     private int parkingCode;
@@ -57,7 +60,9 @@ public class ParkingLot {
     private double yCoor;
 
     public ParkingLot parkingLotMapper(ParkingLotData.Row row) {
+        this.parkingName = row.getPARKING_NAME();
         this.parkingCode = Integer.parseInt(row.getPARKING_CODE());
+        this.address = row.getADDR();
         this.type = row.getPARKING_TYPE_NM();
         this.phoneNumber = row.getTEL();
         this.payYN = row.getPAY_YN().equals("Y");
