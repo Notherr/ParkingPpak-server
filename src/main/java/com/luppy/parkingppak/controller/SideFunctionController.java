@@ -21,36 +21,36 @@ public class SideFunctionController {
     private ParkingLogRepository parkingLogRepository;
     private GasStationRepository gasStationRepository;
 
-
     @PostMapping("/add-favorite")
     public ResponseEntity<?> addFavorite(@RequestBody AddFavoriteRequestDto dto){
 
         if(dto.getType().equals("parking-lot")){
 
-            Optional<Account> account = accountRepository.findById(dto.getAccountId());
-            Optional<ParkingLot> parkingLot = parkingLogRepository.findById(dto.getDataId());
+            Account account = accountRepository.findById(dto.getAccountId()).orElse(null);
+            ParkingLot parkingLot = parkingLogRepository.findById(dto.getDataId()).orElse(null);
 
 
-            if(account.isEmpty()) return ResponseEntity.badRequest().body("잘못된 계정 id 입니다.");
-            if(parkingLot.isEmpty()) return ResponseEntity.badRequest().body("잘못된 주차장 id 입니다.");
+            if(account == null) return ResponseEntity.badRequest().body("잘못된 계정 id 입니다.");
+            if(parkingLot == null) return ResponseEntity.badRequest().body("잘못된 주차장 id 입니다.");
 
-            List<ParkingLot> list = account.get().getParkingLotList();
+            List<ParkingLot> list = account.getParkingLotList();
             list.add(parkingLot);
         }else if(dto.getType().equals("gas-station")){
 
-            Optional<Account> account = accountRepository.findById(dto.getAccountId());
-            Optional<GasStation> gasStation = gasStationRepository.findById(dto.getDataId());
+            Account account = accountRepository.findById(dto.getAccountId()).orElse(null);
+            GasStation gasStation = gasStationRepository.findById(dto.getDataId()).orElse(null);
 
 
-            if(account.isEmpty()) return ResponseEntity.badRequest().body("잘못된 계정 id 입니다.");
-            if(gasStation.isEmpty()) return ResponseEntity.badRequest().body("잘못된 주유소 id 입니다.");
+            if(account == null) return ResponseEntity.badRequest().body("잘못된 계정 id 입니다.");
+            if(gasStation == null) return ResponseEntity.badRequest().body("잘못된 주유소 id 입니다.");
 
-            List<GasStation> list = account.get().getGasStationList();
+            List<GasStation> list = account.getGasStationList();
             list.add(gasStation);
 
-        }else return ResponseEntity.badRequest().body("잘못된 타입입니다.");
+        }else return ResponseEntity.badRequest().body("잘못된 데이터 타입입니다. parking-lot / gas-station .");
 
         return ResponseEntity.ok().body("정상적으로 추가 되었습니다.");
     }
 
 }
+
