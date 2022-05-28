@@ -10,18 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/side-function")
+@RequestMapping("/api/favorite-list")
 @RequiredArgsConstructor
-public class SideFunctionController {
+public class FavoriteListController {
 
     private AccountRepository accountRepository;
     private ParkingLogRepository parkingLogRepository;
     private GasStationRepository gasStationRepository;
 
-    @PostMapping("/add-favorite")
+    @PostMapping("/")
     public ResponseEntity<?> addFavorite(@RequestBody AddFavoriteRequestDto dto){
 
         if(dto.getType().equals("parking-lot")){
@@ -51,6 +50,8 @@ public class SideFunctionController {
 
         return ResponseEntity.ok().body("정상적으로 추가 되었습니다.");
     }
+
+    // 수정, 삭제, 조회
 
 }
 
