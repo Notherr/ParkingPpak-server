@@ -40,7 +40,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         String jwt = request.getHeader("Authorization").replace("Bearer ", "");
 
-        if(jwtUtil.validateToken(jwt)){
+        //if(jwtUtil.validateToken(jwt)){
             String accountId = jwtUtil.getAccountId(jwt);
 
             if (accountId != null) {
@@ -58,7 +58,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-        }
+        //}
         chain.doFilter(request,response);
     }
 }

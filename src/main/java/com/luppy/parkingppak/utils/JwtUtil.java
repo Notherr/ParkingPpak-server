@@ -30,6 +30,7 @@ public class JwtUtil {
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
+                //.setExpiration(new Date(new Date().getTime() + tokenValidTime))
                 .setExpiration(null)
                 .signWith(key)
                 .compact();
