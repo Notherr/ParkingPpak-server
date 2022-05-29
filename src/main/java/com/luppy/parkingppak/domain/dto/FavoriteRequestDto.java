@@ -5,12 +5,10 @@ import lombok.Data;
 
 @Builder
 @Data
-public class AddFavoriteRequestDto {
+public class FavoriteRequestDto {
 
     // parking-lot, gas-station
     private String type;
 
     private Long dataId;
-    private Long accountId;
-
 }
