@@ -37,13 +37,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             Map<String, Object> attributesAccount = (Map<String, Object>) oAuth2User.getAttribute("kakao_account");;
             Map<String, Object> attributesProfile = (Map<String, Object>) attributesAccount.get("profile");
             name = attributesProfile.get("nickname").toString();
-            System.out.println(name);
             email = attributesAccount.get("email").toString();
         }
 
-        Optional<Account> account = accountRepository.findByEmail(email);
+        Account account = accountRepository.findByEmail(email).orElse(null);
 
-        if(account.isEmpty()){
+        if(account == null){
             //join.
             Account newAccount = Account.builder()
                     .email(email)
@@ -56,13 +55,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             return new AccountDetails(newAccount, oAuth2User.getAttributes());
         }else {
             //update.
-            Account account1 = Account.builder()
-                    .email(account.get().getEmail())
-                    .name(account.get().getName())
-                    .password(account.get().getPassword())
-                    .provider(account.get().getProvider())
-                    .build();
-            return new AccountDetails(account1, oAuth2User.getAttributes());
+            account.setEmail(email);
+            account.setName(name);
+            account.setProvider(provider);
+            accountRepository.save(account);
+
+            return new AccountDetails(account, oAuth2User.getAttributes());
         }
     }
 }
