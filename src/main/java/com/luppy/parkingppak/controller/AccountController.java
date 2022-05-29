@@ -68,6 +68,9 @@ public class AccountController {
                     .email(account.get().getEmail())
                     .name(account.get().getName())
                     .jwt(jwtToken)
+                    .card(account.get().getCard())
+                    .oilType(account.get().getOilType())
+                    .naviType(account.get().getNaviType())
                     .build();
 
             return ResponseEntity.ok().body(Response.LOGIN_OK(loginResponseDto));
