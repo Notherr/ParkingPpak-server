@@ -10,7 +10,7 @@ public enum CardCompName {
 
     SINHAN,
     SAMSUNG,
-    HUYNDAI,
+    HYUNDAI,
     KB
     ;
 }

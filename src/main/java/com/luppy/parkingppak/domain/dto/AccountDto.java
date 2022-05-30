@@ -20,8 +20,9 @@ public class AccountDto {
     @Schema(example = "seongkyulim")
     private String name;
 
+    // private String cardType;
     // private String oilType;
-    // private String card;
+    // private String naviType;
 
     @Schema(hidden = true)
     private Boolean verified;

@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,15 +24,26 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2UserService delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-        String provider = userRequest.getClientRegistration().getClientId();
+        String provider = userRequest.getClientRegistration().getRegistrationId();
         String providerId = oAuth2User.getAttribute("sub");
-        String name = oAuth2User.getAttribute("name");
-        String email = oAuth2User.getAttribute("email");
+        String email = "";
+        String name = "";
 
-        Optional<Account> account = accountRepository.findByEmail(email);
+        if (provider.equals("google")) {
+            name = oAuth2User.getAttribute("name");
+            email = oAuth2User.getAttribute("email");
+        }else if (provider.equals("kakao")){
 
-        if(account.isEmpty()){
-            //회원가입.
+            Map<String, Object> attributesAccount = (Map<String, Object>) oAuth2User.getAttribute("kakao_account");;
+            Map<String, Object> attributesProfile = (Map<String, Object>) attributesAccount.get("profile");
+            name = attributesProfile.get("nickname").toString();
+            email = attributesAccount.get("email").toString();
+        }
+
+        Account account = accountRepository.findByEmail(email).orElse(null);
+
+        if(account == null){
+            //join.
             Account newAccount = Account.builder()
                     .email(email)
                     .name(name)
@@ -42,13 +54,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
             return new AccountDetails(newAccount, oAuth2User.getAttributes());
         }else {
-            Account account1 = Account.builder()
-                    .email(account.get().getEmail())
-                    .name(account.get().getName())
-                    .password(account.get().getPassword())
-                    .provider(account.get().getProvider())
-                    .build();
-            return new AccountDetails(account1, oAuth2User.getAttributes());
+            //update.
+            account.setEmail(email);
+            account.setName(name);
+            account.setProvider(provider);
+            accountRepository.save(account);
+
+            return new AccountDetails(account, oAuth2User.getAttributes());
         }
     }
 }
