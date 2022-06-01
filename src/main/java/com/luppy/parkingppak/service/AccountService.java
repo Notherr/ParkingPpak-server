@@ -5,6 +5,7 @@ import com.luppy.parkingppak.domain.AccountRepository;
 import com.luppy.parkingppak.domain.Card;
 import com.luppy.parkingppak.domain.CardRepository;
 import com.luppy.parkingppak.domain.dto.AccountDto;
+import com.luppy.parkingppak.domain.dto.CardDto;
 import com.luppy.parkingppak.domain.dto.LoginRequestDto;
 import com.luppy.parkingppak.domain.enumclass.CardCompName;
 import com.luppy.parkingppak.domain.enumclass.NaviType;
@@ -67,24 +68,29 @@ public class AccountService {
     }
 
     @Transactional
-    public Optional<Card> registerCard(String jwt, String cardType) {
+    public CardDto registerCard(String jwt, CardDto dto) {
         String jwtToken = jwt.replace("Bearer ", "");
 
-        Optional<Account> account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken)));
-        Card selectedCard = cardRepository.findByCompName(CardCompName.valueOf(cardType));
+        Account account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken))).orElse(null);
+        Card selectedCard = cardRepository.findByName(dto.getName());
 
-        System.out.println(account);
-        System.out.println(selectedCard);
-
-        if(account.isEmpty()) return Optional.empty();
-        if(selectedCard == null) return Optional.empty();
-        else return account
-                .map(it ->{
-                    it.setCard(selectedCard);
-                    return it;
-                })
-                .map(accountRepository::save)
-                .map(Account::getCard);
+        if(account == null) return null;
+        if(selectedCard == null) {
+            Card newCard = Card.builder()
+                    .name(dto.getName())
+                    .compName(dto.getCompName())
+                    .content(dto.getContent())
+                    .build();
+            selectedCard = cardRepository.save(newCard);
+        }
+        account.setCard(selectedCard);
+        accountRepository.save(account);
+        return CardDto.builder()
+                .id(selectedCard.getId())
+                .name(selectedCard.getName())
+                .compName(selectedCard.getCompName())
+                .content(selectedCard.getContent())
+                .build();
     }
 
     @Transactional

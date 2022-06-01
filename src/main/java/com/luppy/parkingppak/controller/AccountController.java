@@ -3,10 +3,7 @@ package com.luppy.parkingppak.controller;
 import com.luppy.parkingppak.domain.Account;
 import com.luppy.parkingppak.domain.AccountRepository;
 import com.luppy.parkingppak.domain.Card;
-import com.luppy.parkingppak.domain.dto.AccountDto;
-import com.luppy.parkingppak.domain.dto.LoginRequestDto;
-import com.luppy.parkingppak.domain.dto.LoginResponseDto;
-import com.luppy.parkingppak.domain.dto.Response;
+import com.luppy.parkingppak.domain.dto.*;
 import com.luppy.parkingppak.domain.enumclass.NaviType;
 import com.luppy.parkingppak.domain.enumclass.OilType;
 import com.luppy.parkingppak.service.AccountService;
@@ -80,11 +77,12 @@ public class AccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "카드등록 성공.")
     })
-    @PutMapping("/accounts/card-type/{cardType}")
-    public ResponseEntity<?> registerCard(@RequestHeader("Authorization") String jwt, @PathVariable String cardType) {
+    @PutMapping("/accounts/card-type")
+    public ResponseEntity<?> registerCard(@RequestHeader("Authorization") String jwt, @RequestBody CardDto cardDto) {
 
-        Optional<Card> registeredCard = accountService.registerCard(jwt, cardType);
+        CardDto registeredCard = accountService.registerCard(jwt, cardDto);
 
+        if(registeredCard == null) return ResponseEntity.badRequest().body("계정을 찾지못하여 카드가 등록되지 않았습니다.");
         return ResponseEntity.ok().body(registeredCard);
     }
 
