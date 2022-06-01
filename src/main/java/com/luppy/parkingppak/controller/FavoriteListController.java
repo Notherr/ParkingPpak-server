@@ -14,10 +14,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FavoriteListController {
 
-    private AccountRepository accountRepository;
-    private ParkingLogRepository parkingLogRepository;
-    private GasStationRepository gasStationRepository;
-    private JwtUtil jwtUtil;
+    private final AccountRepository accountRepository;
+    private final ParkingLogRepository parkingLogRepository;
+    private final GasStationRepository gasStationRepository;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/")
     public ResponseEntity<?> addFavorite(@RequestHeader("Authorization") String jwt, @RequestBody FavoriteRequestDto dto){
@@ -79,12 +79,14 @@ public class FavoriteListController {
 
         if(account!=null){
             if(dto.getType().equals("gas-station")){
-                GasStation gasStation = gasStationRepository.findById(dto.getDataId()).get();
+                GasStation gasStation = gasStationRepository.findById(dto.getDataId()).orElse(null);
+                if(gasStation == null) return ResponseEntity.badRequest().body("잘못된 주유소 id 입니다.");
                 account.getGasStationList().remove(gasStation);
                 accountRepository.save(account);
                 return ResponseEntity.ok().body("정상적으로 삭제되었습니다.");
             }else if(dto.getType().equals("parking-lot")) {
-                ParkingLot parkingLot = parkingLogRepository.findById(dto.getDataId()).get();
+                ParkingLot parkingLot = parkingLogRepository.findById(dto.getDataId()).orElse(null);
+                if(parkingLot == null) return ResponseEntity.badRequest().body("잘못된 주차장 id 입니다.");
                 account.getParkingLotList().remove(parkingLot);
                 accountRepository.save(account);
                 return ResponseEntity.ok().body("정상적으로 삭제되었습니다.");

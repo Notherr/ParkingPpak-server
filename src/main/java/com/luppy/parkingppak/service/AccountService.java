@@ -117,9 +117,6 @@ public class AccountService {
 
         Optional<Account> account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken)));
 
-        System.out.println(account);
-        System.out.println(naviType);
-
         if(account.isEmpty()) return Optional.empty();
         else return account
                 .map(it -> {
