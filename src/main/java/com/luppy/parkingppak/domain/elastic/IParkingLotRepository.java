@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface IParkingLotRepository extends ElasticsearchRepository<IParkingLot, Long> {
 
-//    List<IParkingLot> findByParkingNameContaining(String parkingName);
+    List<IParkingLot> findByParkingNameContainingIgnoreCase(String parkingName);
 }

@@ -6,8 +6,11 @@ import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @Component
 public class ParkingLotFieldSetMapper implements FieldSetMapper<ParkingLot> {
@@ -45,8 +48,10 @@ public class ParkingLotFieldSetMapper implements FieldSetMapper<ParkingLot> {
         int addTimeRates = fieldSet.readInt("add_time_rates");
         double xCoor = fieldSet.readDouble("x_coor");
         double yCoor = fieldSet.readDouble("y_coor");
+        LocalDateTime modificationDate = LocalDateTime.parse(fieldSet.readRawString("modification_date"), formatter);
 
         return new ParkingLot(id,
+                modificationDate,
                 parkingName,
                 address,
                 parkingCode,

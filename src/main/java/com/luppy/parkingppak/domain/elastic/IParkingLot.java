@@ -1,17 +1,27 @@
 package com.luppy.parkingppak.domain.elastic;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Document(indexName = "parking_lot")
 @Getter
+@AllArgsConstructor @NoArgsConstructor
 public class IParkingLot {
 
     @Id
     private Long id;
+
+    private LocalDateTime modificationDate;
 
     private String parkingName;
 

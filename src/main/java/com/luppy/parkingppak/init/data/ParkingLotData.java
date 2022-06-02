@@ -29,9 +29,6 @@ public class ParkingLotData {
 
     private final ParkingLotService parkingLotService;
 
-    @Value("${secret.seoul_parking}")
-    private String token;
-
     @PostMapping("/init")
     public ResponseEntity<ParkingLotDataResult> initParkingLot() throws IOException, InterruptedException {
         if (!parkingLotService.isEmpty()) {
@@ -41,21 +38,9 @@ public class ParkingLotData {
             dataResult.setMessage("주차장 정보가 이미 존재합니다.");
             return ResponseEntity.ok(dataResult);
         }
-        Gson gson = new Gson();
 
-        HttpClient httpClient = HttpClient.newHttpClient();
-        for (int cur = 1; cur < 15002; cur = cur+1000) {
-            String uriString =
-                    "http://openapi.seoul.go.kr:8088/" + token + "/json/GetParkInfo/" + cur + "/" + (cur + 999);
-            HttpRequest request = HttpRequest.newBuilder(URI.create(uriString)).GET().build();
-            HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            ParkingLotDataResponse response = gson.fromJson(httpResponse.body(), ParkingLotDataResponse.class);
-            try {
-                parkingLotService.registerResponseData(response);
-            } catch (NullPointerException exception) {
-                log.error(exception.getMessage());
-            }
-        }
+        parkingLotService.processRegister();
+
         ParkingLotDataResult dataResult = new ParkingLotDataResult();
         dataResult.setStatus(200);
         dataResult.setMessage("주차장 정보 등록 완료");

@@ -31,8 +31,6 @@ public class ElasticsearchClientConfig extends AbstractElasticsearchConfiguratio
     @Bean
     public RestHighLevelClient elasticsearchClient() {
 
-        System.out.println("host = " + host);
-        System.out.println("port = " + port);
         RestClientBuilder restClientBuilder = RestClient.builder(new HttpHost(host, port));
         restClientBuilder.setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
             @Override

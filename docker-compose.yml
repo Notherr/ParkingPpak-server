@@ -32,6 +32,8 @@ services:
       - elasticsearch.host=elasticsearch
       - elasticsearch.port=9200
       - spring.batch.initialize-schema=ALWAYS
+      - api.elasticsearch.uri=http://elasticsearch:9200/
+      - api.elasticsearch.search=_search
 
   db:
     image: 'postgres:13.1-alpine'

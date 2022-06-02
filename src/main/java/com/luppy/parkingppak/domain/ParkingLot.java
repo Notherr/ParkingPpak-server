@@ -5,13 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Data
@@ -23,6 +23,7 @@ public class ParkingLot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private LocalDateTime modificationDate;
 
     // 주차장 이름
     private String parkingName;
@@ -82,6 +83,7 @@ public class ParkingLot {
         this.addTimeRates = (int)Float.parseFloat(row.getADD_TIME_RATE());
         this.xCoor = Double.parseDouble(row.getLNG());
         this.yCoor = Double.parseDouble(row.getLAT());
+        this.modificationDate = LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter);
         return this;
     }
 
