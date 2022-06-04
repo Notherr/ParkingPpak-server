@@ -82,8 +82,8 @@ public class AccountController {
 
         CardDto registeredCard = accountService.registerCard(jwt, cardDto);
 
-        if(registeredCard == null) return ResponseEntity.badRequest().body("계정을 찾지못하여 카드가 등록되지 않았습니다.");
-        return ResponseEntity.ok().body(registeredCard);
+        if(registeredCard == null) return ResponseEntity.badRequest().body(Response.REGISTER_CARD_ERROR(cardDto));
+        return ResponseEntity.ok().body(Response.REGISTER_CARD_OK(registeredCard));
     }
 
     @ApiResponses(value = {
@@ -94,7 +94,8 @@ public class AccountController {
 
         Optional<OilType> registeredOilType = accountService.registerOilType(jwt, oilType);
 
-        return ResponseEntity.ok().body(registeredOilType);
+        if(registeredOilType.isEmpty()) return ResponseEntity.badRequest().body(Response.REGISTER_OIL_TYPE_ERROR(oilType));
+        return ResponseEntity.ok().body(Response.REGISTER_OIL_TYPE_OK(registeredOilType));
     }
 
     @ApiResponses(value = {
@@ -103,8 +104,9 @@ public class AccountController {
     @PutMapping("/accounts/navi-type/{naviType}")
     public ResponseEntity<?> registerNaviType(@RequestHeader("Authorization") String jwt, @PathVariable String naviType) {
 
-        Optional<NaviType> registeredNavi = accountService.registerNaviType(jwt ,naviType);
+        Optional<NaviType> registeredNaviType = accountService.registerNaviType(jwt ,naviType);
 
-        return ResponseEntity.ok().body(registeredNavi);
+        if(registeredNaviType.isEmpty()) return ResponseEntity.badRequest().body(Response.REGISTER_NAVI_TYPE_ERROR(naviType));
+        return ResponseEntity.ok().body(Response.REGISTER_NAVI_TYPE_OK(registeredNaviType));
     }
 }
