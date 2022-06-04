@@ -45,8 +45,8 @@ public class AccountController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공."),
-            @ApiResponse(responseCode = "4000", description = "로그인 실패. : 가입되지 않은 이메일입니다."),
-            @ApiResponse(responseCode = "4001", description = "로그인 실패. : 틀린 패스워드 입니다.")
+            @ApiResponse(responseCode = "400", description = "로그인 실패. : 가입되지 않은 이메일입니다."),
+            @ApiResponse(responseCode = "401", description = "로그인 실패. : 틀린 패스워드 입니다.")
     })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto dto) {
@@ -81,9 +81,7 @@ public class AccountController {
     public ResponseEntity<?> registerCard(@RequestHeader("Authorization") String jwt, @RequestBody CardDto cardDto) {
 
         CardDto registeredCard = accountService.registerCard(jwt, cardDto);
-
-        if(registeredCard == null) return ResponseEntity.badRequest().body("계정을 찾지못하여 카드가 등록되지 않았습니다.");
-        return ResponseEntity.ok().body(registeredCard);
+         return ResponseEntity.ok().body(Response.REGISTER_CARD_OK(registeredCard));
     }
 
     @ApiResponses(value = {
@@ -93,8 +91,7 @@ public class AccountController {
     public ResponseEntity<?> registerOilType(@RequestHeader("Authorization") String jwt, @PathVariable String oilType) {
 
         Optional<OilType> registeredOilType = accountService.registerOilType(jwt, oilType);
-
-        return ResponseEntity.ok().body(registeredOilType);
+        return ResponseEntity.ok().body(Response.REGISTER_OIL_TYPE_OK(registeredOilType));
     }
 
     @ApiResponses(value = {
@@ -103,8 +100,7 @@ public class AccountController {
     @PutMapping("/accounts/navi-type/{naviType}")
     public ResponseEntity<?> registerNaviType(@RequestHeader("Authorization") String jwt, @PathVariable String naviType) {
 
-        Optional<NaviType> registeredNavi = accountService.registerNaviType(jwt ,naviType);
-
-        return ResponseEntity.ok().body(registeredNavi);
+        Optional<NaviType> registeredNaviType = accountService.registerNaviType(jwt ,naviType);
+        return ResponseEntity.ok().body(Response.REGISTER_NAVI_TYPE_OK(registeredNaviType));
     }
 }

@@ -6,13 +6,10 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class ParkingppakApplicationTests {
+public class ParkingppakApplicationTests {
 
-	/*
 	@Test
-	void contextLoads() {
+	public void contextLoads() {
 	}
-
-	 */
 
 }
