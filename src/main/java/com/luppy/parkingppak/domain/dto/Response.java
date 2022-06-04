@@ -63,28 +63,11 @@ public class Response<T> {
                 .message("카드정보가 정상적으로 등록되었습니다.")
                 .build();
     }
-
-    public static <T> Response<T> REGISTER_CARD_ERROR(T data){
-        return (Response<T>) Response.builder()
-                .statusCode(400)
-                .data(data)
-                .message("정상적으로 카드가 등록되지 않았습니다.")
-                .build();
-    }
-
     public static <T> Response<T> REGISTER_OIL_TYPE_OK(T data){
         return (Response<T>) Response.builder()
                 .statusCode(200)
                 .data(data)
                 .message("정상적으로 유류정보가 등록되었습니다.")
-                .build();
-    }
-
-    public static <T> Response<T> REGISTER_OIL_TYPE_ERROR(T data){
-        return (Response<T>) Response.builder()
-                .statusCode(400)
-                .data(data)
-                .message("정상적으로 유류정보가 되지 않았습니다.")
                 .build();
     }
 
@@ -95,13 +78,4 @@ public class Response<T> {
                 .message("정상적으로 내비앱 정보가 등록되었습니다.")
                 .build();
     }
-
-    public static <T> Response<T> REGISTER_NAVI_TYPE_ERROR(T data){
-        return (Response<T>) Response.builder()
-                .statusCode(400)
-                .data(data)
-                .message("정상적으로 내비앱 정보가 등록되지 않았습니다.")
-                .build();
-    }
-
 }

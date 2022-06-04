@@ -81,9 +81,7 @@ public class AccountController {
     public ResponseEntity<?> registerCard(@RequestHeader("Authorization") String jwt, @RequestBody CardDto cardDto) {
 
         CardDto registeredCard = accountService.registerCard(jwt, cardDto);
-
-        if(registeredCard == null) return ResponseEntity.badRequest().body(Response.REGISTER_CARD_ERROR(cardDto));
-        return ResponseEntity.ok().body(Response.REGISTER_CARD_OK(registeredCard));
+         return ResponseEntity.ok().body(Response.REGISTER_CARD_OK(registeredCard));
     }
 
     @ApiResponses(value = {
@@ -93,8 +91,6 @@ public class AccountController {
     public ResponseEntity<?> registerOilType(@RequestHeader("Authorization") String jwt, @PathVariable String oilType) {
 
         Optional<OilType> registeredOilType = accountService.registerOilType(jwt, oilType);
-
-        if(registeredOilType.isEmpty()) return ResponseEntity.badRequest().body(Response.REGISTER_OIL_TYPE_ERROR(oilType));
         return ResponseEntity.ok().body(Response.REGISTER_OIL_TYPE_OK(registeredOilType));
     }
 
@@ -105,8 +101,6 @@ public class AccountController {
     public ResponseEntity<?> registerNaviType(@RequestHeader("Authorization") String jwt, @PathVariable String naviType) {
 
         Optional<NaviType> registeredNaviType = accountService.registerNaviType(jwt ,naviType);
-
-        if(registeredNaviType.isEmpty()) return ResponseEntity.badRequest().body(Response.REGISTER_NAVI_TYPE_ERROR(naviType));
         return ResponseEntity.ok().body(Response.REGISTER_NAVI_TYPE_OK(registeredNaviType));
     }
 }
