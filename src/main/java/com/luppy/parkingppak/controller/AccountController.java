@@ -45,8 +45,8 @@ public class AccountController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그인 성공."),
-            @ApiResponse(responseCode = "4000", description = "로그인 실패. : 가입되지 않은 이메일입니다."),
-            @ApiResponse(responseCode = "4001", description = "로그인 실패. : 틀린 패스워드 입니다.")
+            @ApiResponse(responseCode = "400", description = "로그인 실패. : 가입되지 않은 이메일입니다."),
+            @ApiResponse(responseCode = "401", description = "로그인 실패. : 틀린 패스워드 입니다.")
     })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto dto) {
