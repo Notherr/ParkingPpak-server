@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class HelperFunctions {
 
-    public static final String[] PARKING_LOT_FIELDS = {"parkingName"};
+    public static final String[] PARKING_LOT_FIELDS = {"parkingName", "address"};
 
     public static String buildMuiltiIndexMatchBody(String query) {
         return "{\n" +
