@@ -78,4 +78,28 @@ public class Response<T> {
                 .message("정상적으로 내비앱 정보가 등록되었습니다.")
                 .build();
     }
+
+    public static <T> Response<T> GET_CARD_COMP_NAME_LIST_OK(T data){
+        return (Response<T>) Response.builder()
+                .statusCode(200)
+                .data(data)
+                .message("정상적으로 카드 회사 이름 목록이 반환되었습니다.")
+                .build();
+    }
+
+    public static <T> Response<T> GET_OIL_TYPE_LIST_OK(T data){
+        return (Response<T>) Response.builder()
+                .statusCode(200)
+                .data(data)
+                .message("정상적으로 유류 타입 목록이 반환되었습니다.")
+                .build();
+    }
+
+    public static <T> Response<T> GET_NAVI_TYPE_LIST_OK(T data){
+        return (Response<T>) Response.builder()
+                .statusCode(200)
+                .data(data)
+                .message("정상적으로 내비 앱 목록이 반환되었습니다.")
+                .build();
+    }
 }
