@@ -16,10 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -91,6 +88,46 @@ public class AccountControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void 정상적으로_유류정보가_등록되었습니다 () throws Exception {
+
+        Account account = Account.builder()
+                .email("test@gmail.com")
+                .password("1234")
+                .name("seongkyu")
+                .build();
+        Account savedAccount = accountRepository.save(account);
+
+        String jwt = "Bearer " + jwtUtil.createToken(savedAccount.getId(), savedAccount.getName());
+
+        mockMvc.perform(put("/api/accounts/oil-type/LPG")
+                        .header("Authorization", jwt)
+                )
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void 정상적으로_내비앱_정보가_등록되었습니다 () throws Exception {
+
+        Account account = Account.builder()
+                .email("test@gmail.com")
+                .password("1234")
+                .name("seongkyu")
+                .build();
+        Account savedAccount = accountRepository.save(account);
+
+        String jwt = "Bearer " + jwtUtil.createToken(savedAccount.getId(), savedAccount.getName());
+
+        mockMvc.perform(put("/api/accounts/navi-type/KAKAOMAP")
+                        .header("Authorization", jwt)
+                )
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+
 
 }
 
