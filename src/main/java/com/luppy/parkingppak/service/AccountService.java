@@ -72,12 +72,12 @@ public class AccountService {
         String jwtToken = jwt.replace("Bearer ", "");
 
         Account account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken))).orElse(null);
-        Card selectedCard = cardRepository.findByName(dto.getName());
+        Card selectedCard = cardRepository.findByCardName(dto.getName());
 
         if(account == null) return null;
         if(selectedCard == null) {
             Card newCard = Card.builder()
-                    .name(dto.getName())
+                    .cardName(dto.getName())
                     .compName(dto.getCompName())
                     .content(dto.getContent())
                     .build();
@@ -87,7 +87,7 @@ public class AccountService {
         accountRepository.save(account);
         return CardDto.builder()
                 .id(selectedCard.getId())
-                .name(selectedCard.getName())
+                .name(selectedCard.getCardName())
                 .compName(selectedCard.getCompName())
                 .content(selectedCard.getContent())
                 .build();
