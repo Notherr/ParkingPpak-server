@@ -28,6 +28,12 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - spring.jpa.show-sql=true
+      - elasticsearch.host=elasticsearch
+      - elasticsearch.port=9200
+      - spring.batch.initialize-schema=ALWAYS
+      - api.elasticsearch.uri=http://elasticsearch:9200/
+      - api.elasticsearch.search=_search
 
   db:
     image: 'postgres:13.1-alpine'
@@ -48,5 +54,36 @@ services:
     volumes:
       - jenkins:/var/jenkins_home
 
+  elasticsearch:
+    container_name: elasticsearch
+    restart: always
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=elasticsearch
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.12.0
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
 volumes:
   jenkins:
+  esdata:
