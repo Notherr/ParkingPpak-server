@@ -40,25 +40,20 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         String jwt = request.getHeader("Authorization").replace("Bearer ", "");
 
-        if(jwtUtil.validateToken(jwt)){
+        //if(jwtUtil.validateToken(jwt)){
             String accountId = jwtUtil.getAccountId(jwt);
 
             if (accountId != null) {
-                Optional<Account> account = accountRepository.findById(Long.valueOf(accountId));
+                Account account = accountRepository.findById(Long.valueOf(accountId)).orElse(null);
 
-                if(account.isEmpty()) throw new NotFoundException("인가에 실패하였습니다.");
+                if(account == null) throw new NotFoundException("인가에 실패하였습니다.");
                 else {
-                    Account account1 = Account.builder()
-                            .id(account.get().getId())
-                            .email(account.get().getEmail())
-                            .name(account.get().getName())
-                            .build();
-                    AccountDetails accountDetails = new AccountDetails(account1);
+                    AccountDetails accountDetails = new AccountDetails(account);
                     Authentication authentication = new UsernamePasswordAuthenticationToken(accountDetails, null, accountDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-        }
+        //}
         chain.doFilter(request,response);
     }
 }

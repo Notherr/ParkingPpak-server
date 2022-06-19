@@ -1,3 +1,4 @@
+
 package com.luppy.parkingppak.domain.enumclass;
 
 import lombok.AllArgsConstructor;
@@ -9,7 +10,7 @@ public enum CardCompName {
 
     SINHAN,
     SAMSUNG,
-    HUYNDAI,
+    HYUNDAI,
     KB
     ;
 }

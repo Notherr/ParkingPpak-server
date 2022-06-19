@@ -30,6 +30,7 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private NaviType naviType;
     private Boolean verified;
+    private String provider;
 
     @OneToOne
     private Card card;
@@ -40,4 +41,8 @@ public class Account {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="account_parkinglot_list")
     private List<ParkingLot> parkingLotList = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="account_gasstation_list")
+    private List<GasStation> gasStationList = new ArrayList<>();
 }

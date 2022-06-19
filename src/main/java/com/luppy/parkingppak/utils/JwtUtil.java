@@ -2,7 +2,6 @@ package com.luppy.parkingppak.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -16,7 +15,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    //하루
+    // 1 day.
     private final Long tokenValidTime = 1000L * 60 * 60 * 24;
     private final String secret = "12345678901234567890123456789012";
 
@@ -31,7 +30,8 @@ public class JwtUtil {
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + tokenValidTime))
+                //.setExpiration(new Date(new Date().getTime() + tokenValidTime))
+                .setExpiration(null)
                 .signWith(key)
                 .compact();
 
