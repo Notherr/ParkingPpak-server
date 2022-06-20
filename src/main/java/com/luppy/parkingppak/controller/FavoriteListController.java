@@ -16,7 +16,7 @@ import java.util.List;
 public class FavoriteListController {
 
     private final AccountRepository accountRepository;
-    private final ParkingLogRepository parkingLogRepository;
+    private final ParkingLotRepository parkingLotRepository;
     private final GasStationRepository gasStationRepository;
     private final JwtUtil jwtUtil;
 
@@ -28,7 +28,7 @@ public class FavoriteListController {
         if(dto.getType().equals("parking-lot")){
 
             Account account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken))).orElse(null);
-            ParkingLot parkingLot = parkingLogRepository.findById(dto.getDataId()).orElse(null);
+            ParkingLot parkingLot = parkingLotRepository.findById(dto.getDataId()).orElse(null);
 
 
             if(account == null) return ResponseEntity.badRequest().body(Response.INVALID_ACCOUNT_ID(null));
@@ -86,7 +86,7 @@ public class FavoriteListController {
                 accountRepository.save(account);
                 return ResponseEntity.ok().body(Response.DELETE_FAVORITE_OK(null));
             }else if(dto.getType().equals("parking-lot")) {
-                ParkingLot parkingLot = parkingLogRepository.findById(dto.getDataId()).orElse(null);
+                ParkingLot parkingLot = parkingLotRepository.findById(dto.getDataId()).orElse(null);
                 if(parkingLot == null) return ResponseEntity.badRequest().body(Response.INVALID_PARKINGLOT_ID(null));
                 account.getParkingLotList().remove(parkingLot);
                 accountRepository.save(account);
