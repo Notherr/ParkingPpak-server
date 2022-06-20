@@ -2,6 +2,7 @@ package com.luppy.parkingppak.controller;
 
 import com.luppy.parkingppak.domain.*;
 import com.luppy.parkingppak.domain.dto.FavoriteRequestDto;
+import com.luppy.parkingppak.domain.dto.Response;
 import com.luppy.parkingppak.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import java.util.List;
 public class FavoriteListController {
 
     private final AccountRepository accountRepository;
-    private final ParkingLogRepository parkingLogRepository;
+    private final ParkingLotRepository parkingLotRepository;
     private final GasStationRepository gasStationRepository;
     private final JwtUtil jwtUtil;
 
@@ -27,11 +28,11 @@ public class FavoriteListController {
         if(dto.getType().equals("parking-lot")){
 
             Account account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken))).orElse(null);
-            ParkingLot parkingLot = parkingLogRepository.findById(dto.getDataId()).orElse(null);
+            ParkingLot parkingLot = parkingLotRepository.findById(dto.getDataId()).orElse(null);
 
 
-            if(account == null) return ResponseEntity.badRequest().body("잘못된 계정 id 입니다.");
-            if(parkingLot == null) return ResponseEntity.badRequest().body("잘못된 주차장 id 입니다.");
+            if(account == null) return ResponseEntity.badRequest().body(Response.INVALID_ACCOUNT_ID(null));
+            if(parkingLot == null) return ResponseEntity.badRequest().body(Response.INVALID_PARKINGLOT_ID(null));
 
             List<ParkingLot> list = account.getParkingLotList();
             list.add(parkingLot);
@@ -41,15 +42,15 @@ public class FavoriteListController {
             GasStation gasStation = gasStationRepository.findById(dto.getDataId()).orElse(null);
 
 
-            if(account == null) return ResponseEntity.badRequest().body("잘못된 계정 id 입니다.");
-            if(gasStation == null) return ResponseEntity.badRequest().body("잘못된 주유소 id 입니다.");
+            if(account == null) return ResponseEntity.badRequest().body(Response.INVALID_ACCOUNT_ID(null));
+            if(gasStation == null) return ResponseEntity.badRequest().body(Response.INVALID_GAS_STATION_ID(null));
 
             List<GasStation> list = account.getGasStationList();
             list.add(gasStation);
 
-        }else return ResponseEntity.badRequest().body("잘못된 데이터 타입입니다. parking-lot / gas-station .");
+        }else return ResponseEntity.badRequest().body(Response.INVALID_DATATYPE(null));
 
-        return ResponseEntity.ok().body("정상적으로 추가 되었습니다.");
+        return ResponseEntity.ok().body(Response.ADD_FAVORITE_OK(null));
     }
 
     @GetMapping("/{dataType}")
@@ -64,10 +65,10 @@ public class FavoriteListController {
             }else if(dataType.equals("gas-station")){
                 return ResponseEntity.ok().body(account.getGasStationList());
             }else{
-                return ResponseEntity.ok().body("잘못된 데이터 타입입니다.");
+                return ResponseEntity.badRequest().body(Response.INVALID_DATATYPE(null));
             }
         }else{
-            return ResponseEntity.ok().body("잘못된 토큰입니다.");
+            return ResponseEntity.badRequest().body(Response.INVALID_ACCOUNT_ID(null));
         }
     }
 
@@ -80,18 +81,18 @@ public class FavoriteListController {
         if(account!=null){
             if(dto.getType().equals("gas-station")){
                 GasStation gasStation = gasStationRepository.findById(dto.getDataId()).orElse(null);
-                if(gasStation == null) return ResponseEntity.badRequest().body("잘못된 주유소 id 입니다.");
+                if(gasStation == null) return ResponseEntity.badRequest().body(Response.INVALID_GAS_STATION_ID(null));
                 account.getGasStationList().remove(gasStation);
                 accountRepository.save(account);
-                return ResponseEntity.ok().body("정상적으로 삭제되었습니다.");
+                return ResponseEntity.ok().body(Response.DELETE_FAVORITE_OK(null));
             }else if(dto.getType().equals("parking-lot")) {
-                ParkingLot parkingLot = parkingLogRepository.findById(dto.getDataId()).orElse(null);
-                if(parkingLot == null) return ResponseEntity.badRequest().body("잘못된 주차장 id 입니다.");
+                ParkingLot parkingLot = parkingLotRepository.findById(dto.getDataId()).orElse(null);
+                if(parkingLot == null) return ResponseEntity.badRequest().body(Response.INVALID_PARKINGLOT_ID(null));
                 account.getParkingLotList().remove(parkingLot);
                 accountRepository.save(account);
-                return ResponseEntity.ok().body("정상적으로 삭제되었습니다.");
-            }else return ResponseEntity.badRequest().body("잘못된 데이터 타입입니다.");
-        }else return ResponseEntity.badRequest().body("잘못된 토큰입니다.");
+                return ResponseEntity.ok().body(Response.DELETE_FAVORITE_OK(null));
+            }else return ResponseEntity.badRequest().body(Response.INVALID_DATATYPE(null));
+        }else return ResponseEntity.badRequest().body(Response.INVALID_ACCOUNT_ID(null));
     }
 }
 
