@@ -2,6 +2,7 @@ package com.luppy.parkingppak.controller;
 
 import com.luppy.parkingppak.domain.ParkingLot;
 import com.luppy.parkingppak.domain.dto.MapRequestDto;
+import com.luppy.parkingppak.domain.dto.ParkingLotDto;
 import com.luppy.parkingppak.service.MapService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,9 @@ public class MapController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getParkingLot(@PathVariable String id){
-        return ResponseEntity.ok().body("");
+
+        ParkingLot parkingLot  = mapService.getParkingLot(id);
+        return ResponseEntity.ok().body(parkingLot);
     }
 
 

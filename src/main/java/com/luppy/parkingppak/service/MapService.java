@@ -20,4 +20,7 @@ public class MapService {
         return parkingLotRepository.findAll();
     }
 
+    public ParkingLot getParkingLot(String id) {
+        return parkingLotRepository.findById(Long.valueOf(id)).orElse(null);
+    }
 }
