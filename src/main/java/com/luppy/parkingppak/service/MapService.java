@@ -1,7 +1,6 @@
 package com.luppy.parkingppak.service;
 
 import com.luppy.parkingppak.domain.GasStationRepository;
-import com.luppy.parkingppak.domain.ParkingLot;
 import com.luppy.parkingppak.domain.ParkingLotRepository;
 import com.luppy.parkingppak.domain.dto.MapRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,11 @@ public class MapService {
         }
     }
 
-    public ParkingLot getData(String id) {
-        return parkingLotRepository.findById(Long.valueOf(id)).orElse(null);
+    public Object getData(MapRequestDto dto) {
+        if(dto.getType().equals("parking-lot")){
+            return parkingLotRepository.findById(dto.getId()).orElse(null);
+        }else{
+            return gasStationRepository.findById(dto.getId()).orElse(null);
+        }
     }
 }

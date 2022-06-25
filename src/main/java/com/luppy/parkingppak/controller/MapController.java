@@ -27,13 +27,10 @@ public class MapController {
             return ResponseEntity.ok().body(dataList);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getData(@PathVariable String id){
+    @GetMapping("/detail")
+    public ResponseEntity<?> getData(@RequestBody MapRequestDto dto){
 
-        ParkingLot parkingLot  = mapService.getParkingLot(id);
-        return ResponseEntity.ok().body(parkingLot);
+        Object data  = mapService.getData(dto);
+        return ResponseEntity.ok().body(data);
     }
-
-
-
 }

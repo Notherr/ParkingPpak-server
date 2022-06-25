@@ -12,5 +12,4 @@ public class MapRequestDto {
     private double xcoor;
     private double ycoor;
     private Long id;
-
 }
