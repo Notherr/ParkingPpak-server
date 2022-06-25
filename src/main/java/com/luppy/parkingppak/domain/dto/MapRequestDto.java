@@ -11,5 +11,6 @@ public class MapRequestDto {
     private String type;
     private double xcoor;
     private double ycoor;
+    private Long id;
 
 }
