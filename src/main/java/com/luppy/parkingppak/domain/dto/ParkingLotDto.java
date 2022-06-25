@@ -1,10 +1,11 @@
 package com.luppy.parkingppak.domain.dto;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.Builder;
+import lombok.Data;
 import java.time.LocalDateTime;
 
+@Builder
+@Data
 public class ParkingLotDto {
     private Long id;
     private LocalDateTime modificationDate;
