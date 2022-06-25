@@ -1,5 +1,6 @@
 package com.luppy.parkingppak.service;
 
+import com.luppy.parkingppak.domain.GasStationRepository;
 import com.luppy.parkingppak.domain.ParkingLot;
 import com.luppy.parkingppak.domain.ParkingLotRepository;
 import com.luppy.parkingppak.domain.dto.MapRequestDto;
@@ -13,14 +14,19 @@ import java.util.List;
 public class MapService {
 
     private final ParkingLotRepository parkingLotRepository;
+    private final GasStationRepository gasStationRepository;
 
-    public List<ParkingLot> getParkingLotList(MapRequestDto dto){
+    public List<?> getDataList(MapRequestDto dto){
 
         // 요청받은 좌표값 기준 범위내 조회 쿼리메소드로 수정 필요.
-        return parkingLotRepository.findAll();
+        if(dto.getType().equals("parking-lot")) {
+            return parkingLotRepository.findAll();
+        }else{
+            return gasStationRepository.findAll();
+        }
     }
 
-    public ParkingLot getParkingLot(String id) {
+    public ParkingLot getData(String id) {
         return parkingLotRepository.findById(Long.valueOf(id)).orElse(null);
     }
 }
