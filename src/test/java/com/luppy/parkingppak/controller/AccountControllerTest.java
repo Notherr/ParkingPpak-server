@@ -1,7 +1,6 @@
 
 package com.luppy.parkingppak.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luppy.parkingppak.domain.Account;
 import com.luppy.parkingppak.domain.AccountRepository;
@@ -14,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +44,7 @@ public class AccountControllerTest {
     private JwtUtil jwtUtil;
 
     @Test
+    @Transactional
     public void 회원가입이_정상적으로_되었습니다 () throws Exception {
 
         Map<String, String> joinContent = new HashMap<>();
@@ -61,6 +62,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @Transactional
     public void 이미_존재하는_이메일입니다 () throws Exception {
 
         Account account = Account.builder()
@@ -86,6 +88,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @Transactional
     public void 로그인이_정상적으로_되었습니다 () throws Exception {
 
         Account account = Account.builder()
@@ -109,6 +112,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @Transactional
     public void 가입되지_않은_이메일입니다 () throws Exception {
 
         Account account = Account.builder()
@@ -133,6 +137,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @Transactional
     public void 틀린_패스워드_입니다 () throws Exception {
 
         Account account = Account.builder()
@@ -157,6 +162,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @Transactional
     public void 카드정보가_정상적으로_등록되었습니다 () throws Exception {
 
         Account account = Account.builder()
@@ -184,6 +190,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @Transactional
     public void 정상적으로_유류정보가_등록되었습니다 () throws Exception {
 
         Account account = Account.builder()
@@ -203,6 +210,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @Transactional
     public void 정상적으로_내비앱_정보가_등록되었습니다 () throws Exception {
 
         Account account = Account.builder()

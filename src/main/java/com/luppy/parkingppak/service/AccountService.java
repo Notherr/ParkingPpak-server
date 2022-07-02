@@ -7,7 +7,6 @@ import com.luppy.parkingppak.domain.CardRepository;
 import com.luppy.parkingppak.domain.dto.AccountDto;
 import com.luppy.parkingppak.domain.dto.CardDto;
 import com.luppy.parkingppak.domain.dto.LoginRequestDto;
-import com.luppy.parkingppak.domain.enumclass.CardCompName;
 import com.luppy.parkingppak.domain.enumclass.NaviType;
 import com.luppy.parkingppak.domain.enumclass.OilType;
 import com.luppy.parkingppak.utils.JwtUtil;
