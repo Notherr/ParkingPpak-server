@@ -159,5 +159,21 @@ public class Response<T> {
                 .build();
     }
 
+    public static <T> Response<T> GET_OAUTH_KEY_OK(T data){
+        return (Response<T>) Response.builder()
+                .statusCode(200)
+                .data(data)
+                .message("정상적으로 반환되었습니다.")
+                .build();
+    }
+
+    public static <T> Response<T> INVALID_RESOURCE_SERVER_NAME(T data){
+        return (Response<T>) Response.builder()
+                .statusCode(400)
+                .data(data)
+                .message("등록되지 않은 리소스 서버 네임입니다.")
+                .build();
+    }
+
 
 }
