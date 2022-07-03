@@ -167,5 +167,13 @@ public class Response<T> {
                 .build();
     }
 
+    public static <T> Response<T> INVALID_RESOURCE_SERVER_NAME(T data){
+        return (Response<T>) Response.builder()
+                .statusCode(400)
+                .data(data)
+                .message("등록되지 않은 리소스 서버 네임입니다.")
+                .build();
+    }
+
 
 }
