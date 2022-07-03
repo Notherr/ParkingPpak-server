@@ -1,24 +1,17 @@
 package com.luppy.parkingppak.init.data;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.google.gson.Gson;
 import com.luppy.parkingppak.service.ParkingLotService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriBuilder;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -29,7 +22,7 @@ public class ParkingLotData {
 
     private final ParkingLotService parkingLotService;
 
-    @PostMapping("/init")
+    @PostMapping("/parking/init")
     public ResponseEntity<ParkingLotDataResult> initParkingLot() throws IOException, InterruptedException {
         if (!parkingLotService.isEmpty()) {
             log.info("ParkingLot Data already exists");

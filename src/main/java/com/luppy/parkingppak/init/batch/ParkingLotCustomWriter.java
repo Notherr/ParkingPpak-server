@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class CustomWriter implements ItemWriter<ParkingLot> {
+public class ParkingLotCustomWriter implements ItemWriter<ParkingLot> {
 
     @Autowired
     ParkingLotRepository parkingLotRepository;
@@ -19,7 +19,7 @@ public class CustomWriter implements ItemWriter<ParkingLot> {
     @Override
     public void write(List<? extends ParkingLot> list) throws Exception {
         for (ParkingLot data : list) {
-            log.info("CustomWriter :: Writing data :: " + data.getId() + " " + data.getParkingName() + " " + data.getAddress() + "...");
+            log.info("CustomWriter :: Writing data :: " + data.getId() + " " + data.getParkingName() + " " + data.getAddress());
             parkingLotRepository.save(data);
         }
     }

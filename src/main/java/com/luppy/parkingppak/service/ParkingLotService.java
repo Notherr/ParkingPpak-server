@@ -47,6 +47,7 @@ public class ParkingLotService implements PublicDataService{
         return parkingLotRepository.findAll().size() == 0;
     }
 
+    @Override
     public void processRegister() throws IOException, InterruptedException {
         Gson gson = new Gson();
         HttpClient httpClient = HttpClient.newHttpClient();

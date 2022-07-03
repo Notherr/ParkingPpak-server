@@ -1,8 +1,8 @@
 package com.luppy.parkingppak.config;
 
-import com.luppy.parkingppak.domain.ParkingLot;
-import com.luppy.parkingppak.init.batch.CustomWriter;
-import com.luppy.parkingppak.init.batch.ParkingLotFieldSetMapper;
+import com.luppy.parkingppak.domain.GasStation;
+import com.luppy.parkingppak.init.batch.GasStationCustomWriter;
+import com.luppy.parkingppak.init.batch.GasStationFieldSetMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -22,58 +22,55 @@ import org.springframework.core.io.ClassPathResource;
 
 @Configuration
 @RequiredArgsConstructor
-public class BatchConfig {
+public class GasStationBatchConfig {
 
     private final JobBuilderFactory jobBuilderFactory;
 
     private final StepBuilderFactory stepBuilderFactory;
 
-    private final CustomWriter customWriter;
+    private final GasStationCustomWriter customWriter;
 
-    private final ParkingLotFieldSetMapper parkingLotFieldSetMapper;
+    private final GasStationFieldSetMapper gasStationFieldSetMapper;
 
-    private String[] format = new String[]{"id", "add_rates", "add_time_rates", "address", "holiday_begin",
-            "holiday_end", "modification_date","parking_code", "parking_name", "payyn", "phone_number", "rates",
-            "sync_time",
-            "time_rates", "type", "weekday_begin", "weekday_end", "weekend_begin", "weekend_end", "x_coor",
-            "y_coor"};
+    private String[] gasStationFormat = new String[]{"id", "comp_name", "diesel_price", "gasoline_price", "name",
+            "unique_id", "x_coor", "y_coor"};
 
     @Bean
-    public Job createJob() {
-        return jobBuilderFactory.get("createJob").incrementer(new RunIdIncrementer()).flow(createStep()).end().build();
+    public Job createGasStationJob() {
+        return jobBuilderFactory.get("createGasStationJob").incrementer(new RunIdIncrementer()).flow(createGasStationStep()).end().build();
     }
 
     @Bean
-    public Step createStep() {
-        return stepBuilderFactory.get("createStep").<ParkingLot, ParkingLot> chunk(10).reader(flatFileItemReader()).writer(customWriter)
+    public Step createGasStationStep() {
+        return stepBuilderFactory.get("createGasStationStep").<GasStation, GasStation> chunk(10).reader(gasStationFlatFileItemReader()).writer(customWriter)
                 .build();
     }
 
     @Bean
-    public FlatFileItemReader<ParkingLot> flatFileItemReader() {
-        return new FlatFileItemReaderBuilder<ParkingLot>()
+    public FlatFileItemReader<GasStation> gasStationFlatFileItemReader() {
+        return new FlatFileItemReaderBuilder<GasStation>()
                 .name("flatFileItemReader")
-                .resource(new ClassPathResource("input/parking_lot.csv"))
+                .resource(new ClassPathResource("input/gas_station.csv"))
                 .delimited()
-                .names(format)
+                .names(gasStationFormat)
                 .linesToSkip(1)
-                .lineMapper(lineMapper())
+                .lineMapper(gasStationLineMapper())
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<>(){{
-                    setTargetType(ParkingLot.class);
+                    setTargetType(GasStation.class);
                 }})
                 .build();
     }
 
     @Bean
-    public LineMapper<ParkingLot> lineMapper() {
-        final DefaultLineMapper<ParkingLot> defaultLineMapper = new DefaultLineMapper<>();
+    public LineMapper<GasStation> gasStationLineMapper() {
+        final DefaultLineMapper<GasStation> defaultLineMapper = new DefaultLineMapper<>();
         final DelimitedLineTokenizer delimitedLineTokenizer = new DelimitedLineTokenizer();
         delimitedLineTokenizer.setDelimiter(",");
         delimitedLineTokenizer.setStrict(false);
-        delimitedLineTokenizer.setNames(format);
+        delimitedLineTokenizer.setNames(gasStationFormat);
 
         defaultLineMapper.setLineTokenizer(delimitedLineTokenizer);
-        defaultLineMapper.setFieldSetMapper(parkingLotFieldSetMapper);
+        defaultLineMapper.setFieldSetMapper(gasStationFieldSetMapper);
 
         return defaultLineMapper;
     }
