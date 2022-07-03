@@ -1,5 +1,6 @@
 package com.luppy.parkingppak.domain;
 
+import com.luppy.parkingppak.init.data.GasStationData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,4 +27,23 @@ public class GasStation {
     private String uniqueId;
     private double xCoor;
     private double yCoor;
+    private int gasolinePrice;
+    private int dieselPrice;
+
+    public void gasStationMapper(GasStationData.Row row) {
+        this.uniqueId = row.getUNI_ID();
+        this.name = row.getOS_NM();
+        this.compName = row.getPOLL_DIV_CD();
+        this.xCoor = Double.parseDouble(row.getGIS_X_COOR());
+        this.yCoor = Double.parseDouble(row.getGIS_Y_COOR());
+    }
+
+    public void updatePrice(boolean isGasoline, int newPrice) {
+        System.out.println("newPrice = " + newPrice);
+        if (isGasoline) {
+            this.gasolinePrice = newPrice;
+        } else {
+            this.dieselPrice = newPrice;
+        }
+    }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter @Setter
 @NoArgsConstructor
-public class ResultQuery {
+public class ParkingLotResultQuery {
 
     private Float timeTook; // Elastic response time
     private Integer numberOfResults; // number of total elements retrieved
