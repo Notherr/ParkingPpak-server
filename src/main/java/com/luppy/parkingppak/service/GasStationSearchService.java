@@ -1,6 +1,7 @@
 package com.luppy.parkingppak.service;
 
-import com.luppy.parkingppak.domain.dto.IParkingLotDto;
+import com.luppy.parkingppak.domain.dto.IGasStationDto;
+import com.luppy.parkingppak.utils.GasStationResultQuery;
 import com.luppy.parkingppak.utils.HelperFunctions;
 import com.luppy.parkingppak.utils.ParkingLotResultQuery;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +21,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Service
 @Slf4j
-public class ParkingLotSearchService {
+public class GasStationSearchService {
 
     @Value("${api.elasticsearch.uri}")
     private String elasticSearchUri;
@@ -31,14 +31,14 @@ public class ParkingLotSearchService {
     @Value("${api.elasticsearch.search}")
     private String elasticSearchPrefix;
 
-    public ParkingLotResultQuery searchFromQuery(String query) throws IOException {
-        String body = HelperFunctions.parkingLotbuildMuiltiIndexMatchBody(query);
+    public GasStationResultQuery searchFromQuery(String query) throws IOException {
+        String body = HelperFunctions.gasStationbuildMuiltiIndexMatchBody(query);
         return executeHttpRequest(body);
     }
 
-    private ParkingLotResultQuery executeHttpRequest(String body) throws IOException{
+    private GasStationResultQuery executeHttpRequest(String body) throws IOException{
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            ParkingLotResultQuery parkingLotResultQuery = new ParkingLotResultQuery();
+            GasStationResultQuery gasStationResultQuery = new GasStationResultQuery();
             HttpPost httpPost = new HttpPost(HelperFunctions.buildSearchUri(elasticSearchUri, "", elasticSearchPrefix));
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
@@ -49,49 +49,42 @@ public class ParkingLotSearchService {
                 String message = EntityUtils.toString(response.getEntity());
                 JSONObject object = new JSONObject(message);
                 if (object.getJSONObject("hits").getJSONObject("total").getInt("value") != 0) {
-                    parkingLotResultQuery.setNumberOfResults(object.getJSONObject("hits").getJSONObject("total").getInt("value"));
-                    parkingLotResultQuery.setTimeTook((float) ((double) object.getInt("took") / 1000));
-                    parkingLotResultQuery.setData(parseDtoFromObject(object));
+                    gasStationResultQuery.setNumberOfResults(object.getJSONObject("hits").getJSONObject("total").getInt("value"));
+                    gasStationResultQuery.setTimeTook((float) ((double) object.getInt("took") / 1000));
+                    gasStationResultQuery.setData(parseDtoFromObject(object));
                 } else {
                     log.info("no search results");
-                    parkingLotResultQuery.setNumberOfResults(0);
-                    parkingLotResultQuery.setTimeTook((float) ((double) object.getInt("took") / 1000));
+                    gasStationResultQuery.setNumberOfResults(0);
+                    gasStationResultQuery.setTimeTook((float) ((double) object.getInt("took") / 1000));
                 }
             }
-            catch (IOException |JSONException e) {
+            catch (IOException | JSONException e) {
                 log.error("Error while connecting to elastic engine :: {}", e.getMessage());
-                parkingLotResultQuery.setNumberOfResults(0);
+                gasStationResultQuery.setNumberOfResults(0);
             }
-            return parkingLotResultQuery;
+            return gasStationResultQuery;
         }
     }
 
-    private List<IParkingLotDto> parseDtoFromObject(JSONObject object) {
+    private List<IGasStationDto> parseDtoFromObject(JSONObject object) {
         JSONArray hitsArray = object.getJSONObject("hits").getJSONArray("hits");
-        List<IParkingLotDto> parkingLotDtos = new ArrayList<>();
+        List<IGasStationDto> gasStationDtos = new ArrayList<>();
         for (Object hits : hitsArray) {
             JSONObject jsonObject = new JSONObject(hits.toString());
             JSONObject source = jsonObject.getJSONObject("_source");
-            IParkingLotDto parkingLotDto = IParkingLotDto.builder()
+            IGasStationDto gasStationDto = IGasStationDto.builder()
                     .id(source.getLong("id"))
-                    .parkingName(source.getString("parkingName"))
+                    .compName(source.getString("compName"))
+                    .name(source.getString("name"))
+                    .uniqueId(source.getString("uniqueId"))
                     .xCoor(source.getDouble("xCoor"))
-                    .yCoor(source.getDouble(("yCoor")))
-                    .address(source.getString("address"))
-                    .payYN(source.getBoolean("payYN"))
-                    .weekdayBegin(source.getString("weekdayBegin"))
-                    .weekdayEnd(source.getString("weekdayEnd"))
-                    .weekendBegin(source.getString("weekendBegin"))
-                    .weekendEnd(source.getString("weekendEnd"))
-                    .holidayBegin(source.getString("holidayBegin"))
-                    .holidayEnd(source.getString("holidayEnd"))
-                    .rates(source.getInt("rates"))
-                    .timeRates(source.getInt("timeRates"))
-                    .addRates(source.getInt("addRates"))
-                    .addTimeRates(source.getInt("addTimeRates"))
+                    .yCoor(source.getDouble("yCoor"))
+                    .gasolinePrice(source.getInt("gasolinePrice"))
+                    .dieselPrice(source.getInt("dieselPrice"))
                     .build();
-            parkingLotDtos.add(parkingLotDto);
+
+            gasStationDtos.add(gasStationDto);
         }
-        return parkingLotDtos;
+        return gasStationDtos;
     }
 }

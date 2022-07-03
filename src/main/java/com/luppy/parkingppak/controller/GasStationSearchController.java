@@ -1,6 +1,8 @@
 package com.luppy.parkingppak.controller;
 
+import com.luppy.parkingppak.service.GasStationSearchService;
 import com.luppy.parkingppak.service.ParkingLotSearchService;
+import com.luppy.parkingppak.utils.GasStationResultQuery;
 import com.luppy.parkingppak.utils.ParkingLotResultQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/search/parking")
+@RequestMapping("/api/search/gas")
 @RequiredArgsConstructor
-public class ParkingLotSearchController {
+public class GasStationSearchController {
 
-    private final ParkingLotSearchService parkingLotSearchService;
+    private final GasStationSearchService gasStationSearchService;
 
     @GetMapping("/query" + "/{query}")
-    public ResponseEntity<ParkingLotResultQuery> searchQuery(@PathVariable String query) throws IOException {
-        return new ResponseEntity<>(parkingLotSearchService.searchFromQuery(query.trim().toLowerCase()), HttpStatus.OK);
+    public ResponseEntity<GasStationResultQuery> searchQuery(@PathVariable String query) throws IOException {
+        return new ResponseEntity<>(gasStationSearchService.searchFromQuery(query.trim().toLowerCase()), HttpStatus.OK);
     }
 }
