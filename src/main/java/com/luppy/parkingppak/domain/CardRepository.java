@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface CardRepository extends JpaRepository<Card, Long> {
 
     Card findByCompName(CardCompName compName);
-    Card findByName(String cardName);
+    Card findByCardName(String cardName);
 }
