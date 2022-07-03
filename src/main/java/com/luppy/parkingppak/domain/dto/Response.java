@@ -159,5 +159,13 @@ public class Response<T> {
                 .build();
     }
 
+    public static <T> Response<T> GET_OAUTH_KEY_OK(T data){
+        return (Response<T>) Response.builder()
+                .statusCode(200)
+                .data(data)
+                .message("정상적으로 반환되었습니다.")
+                .build();
+    }
+
 
 }
