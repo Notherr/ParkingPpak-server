@@ -34,6 +34,9 @@ public class FavoriteListController {
             if(account == null) return ResponseEntity.badRequest().body(Response.INVALID_ACCOUNT_ID(null));
             if(parkingLot == null) return ResponseEntity.badRequest().body(Response.INVALID_PARKINGLOT_ID(null));
 
+            account.getParkingLotList().add(parkingLot);
+            accountRepository.save(account);
+
             List<ParkingLot> list = account.getParkingLotList();
             list.add(parkingLot);
 
@@ -47,6 +50,9 @@ public class FavoriteListController {
 
             if(account == null) return ResponseEntity.badRequest().body(Response.INVALID_ACCOUNT_ID(null));
             if(gasStation == null) return ResponseEntity.badRequest().body(Response.INVALID_GAS_STATION_ID(null));
+
+            account.getGasStationList().add(gasStation);
+            accountRepository.save(account);
 
             List<GasStation> list = account.getGasStationList();
             list.add(gasStation);
@@ -64,9 +70,9 @@ public class FavoriteListController {
 
         if(account != null){
             if(dataType.equals("parking-lot")) {
-                return ResponseEntity.ok().body(account.getParkingLotList());
+                return ResponseEntity.ok().body(Response.ADD_FAVORITE_OK(account.getParkingLotList()));
             }else if(dataType.equals("gas-station")){
-                return ResponseEntity.ok().body(account.getGasStationList());
+                return ResponseEntity.ok().body(Response.ADD_FAVORITE_OK(account.getGasStationList()));
             }else{
                 return ResponseEntity.badRequest().body(Response.INVALID_DATATYPE(null));
             }
