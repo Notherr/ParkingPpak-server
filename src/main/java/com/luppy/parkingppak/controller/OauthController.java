@@ -1,17 +1,20 @@
 package com.luppy.parkingppak.controller;
 
+import com.luppy.parkingppak.domain.dto.OauthDto;
 import com.luppy.parkingppak.domain.dto.OauthKeyDto;
 import com.luppy.parkingppak.domain.dto.Response;
+import com.luppy.parkingppak.service.OauthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/oauth")
 public class OauthController {
+
+    private final OauthService oauthService;
 
     @Value("${googleClientId}")
     private String googleClientId;
@@ -26,9 +29,6 @@ public class OauthController {
 
     @Value("${googleClientSecretForSearch}")
     private String googleClientSecretForSearch;
-
-
-
 
     @GetMapping("/{resourceServer}")
     public ResponseEntity<?> getOauthKey(@PathVariable String resourceServer){
@@ -62,5 +62,12 @@ public class OauthController {
         }
 
         return ResponseEntity.badRequest().body(Response.INVALID_RESOURCE_SERVER_NAME(null));
+    }
+
+    @GetMapping("/join")
+    public ResponseEntity<?> oauthJoin(@RequestBody OauthDto oauthDto){
+
+        oauthService.join(oauthDto);
+        return null;
     }
 }
