@@ -1,5 +1,6 @@
 package com.luppy.parkingppak.controller;
 
+import com.luppy.parkingppak.domain.dto.LoginResponseDto;
 import com.luppy.parkingppak.domain.dto.OauthDto;
 import com.luppy.parkingppak.domain.dto.OauthKeyDto;
 import com.luppy.parkingppak.domain.dto.Response;
@@ -67,7 +68,7 @@ public class OauthController {
     @GetMapping("/login")
     public ResponseEntity<?> oauthLogin(@RequestBody OauthDto oauthDto){
 
-        oauthService.login(oauthDto);
-        return null;
+        LoginResponseDto loginResponseDto = oauthService.login(oauthDto);
+        return ResponseEntity.ok().body(Response.OAUTH_LOGIN_OK(loginResponseDto));
     }
 }
