@@ -3,11 +3,11 @@ package com.luppy.parkingppak.service;
 import com.luppy.parkingppak.config.auth.AccountDetails;
 import com.luppy.parkingppak.domain.Account;
 import com.luppy.parkingppak.domain.AccountRepository;
-import com.luppy.parkingppak.domain.dto.AccountDto;
-import com.luppy.parkingppak.domain.dto.LoginResponseDto;
-import com.luppy.parkingppak.domain.dto.OauthDto;
+import com.luppy.parkingppak.domain.dto.*;
 import com.luppy.parkingppak.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +16,50 @@ public class OauthService {
 
     private final AccountRepository accountRepository;
     private final JwtUtil jwtUtil;
+
+    @Value("${googleClientId}")
+    private String googleClientId;
+
+    @Value("${googleClientSecret}")
+    private String googleClientSecret;
+
+    @Value("${kakaoClientId}")
+    private String kakaoClientId;
+    @Value("${kakaoClientSecret}")
+    private String kakaoClientSecret;
+
+    @Value("${googleClientSecretForSearch}")
+    private String googleClientSecretForSearch;
+
+
+    public OauthKeyDto getOauthKey(String resourceServer){
+
+        switch (resourceServer) {
+            case "google": {
+                OauthKeyDto oauthKeyDto = OauthKeyDto.builder()
+                        .clientId(googleClientId)
+                        .clientSecret(googleClientSecret)
+                        .build();
+
+                return oauthKeyDto;
+            }
+            case "kakao": {
+                OauthKeyDto oauthKeyDto = OauthKeyDto.builder()
+                        .clientId(kakaoClientId)
+                        .clientSecret(kakaoClientSecret)
+                        .build();
+                return oauthKeyDto;
+            }
+            case "google-search": {
+                OauthKeyDto oauthKeyDto = OauthKeyDto.builder()
+                        .clientId(null)
+                        .clientSecret(googleClientSecretForSearch)
+                        .build();
+                return oauthKeyDto;
+            }
+        }
+        return null;
+    }
 
 
     public LoginResponseDto login(OauthDto oauthDto) {
