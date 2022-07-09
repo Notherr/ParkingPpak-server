@@ -36,6 +36,9 @@ public class FavoriteListController {
 
             List<ParkingLot> list = account.getParkingLotList();
             list.add(parkingLot);
+
+            return ResponseEntity.ok().body(Response.ADD_FAVORITE_OK(list));
+
         }else if(dto.getType().equals("gas-station")){
 
             Account account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken))).orElse(null);
@@ -48,9 +51,9 @@ public class FavoriteListController {
             List<GasStation> list = account.getGasStationList();
             list.add(gasStation);
 
-        }else return ResponseEntity.badRequest().body(Response.INVALID_DATATYPE(null));
+            return ResponseEntity.ok().body(Response.ADD_FAVORITE_OK(list));
 
-        return ResponseEntity.ok().body(Response.ADD_FAVORITE_OK(null));
+        }else return ResponseEntity.badRequest().body(Response.INVALID_DATATYPE(null));
     }
 
     @GetMapping("/{dataType}")
