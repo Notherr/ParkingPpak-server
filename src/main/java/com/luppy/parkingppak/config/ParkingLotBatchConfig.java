@@ -33,10 +33,10 @@ public class ParkingLotBatchConfig {
     private final ParkingLotFieldSetMapper parkingLotFieldSetMapper;
 
     private String[] parkingLotFormat = new String[]{"id", "add_rates", "add_time_rates", "address", "holiday_begin",
-            "holiday_end", "modification_date","parking_code", "parking_name", "payyn", "phone_number", "rates",
+            "holiday_end", "lat", "lng", "modification_date","parking_code", "parking_name", "payyn", "phone_number",
+            "rates",
             "sync_time",
-            "time_rates", "type", "weekday_begin", "weekday_end", "weekend_begin", "weekend_end", "x_coor",
-            "y_coor"};
+            "time_rates", "type", "weekday_begin", "weekday_end", "weekend_begin", "weekend_end"};
 
     @Bean
     public Job createJob() {

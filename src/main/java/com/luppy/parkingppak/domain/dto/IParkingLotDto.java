@@ -10,8 +10,8 @@ public class IParkingLotDto {
     private Long id;
     private String parkingName;
     // 주차장 위치 좌표
-    private double xCoor;
-    private double yCoor;
+    private double lng;
+    private double lat;
     private String address;
     private Boolean payYN;
     // 주중 운영 시간

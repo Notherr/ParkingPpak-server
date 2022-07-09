@@ -5,13 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 @Entity
 @Data
@@ -57,8 +53,8 @@ public class ParkingLot {
     // 추가 단위 시간 (분 단위)
     private int addTimeRates;
     // 주차장 위치 좌표
-    private double xCoor;
-    private double yCoor;
+    private double lat; // 경도
+    private double lng; // 위도
 
     public ParkingLot parkingLotMapper(ParkingLotData.Row row) {
         this.parkingName = row.getPARKING_NAME();
@@ -81,8 +77,8 @@ public class ParkingLot {
         this.timeRates = (int)Float.parseFloat(row.getTIME_RATE());
         this.addRates = (int)Float.parseFloat(row.getADD_RATES());
         this.addTimeRates = (int)Float.parseFloat(row.getADD_TIME_RATE());
-        this.xCoor = Double.parseDouble(row.getLNG());
-        this.yCoor = Double.parseDouble(row.getLAT());
+        this.lng = Double.parseDouble(row.getLNG());
+        this.lat = Double.parseDouble(row.getLAT());
         this.modificationDate = LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter);
         return this;
     }

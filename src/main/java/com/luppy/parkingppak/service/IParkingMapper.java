@@ -17,6 +17,6 @@ public class IParkingMapper {
                 , parkingLot.getWeekdayBegin(), parkingLot.getWeekdayEnd(), parkingLot.getWeekendBegin(),
                 parkingLot.getWeekendEnd(), parkingLot.getHolidayBegin(), parkingLot.getHolidayEnd(),
                 parkingLot.getSyncTime(), parkingLot.getRates(), parkingLot.getTimeRates(), parkingLot.getAddRates(),
-                parkingLot.getAddTimeRates(), parkingLot.getXCoor(), parkingLot.getYCoor());
+                parkingLot.getAddTimeRates(), parkingLot.getLat(), parkingLot.getLng());
     }
 }

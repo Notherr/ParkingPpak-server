@@ -45,14 +45,14 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=postgres
 
-  jenkins:
-    image: jenkins/jenkins:latest
-    container_name: jenkins
-    ports:
-      - "8082:8080"
-      - "50000:50000"
-    volumes:
-      - jenkins:/var/jenkins_home
+#  jenkins:
+#    image: jenkins/jenkins:latest
+#    container_name: jenkins
+#    ports:
+#      - "8082:8080"
+#      - "50000:50000"
+#    volumes:
+#      - jenkins:/var/jenkins_home
 
   elasticsearch:
     container_name: elasticsearch
@@ -74,16 +74,16 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.12.0
-    container_name: kibana
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    ports:
-      - 5601:5601
-    depends_on:
-      - elasticsearch
+#  kibana:
+#    image: docker.elastic.co/kibana/kibana:7.12.0
+#    container_name: kibana
+#    environment:
+#      - ELASTICSEARCH_URL=http://elasticsearch:9200
+#      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+#    ports:
+#      - 5601:5601
+#    depends_on:
+#      - elasticsearch
 volumes:
   jenkins:
   esdata:

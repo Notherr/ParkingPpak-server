@@ -1,14 +1,11 @@
 package com.luppy.parkingppak.init.batch;
 
 import com.luppy.parkingppak.domain.GasStation;
-import com.luppy.parkingppak.domain.ParkingLot;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Component
 public class GasStationFieldSetMapper implements FieldSetMapper<GasStation> {
@@ -22,8 +19,8 @@ public class GasStationFieldSetMapper implements FieldSetMapper<GasStation> {
         int dieselPrice = fieldSet.readInt("diesel_price");
         int gasolinePrice = fieldSet.readInt("gasoline_price");
         String uniqueId = fieldSet.readRawString("unique_id");
-        double xCoor = fieldSet.readDouble("x_coor");
-        double yCoor = fieldSet.readDouble("y_coor");
+        double lng = fieldSet.readDouble("lng");
+        double lat = fieldSet.readDouble("lat");
 
 
         return new GasStation(
@@ -31,8 +28,8 @@ public class GasStationFieldSetMapper implements FieldSetMapper<GasStation> {
                 compName,
                 gasStationName,
                 uniqueId,
-                xCoor,
-                yCoor,
+                lng,
+                lat,
                 gasolinePrice,
                 dieselPrice
         );
