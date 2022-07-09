@@ -143,6 +143,14 @@ public class Response<T> {
                 .build();
     }
 
+    public static <T> Response<T> REDUNDANT_FAVORITE(T data){
+        return (Response<T>) Response.builder()
+                .statusCode(400)
+                .data(data)
+                .message("이미 찜목록에 추가된 데이터입니다.")
+                .build();
+    }
+
     public static <T> Response<T> GET_FAVORITE_LIST_OK(T data){
         return (Response<T>) Response.builder()
                 .statusCode(200)
