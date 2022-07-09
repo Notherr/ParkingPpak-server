@@ -64,10 +64,10 @@ public class OauthController {
         return ResponseEntity.badRequest().body(Response.INVALID_RESOURCE_SERVER_NAME(null));
     }
 
-    @GetMapping("/join")
-    public ResponseEntity<?> oauthJoin(@RequestBody OauthDto oauthDto){
+    @GetMapping("/login")
+    public ResponseEntity<?> oauthLogin(@RequestBody OauthDto oauthDto){
 
-        oauthService.join(oauthDto);
+        oauthService.login(oauthDto);
         return null;
     }
 }
