@@ -65,7 +65,7 @@ public class OauthController {
         return ResponseEntity.badRequest().body(Response.INVALID_RESOURCE_SERVER_NAME(null));
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<?> oauthLogin(@RequestBody OauthDto oauthDto){
 
         LoginResponseDto loginResponseDto = oauthService.login(oauthDto);
