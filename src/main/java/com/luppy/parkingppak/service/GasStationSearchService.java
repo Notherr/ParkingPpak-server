@@ -77,8 +77,8 @@ public class GasStationSearchService {
                     .compName(source.getString("compName"))
                     .name(source.getString("name"))
                     .uniqueId(source.getString("uniqueId"))
-                    .xCoor(source.getDouble("xCoor"))
-                    .yCoor(source.getDouble("yCoor"))
+                    .lat(source.getDouble("lat"))
+                    .lng(source.getDouble("lng"))
                     .gasolinePrice(source.getInt("gasolinePrice"))
                     .dieselPrice(source.getInt("dieselPrice"))
                     .build();

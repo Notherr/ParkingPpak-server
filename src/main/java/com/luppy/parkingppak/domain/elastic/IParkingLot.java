@@ -51,6 +51,6 @@ public class IParkingLot {
     // 추가 단위 시간 (분 단위)
     private int addTimeRates;
     // 주차장 위치 좌표
-    private double xCoor;
-    private double yCoor;
+    private double lat;
+    private double lng;
 }

@@ -17,8 +17,8 @@ public class IGasStationMapper {
                 gasStation.getCompName(),
                 gasStation.getName(),
                 gasStation.getUniqueId(),
-                gasStation.getXCoor(),
-                gasStation.getYCoor(),
+                gasStation.getLng(),
+                gasStation.getLat(),
                 gasStation.getGasolinePrice(),
                 gasStation.getDieselPrice()
         );
