@@ -85,5 +85,5 @@ services:
 #    depends_on:
 #      - elasticsearch
 volumes:
-  jenkins:
   esdata:
+#  jenkins:
