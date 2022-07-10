@@ -46,7 +46,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             if (accountId != null) {
                 Account account = accountRepository.findById(Long.valueOf(accountId)).orElse(null);
 
-                if(account == null) throw new NotFoundException("인가에 실패하였습니다.");
+                if(account == null) {
+                    chain.doFilter(request, response);
+                    return;
+                }
                 else {
                     AccountDetails accountDetails = new AccountDetails(account);
                     Authentication authentication = new UsernamePasswordAuthenticationToken(accountDetails, null, accountDetails.getAuthorities());

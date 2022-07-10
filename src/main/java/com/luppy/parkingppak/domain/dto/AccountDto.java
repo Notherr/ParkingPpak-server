@@ -1,5 +1,8 @@
 package com.luppy.parkingppak.domain.dto;
 
+import com.luppy.parkingppak.domain.Card;
+import com.luppy.parkingppak.domain.enumclass.NaviType;
+import com.luppy.parkingppak.domain.enumclass.OilType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -8,22 +11,19 @@ import lombok.Data;
 @Data
 public class AccountDto {
 
-    @Schema(hidden = true)
     private Long id;
 
-    @Schema(example = "96x60812@gmail.com")
     private String email;
 
-    @Schema(example = "1234")
     private String password;
 
-    @Schema(example = "seongkyulim")
     private String name;
 
-    // private String cardType;
-    // private String oilType;
-    // private String naviType;
+    private Card card;
 
-    @Schema(hidden = true)
+    private OilType oilType;
+
+    private NaviType naviType;
+
     private Boolean verified;
 }

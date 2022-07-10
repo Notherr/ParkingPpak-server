@@ -143,6 +143,14 @@ public class Response<T> {
                 .build();
     }
 
+    public static <T> Response<T> REDUNDANT_FAVORITE(T data){
+        return (Response<T>) Response.builder()
+                .statusCode(400)
+                .data(data)
+                .message("이미 찜목록에 추가된 데이터입니다.")
+                .build();
+    }
+
     public static <T> Response<T> GET_FAVORITE_LIST_OK(T data){
         return (Response<T>) Response.builder()
                 .statusCode(200)
@@ -172,6 +180,14 @@ public class Response<T> {
                 .statusCode(400)
                 .data(data)
                 .message("등록되지 않은 리소스 서버 네임입니다.")
+                .build();
+    }
+
+    public static <T> Response<T> OAUTH_LOGIN_OK(T data){
+        return (Response<T>) Response.builder()
+                .statusCode(200)
+                .data(data)
+                .message("OAUTH로그인이 정상적으로 되었습니다.")
                 .build();
     }
 

@@ -30,10 +30,6 @@ public class AccountController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtil jwtUtil;
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원가입 성공."),
-            @ApiResponse(responseCode = "400", description = "회원가입 실패. - 이미 존재하는 이메일입니다.")
-    })
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody AccountDto dto) {
 
@@ -43,11 +39,6 @@ public class AccountController {
         else return ResponseEntity.ok().body(Response.JOIN_OK(registeredAccount));
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "로그인 성공."),
-            @ApiResponse(responseCode = "400", description = "로그인 실패. : 가입되지 않은 이메일입니다."),
-            @ApiResponse(responseCode = "401", description = "로그인 실패. : 틀린 패스워드 입니다.")
-    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto dto) {
 
@@ -74,9 +65,6 @@ public class AccountController {
         }
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "카드등록 성공.")
-    })
     @PutMapping("/accounts/card-type")
     public ResponseEntity<?> registerCard(@RequestHeader("Authorization") String jwt, @RequestBody CardDto cardDto) {
 
@@ -84,9 +72,6 @@ public class AccountController {
          return ResponseEntity.ok().body(Response.REGISTER_CARD_OK(registeredCard));
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "유류정보등록 성공.")
-    })
     @PutMapping("/accounts/oil-type/{oilType}")
     public ResponseEntity<?> registerOilType(@RequestHeader("Authorization") String jwt, @PathVariable String oilType) {
 
@@ -94,9 +79,6 @@ public class AccountController {
         return ResponseEntity.ok().body(Response.REGISTER_OIL_TYPE_OK(registeredOilType));
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "네비게이션앱정보등록 성공.")
-    })
     @PutMapping("/accounts/navi-type/{naviType}")
     public ResponseEntity<?> registerNaviType(@RequestHeader("Authorization") String jwt, @PathVariable String naviType) {
 

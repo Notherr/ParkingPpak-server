@@ -33,9 +33,16 @@ public class FavoriteListController {
 
             if(account == null) return ResponseEntity.badRequest().body(Response.INVALID_ACCOUNT_ID(null));
             if(parkingLot == null) return ResponseEntity.badRequest().body(Response.INVALID_PARKINGLOT_ID(null));
+            if ( account.getParkingLotList().contains(parkingLot)) return ResponseEntity.badRequest().body(Response.REDUNDANT_FAVORITE(null));
+
+            account.getParkingLotList().add(parkingLot);
+            accountRepository.save(account);
 
             List<ParkingLot> list = account.getParkingLotList();
             list.add(parkingLot);
+
+            return ResponseEntity.ok().body(Response.ADD_FAVORITE_OK(list));
+
         }else if(dto.getType().equals("gas-station")){
 
             Account account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken))).orElse(null);
@@ -44,13 +51,17 @@ public class FavoriteListController {
 
             if(account == null) return ResponseEntity.badRequest().body(Response.INVALID_ACCOUNT_ID(null));
             if(gasStation == null) return ResponseEntity.badRequest().body(Response.INVALID_GAS_STATION_ID(null));
+            if ( account.getGasStationList().contains(gasStation)) return ResponseEntity.badRequest().body(Response.REDUNDANT_FAVORITE(null));
+
+            account.getGasStationList().add(gasStation);
+            accountRepository.save(account);
 
             List<GasStation> list = account.getGasStationList();
             list.add(gasStation);
 
-        }else return ResponseEntity.badRequest().body(Response.INVALID_DATATYPE(null));
+            return ResponseEntity.ok().body(Response.ADD_FAVORITE_OK(list));
 
-        return ResponseEntity.ok().body(Response.ADD_FAVORITE_OK(null));
+        }else return ResponseEntity.badRequest().body(Response.INVALID_DATATYPE(null));
     }
 
     @GetMapping("/{dataType}")
@@ -61,9 +72,9 @@ public class FavoriteListController {
 
         if(account != null){
             if(dataType.equals("parking-lot")) {
-                return ResponseEntity.ok().body(account.getParkingLotList());
+                return ResponseEntity.ok().body(Response.GET_FAVORITE_LIST_OK(account.getParkingLotList()));
             }else if(dataType.equals("gas-station")){
-                return ResponseEntity.ok().body(account.getGasStationList());
+                return ResponseEntity.ok().body(Response.GET_FAVORITE_LIST_OK(account.getGasStationList()));
             }else{
                 return ResponseEntity.badRequest().body(Response.INVALID_DATATYPE(null));
             }
