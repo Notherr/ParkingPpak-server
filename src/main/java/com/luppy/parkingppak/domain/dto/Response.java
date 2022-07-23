@@ -36,7 +36,7 @@ public class Response<T> {
         return (Response<T>) Response.builder()
                 .statusCode(200)
                 .data(data)
-                .message("로그인이 정상적으로 되었습니다.")
+                .message("Login succeeded.")
                 .build();
     }
 
