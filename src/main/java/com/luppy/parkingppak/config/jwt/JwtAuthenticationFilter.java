@@ -2,7 +2,10 @@ package com.luppy.parkingppak.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luppy.parkingppak.config.auth.AccountDetails;
+import com.luppy.parkingppak.domain.AccountRepository;
 import com.luppy.parkingppak.domain.dto.LoginRequestDto;
+import com.luppy.parkingppak.domain.dto.LoginResponseDto;
+import com.luppy.parkingppak.domain.dto.Response;
 import com.luppy.parkingppak.utils.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,15 +18,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    private final AccountRepository accountRepository;
+
+
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil, AccountRepository accountRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.accountRepository = accountRepository;
     }
 
     @Override
@@ -52,6 +60,23 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String jwtToken = jwtUtil.createToken(accountDetails.getAccount().getId(), accountDetails.getUsername());
 
-        response.addHeader("Authorization", "Bearer "+jwtToken);
+        LoginResponseDto loginResponseDto = LoginResponseDto.builder()
+                    .email(accountDetails.getAccount().getEmail())
+                    .name(accountDetails.getAccount().getName())
+                    .jwt("Bearer "+jwtToken)
+                    .card(accountDetails.getAccount().getCard())
+                    .oilType(accountDetails.getAccount().getOilType())
+                    .naviType(accountDetails.getAccount().getNaviType())
+                    .build();
+
+        PrintWriter writer = response.getWriter();
+        ObjectMapper om= new ObjectMapper();
+        String jsonString = om.writeValueAsString(Response.LOGIN_OK(loginResponseDto));
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        writer.print(jsonString);
+        writer.flush();
+
+//        response.addHeader("Authorization", "Bearer "+jwtToken);
     }
 }
