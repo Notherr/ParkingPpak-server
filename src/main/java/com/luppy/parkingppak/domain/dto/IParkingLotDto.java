@@ -10,7 +10,7 @@ public class IParkingLotDto {
     private Long id;
     private String parkingName;
     // 주차장 위치 좌표
-    private double lng;
+    private double lon;
     private double lat;
     private String address;
     private Boolean payYN;

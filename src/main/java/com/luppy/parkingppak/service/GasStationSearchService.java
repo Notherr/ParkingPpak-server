@@ -3,7 +3,6 @@ package com.luppy.parkingppak.service;
 import com.luppy.parkingppak.domain.dto.IGasStationDto;
 import com.luppy.parkingppak.utils.GasStationResultQuery;
 import com.luppy.parkingppak.utils.HelperFunctions;
-import com.luppy.parkingppak.utils.ParkingLotResultQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -35,11 +34,16 @@ public class GasStationSearchService {
         String body = HelperFunctions.gasStationbuildMuiltiIndexMatchBody(query);
         return executeHttpRequest(body);
     }
+    public GasStationResultQuery searchLocationFromQuery(int distance, double lat, double lon) throws IOException {
+        String body = HelperFunctions.searchGeoLocation(distance,lat, lon);
+        return executeHttpRequest(body);
+    }
 
     private GasStationResultQuery executeHttpRequest(String body) throws IOException{
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             GasStationResultQuery gasStationResultQuery = new GasStationResultQuery();
-            HttpPost httpPost = new HttpPost(HelperFunctions.buildSearchUri(elasticSearchUri, "", elasticSearchPrefix));
+            HttpPost httpPost = new HttpPost(HelperFunctions.buildSearchUri(elasticSearchUri, "gas_station",
+                    elasticSearchPrefix));
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
 
@@ -53,9 +57,16 @@ public class GasStationSearchService {
                     gasStationResultQuery.setTimeTook((float) ((double) object.getInt("took") / 1000));
                     gasStationResultQuery.setData(parseDtoFromObject(object));
                 } else {
-                    log.info("no search results");
-                    gasStationResultQuery.setNumberOfResults(0);
-                    gasStationResultQuery.setTimeTook((float) ((double) object.getInt("took") / 1000));
+                    List<IGasStationDto> gasStationDtos = parseDtoFromObject(object);
+                    if (gasStationDtos.size()!= 0) {
+                        gasStationResultQuery.setNumberOfResults(0);
+                        gasStationResultQuery.setTimeTook((float) ((double) object.getInt("took") / 1000));
+                        gasStationResultQuery.setData((gasStationDtos));
+                    } else {
+                        log.info("no search results");
+                        gasStationResultQuery.setNumberOfResults(0);
+                        gasStationResultQuery.setTimeTook((float) ((double) object.getInt("took") / 1000));
+                    }
                 }
             }
             catch (IOException | JSONException e) {
@@ -72,13 +83,14 @@ public class GasStationSearchService {
         for (Object hits : hitsArray) {
             JSONObject jsonObject = new JSONObject(hits.toString());
             JSONObject source = jsonObject.getJSONObject("_source");
+            JSONObject geoPoint = source.getJSONObject("location");
             IGasStationDto gasStationDto = IGasStationDto.builder()
                     .id(source.getLong("id"))
                     .compName(source.getString("compName"))
                     .name(source.getString("name"))
                     .uniqueId(source.getString("uniqueId"))
-                    .lat(source.getDouble("lat"))
-                    .lng(source.getDouble("lng"))
+                    .lat(geoPoint.getDouble("lat"))
+                    .lon(geoPoint.getDouble("lon"))
                     .gasolinePrice(source.getInt("gasolinePrice"))
                     .dieselPrice(source.getInt("dieselPrice"))
                     .build();

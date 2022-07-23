@@ -7,9 +7,8 @@ import lombok.Data;
 @Builder
 public class MapRequestDto {
 
-    // parking-lot, gas-station
+    // parking_lot, gas_station
     private String type;
-    private double xcoor;
-    private double ycoor;
-    private Long id;
+    private double lat;
+    private double lon;
 }

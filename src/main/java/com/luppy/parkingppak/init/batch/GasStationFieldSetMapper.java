@@ -19,7 +19,7 @@ public class GasStationFieldSetMapper implements FieldSetMapper<GasStation> {
         int dieselPrice = fieldSet.readInt("diesel_price");
         int gasolinePrice = fieldSet.readInt("gasoline_price");
         String uniqueId = fieldSet.readRawString("unique_id");
-        double lng = fieldSet.readDouble("lng");
+        double lon = fieldSet.readDouble("lon");
         double lat = fieldSet.readDouble("lat");
 
 
@@ -28,7 +28,7 @@ public class GasStationFieldSetMapper implements FieldSetMapper<GasStation> {
                 compName,
                 gasStationName,
                 uniqueId,
-                lng,
+                lon,
                 lat,
                 gasolinePrice,
                 dieselPrice

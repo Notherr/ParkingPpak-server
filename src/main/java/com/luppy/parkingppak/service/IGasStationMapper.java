@@ -4,6 +4,7 @@ package com.luppy.parkingppak.service;
 import com.luppy.parkingppak.domain.GasStation;
 import com.luppy.parkingppak.domain.elastic.IGasStation;
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +18,7 @@ public class IGasStationMapper {
                 gasStation.getCompName(),
                 gasStation.getName(),
                 gasStation.getUniqueId(),
-                gasStation.getLng(),
-                gasStation.getLat(),
+                new GeoPoint(gasStation.getLat(), gasStation.getLon()),
                 gasStation.getGasolinePrice(),
                 gasStation.getDieselPrice()
         );

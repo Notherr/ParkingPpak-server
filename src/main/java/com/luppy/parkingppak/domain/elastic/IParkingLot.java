@@ -3,8 +3,10 @@ package com.luppy.parkingppak.domain.elastic;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.GeoPointField;
 
 
 import java.time.LocalDateTime;
@@ -51,6 +53,6 @@ public class IParkingLot {
     // 추가 단위 시간 (분 단위)
     private int addTimeRates;
     // 주차장 위치 좌표
-    private double lat;
-    private double lng;
+    @GeoPointField
+    private GeoPoint location;
 }

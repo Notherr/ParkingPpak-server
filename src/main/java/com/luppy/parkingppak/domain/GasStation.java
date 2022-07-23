@@ -29,7 +29,7 @@ public class GasStation {
     private String compName;
     private String name;
     private String uniqueId;
-    private double lng;
+    private double lon;
     private double lat;
     private int gasolinePrice;
     private int dieselPrice;
@@ -40,7 +40,7 @@ public class GasStation {
         this.compName = row.getPOLL_DIV_CD();
         GeoTrans geoTrans = new GeoTrans(Double.parseDouble(row.getGIS_X_COOR()), Double.parseDouble(row.getGIS_Y_COOR()));
         List<Double> geoPts = geoTrans.Katec2Geo();
-        this.lng = geoPts.get(0);
+        this.lon = geoPts.get(0);
         this.lat = geoPts.get(1);
     }
 

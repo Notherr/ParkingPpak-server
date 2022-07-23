@@ -11,7 +11,7 @@ public class IGasStationDto {
     private String compName;
     private String name;
     private String uniqueId;
-    private double lng;
+    private double lon;
     private double lat;
     private int gasolinePrice;
     private int dieselPrice;

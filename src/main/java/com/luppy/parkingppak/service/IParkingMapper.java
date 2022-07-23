@@ -3,6 +3,7 @@ package com.luppy.parkingppak.service;
 import com.luppy.parkingppak.domain.ParkingLot;
 import com.luppy.parkingppak.domain.elastic.IParkingLot;
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.stereotype.Service;
 
 
@@ -17,6 +18,6 @@ public class IParkingMapper {
                 , parkingLot.getWeekdayBegin(), parkingLot.getWeekdayEnd(), parkingLot.getWeekendBegin(),
                 parkingLot.getWeekendEnd(), parkingLot.getHolidayBegin(), parkingLot.getHolidayEnd(),
                 parkingLot.getSyncTime(), parkingLot.getRates(), parkingLot.getTimeRates(), parkingLot.getAddRates(),
-                parkingLot.getAddTimeRates(), parkingLot.getLat(), parkingLot.getLng());
+                parkingLot.getAddTimeRates(), new GeoPoint(parkingLot.getLat(), parkingLot.getLon()));
     }
 }

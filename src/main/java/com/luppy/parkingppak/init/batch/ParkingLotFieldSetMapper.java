@@ -43,7 +43,7 @@ public class ParkingLotFieldSetMapper implements FieldSetMapper<ParkingLot> {
         int timeRates = fieldSet.readInt("time_rates");
         int addRates = fieldSet.readInt("add_rates");
         int addTimeRates = fieldSet.readInt("add_time_rates");
-        double lng = fieldSet.readDouble("lng");
+        double lon = fieldSet.readDouble("lon");
         double lat = fieldSet.readDouble("lat");
         LocalDateTime modificationDate = LocalDateTime.parse(fieldSet.readRawString("modification_date"), formatter);
 
@@ -67,7 +67,7 @@ public class ParkingLotFieldSetMapper implements FieldSetMapper<ParkingLot> {
                 addRates,
                 addTimeRates,
                 lat,
-                lng);
+                lon);
     }
 
 }
