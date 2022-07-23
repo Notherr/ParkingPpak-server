@@ -39,31 +39,31 @@ public class AccountController {
         else return ResponseEntity.ok().body(Response.JOIN_OK(registeredAccount));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto dto) {
-
-        Optional<Account> account = accountRepository.findByEmail(dto.getEmail());
-
-        if (account.isEmpty()) return ResponseEntity.status(400).body(Response.NOT_JOIN_ERROR());
-        else {
-            if (!bCryptPasswordEncoder.matches(dto.getPassword(), account.get().getPassword())) {
-                return ResponseEntity.status(401).body(Response.PASSWORD_ERROR());
-            }
-
-            String jwtToken = "Bearer " + jwtUtil.createToken(account.get().getId(), account.get().getName());
-
-            LoginResponseDto loginResponseDto = LoginResponseDto.builder()
-                    .email(account.get().getEmail())
-                    .name(account.get().getName())
-                    .jwt(jwtToken)
-                    .card(account.get().getCard())
-                    .oilType(account.get().getOilType())
-                    .naviType(account.get().getNaviType())
-                    .build();
-
-            return ResponseEntity.ok().body(Response.LOGIN_OK(loginResponseDto));
-        }
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody LoginRequestDto dto) {
+//
+//        Optional<Account> account = accountRepository.findByEmail(dto.getEmail());
+//
+//        if (account.isEmpty()) return ResponseEntity.status(400).body(Response.NOT_JOIN_ERROR());
+//        else {
+//            if (!bCryptPasswordEncoder.matches(dto.getPassword(), account.get().getPassword())) {
+//                return ResponseEntity.status(401).body(Response.PASSWORD_ERROR());
+//            }
+//
+//            String jwtToken = "Bearer " + jwtUtil.createToken(account.get().getId(), account.get().getName());
+//
+//            LoginResponseDto loginResponseDto = LoginResponseDto.builder()
+//                    .email(account.get().getEmail())
+//                    .name(account.get().getName())
+//                    .jwt(jwtToken)
+//                    .card(account.get().getCard())
+//                    .oilType(account.get().getOilType())
+//                    .naviType(account.get().getNaviType())
+//                    .build();
+//
+//            return ResponseEntity.ok().body(Response.LOGIN_OK(loginResponseDto));
+//        }
+//    }
 
     @PutMapping("/accounts/card-type")
     public ResponseEntity<?> registerCard(@RequestHeader("Authorization") String jwt, @RequestBody CardDto cardDto) {
