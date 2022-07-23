@@ -23,7 +23,7 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtAuthenticationFilter getJwtAuthenticationFilter() throws Exception {
-        final JwtAuthenticationFilter filter = new JwtAuthenticationFilter(authenticationManager(), jwtUtil, accountRepository);
+        final JwtAuthenticationFilter filter = new JwtAuthenticationFilter(authenticationManager(), jwtUtil);
         filter.setAuthenticationManager(authenticationManager());
         filter.setFilterProcessesUrl("/api/login");
         return filter;
