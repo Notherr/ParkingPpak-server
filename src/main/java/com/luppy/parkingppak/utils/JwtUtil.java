@@ -30,8 +30,7 @@ public class JwtUtil {
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
-                //.setExpiration(new Date(new Date().getTime() + tokenValidTime))
-                .setExpiration(null)
+                .setExpiration(new Date(new Date().getTime() + tokenValidTime))
                 .signWith(key)
                 .compact();
 
@@ -48,8 +47,6 @@ public class JwtUtil {
     // 토큰의 유효성 + 만료일자 확인
     public boolean validateToken(String jwt) {
         try {
-            // Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(jwt);
-            // return !claims.getBody().getExpiration().before(new Date());
             Key key = Keys.hmacShaKeyFor(secret.getBytes());
 
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
@@ -58,6 +55,7 @@ public class JwtUtil {
             log.info("만료된 jwt 토큰입니다.");
             return false;
         } catch (Exception e) {
+            log.info("유효하지않은 토큰입니다.");
             return false;
         }
     }
