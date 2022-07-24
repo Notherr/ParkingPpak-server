@@ -19,6 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -32,6 +34,11 @@ public class AccountController {
 
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody AccountDto dto) {
+        String regx = "^(.+)@(.+)$";
+        Pattern pattern = Pattern.compile(regx);
+        Matcher matcher = pattern.matcher(dto.getEmail());
+
+        if (!matcher.matches()) return ResponseEntity.badRequest().body(Response.INVALID_EMAIL_ERROR());
 
         AccountDto registeredAccount = accountService.joinAccount(dto);
 
