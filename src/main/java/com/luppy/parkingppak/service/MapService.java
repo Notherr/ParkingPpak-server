@@ -1,7 +1,5 @@
 package com.luppy.parkingppak.service;
 
-import com.luppy.parkingppak.domain.GasStationRepository;
-import com.luppy.parkingppak.domain.ParkingLotRepository;
 import com.luppy.parkingppak.domain.dto.MapRequestDto;
 import com.luppy.parkingppak.utils.GasStationResultQuery;
 import com.luppy.parkingppak.utils.ParkingLotResultQuery;
