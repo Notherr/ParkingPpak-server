@@ -18,9 +18,10 @@ public class IGasStationMapper {
                 gasStation.getCompName(),
                 gasStation.getName(),
                 gasStation.getUniqueId(),
+                gasStation.getAddress(),
                 new GeoPoint(gasStation.getLat(), gasStation.getLon()),
                 gasStation.getGasolinePrice(),
-                gasStation.getDieselPrice()
+                gasStation.getDieselPrice(), gasStation.isCarWash(), gasStation.isCvsExist(), gasStation.getTel()
         );
     }
 }

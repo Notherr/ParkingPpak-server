@@ -32,8 +32,11 @@ public class GasStationBatchConfig {
 
     private final GasStationFieldSetMapper gasStationFieldSetMapper;
 
-    private String[] gasStationFormat = new String[]{"id", "comp_name", "diesel_price", "gasoline_price","lat", "lon",
-            "name",
+    private String[] gasStationFormat = new String[]{"id", "address", "car_wash", "comp_name", "cvs_exist",
+            "diesel_price",
+            "gasoline_price",
+            "lat", "lon",
+            "name", "tel",
             "unique_id"};
 
     @Bean

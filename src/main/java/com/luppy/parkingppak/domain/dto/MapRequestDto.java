@@ -11,5 +11,5 @@ public class MapRequestDto {
     private String type;
     private double lat;
     private double lon;
-    private Long id;
+    private int distance;
 }

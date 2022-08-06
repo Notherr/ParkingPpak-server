@@ -93,6 +93,10 @@ public class GasStationSearchService {
                     .lon(geoPoint.getDouble("lon"))
                     .gasolinePrice(source.getInt("gasolinePrice"))
                     .dieselPrice(source.getInt("dieselPrice"))
+                    .address(source.getString("address"))
+                    .carWash(source.getBoolean("carWash"))
+                    .cvsExist(source.getBoolean("cvsExist"))
+                    .tel(source.getString("tel"))
                     .build();
 
             gasStationDtos.add(gasStationDto);

@@ -20,8 +20,12 @@ public class IGasStation {
     private String compName;
     private String name;
     private String uniqueId;
+    private String address;
     @GeoPointField
     private GeoPoint location;
     private int gasolinePrice;
     private int dieselPrice;
+    private boolean carWash;
+    private boolean cvsExist;
+    private String tel;
 }

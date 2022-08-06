@@ -17,13 +17,15 @@ public class MapController {
 
     private final MapService mapService;
 
-    @GetMapping("/")
+    @GetMapping("/{type}/{lat}/{lon}/{distance}")
 
-    public ResponseEntity<?> getDataList(@RequestBody MapRequestDto dto) throws IOException {
+    public ResponseEntity<?> getDataList(@PathVariable String type, @PathVariable double lat,
+                                         @PathVariable double lon, @PathVariable int distance) throws IOException {
         /*
          * 좌표를 받아서 해당 좌표의 범위내 데이터 반환.
          */
-        List<?> dataList = mapService.getDataList(dto);
+        MapRequestDto mapRequestDto = MapRequestDto.builder().type(type).lat(lat).lon(lon).distance(distance).build();
+        List<?> dataList = mapService.getDataList(mapRequestDto);
         return ResponseEntity.ok().body(dataList);
     }
 
