@@ -8,6 +8,7 @@ import com.luppy.parkingppak.domain.enumclass.NaviType;
 import com.luppy.parkingppak.domain.enumclass.OilType;
 import com.luppy.parkingppak.service.AccountService;
 import com.luppy.parkingppak.utils.JwtUtil;
+import com.luppy.parkingppak.utils.ValidationUtil;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -29,9 +32,13 @@ public class AccountController {
     private final AccountRepository accountRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtil jwtUtil;
+    private final ValidationUtil validationUtil;
 
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody AccountDto dto) {
+
+        if (!validationUtil.validate_email(dto.getEmail())) return ResponseEntity.badRequest().body(Response.INVALID_EMAIL_ERROR());
+        if (!validationUtil.validate_password(dto.getPassword())) return ResponseEntity.badRequest().body(Response.INVALID_PASSWORD_ERROR());
 
         AccountDto registeredAccount = accountService.joinAccount(dto);
 

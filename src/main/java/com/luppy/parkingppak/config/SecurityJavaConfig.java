@@ -43,7 +43,6 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(getJwtAuthenticationFilter())
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), jwtUtil, accountRepository))
                 .authorizeRequests()
-                //.antMatchers("/api/accounts/**").access("hasRole('ACCOUNT')")
                 .antMatchers("/api/accounts/**").authenticated()
                 .anyRequest().permitAll();
     }
