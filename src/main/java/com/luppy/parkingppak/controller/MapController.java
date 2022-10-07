@@ -17,29 +17,22 @@ public class MapController {
 
     private final MapService mapService;
 
-    @GetMapping("/{type}/{lat}/{lon}/{distance}")
-
-    public ResponseEntity<?> getDataList(@PathVariable String type, @PathVariable double lat,
-                                         @PathVariable double lon, @PathVariable int distance) throws IOException {
+    @GetMapping
+    public ResponseEntity<?> getDataList(@RequestParam String type, @RequestParam double lat,
+                                         @RequestParam double lon, @RequestParam(required = false) Integer distance) throws IOException {
         /*
          * 좌표를 받아서 해당 좌표의 범위내 데이터 반환.
          */
+        if (distance == null) {
+            distance = 5;
+        } else {
+            if (distance > 20) {
+                distance = 20;
+            }
+        }
         MapRequestDto mapRequestDto = MapRequestDto.builder().type(type).lat(lat).lon(lon).distance(distance).build();
         List<?> dataList = mapService.getDataList(mapRequestDto);
         return ResponseEntity.ok().body(dataList);
     }
 
-//    @GetMapping("/detail")
-//    public ResponseEntity<?> getData(@RequestBody MapRequestDto dto){
-//
-//        Object data  = mapService.getData(dto);
-//        return ResponseEntity.ok().body(data);
-//    }
-
-//    @GetMapping("/detail")
-//    public ResponseEntity<?> getData(@RequestBody MapRequestDto dto){
-//
-//        Object data  = mapService.getData(dto);
-//        return ResponseEntity.ok().body(Response.GET_MAP_DATA_OK(data));
-//    }
 }
