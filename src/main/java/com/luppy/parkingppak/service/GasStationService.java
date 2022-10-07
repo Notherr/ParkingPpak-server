@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -32,7 +33,6 @@ public class GasStationService implements PublicDataService<GasStation>{
     private int xBasePoint = 300400;
     private int yBasePoint = 544800;
     private int distance = 5000;
-    HashSet<String> uniqueIdSet = new HashSet<>();
 
 
     @Override
@@ -111,4 +111,62 @@ public class GasStationService implements PublicDataService<GasStation>{
     public boolean isEmpty() {
         return gasStationRepository.findAll().size() == 0;
     }
+
+    @Transactional
+    public void addGasStationDetail() {
+
+        List<GasStation> gasStations = gasStationRepository.findAll();
+        for (GasStation gasStation : gasStations) {
+            if (gasStation.getAddress() == null) {
+                try {
+                    GasStation updatedGasStation = updateGasStationDetail(gasStation);
+                    gasStation.setAddress(updatedGasStation.getAddress());
+                    gasStation.setCvsExist(updatedGasStation.isCvsExist());
+                    gasStation.setCarWash(updatedGasStation.isCarWash());
+                    gasStation.setTel(updatedGasStation.getTel());
+                } catch (RuntimeException e) {
+                    log.info("주유소 주소 등록 에러 발생" + e);
+                }
+            }
+        }
+
+    }
+
+    private GasStation updateGasStationDetail(GasStation gasStation) {
+        String uri = "http://www.opinet.co.kr/api/detailById.do?code=" + token + "&out=json&id=" + gasStation.getUniqueId();
+        log.info("uri :: " + uri);
+        HttpRequest request = HttpRequest.newBuilder(URI.create(uri)).GET().build();
+        try {
+            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+            Gson gson = new Gson();
+            GasStationData.GasStationDetailResponse dataResponse = gson.fromJson(response.body(),
+                    GasStationData.GasStationDetailResponse.class);
+            if (dataResponse.getRESULT().getOIL().size()==0) {
+                return gasStation;
+            }
+            GasStationData.DetailRow detailRow = dataResponse.getRESULT().getOIL().get(0);
+            String cvs_yn = detailRow.getCVS_YN();
+            if (cvs_yn != "N") {
+                gasStation.setCvsExist(true);
+            }
+            String car_wash_yn = detailRow.getCAR_WASH_YN();
+            if (car_wash_yn != "N") {
+                gasStation.setCarWash(true);
+            }
+            String tel = detailRow.getTEL();
+            if (!tel.isBlank()) {
+                gasStation.setTel(tel);
+            }
+            String new_adr = detailRow.getNEW_ADR();
+            if (!new_adr.isBlank()) {
+                gasStation.setAddress(new_adr);
+            }
+            return gasStation;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

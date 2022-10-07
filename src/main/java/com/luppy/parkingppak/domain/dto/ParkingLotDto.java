@@ -1,18 +1,24 @@
 package com.luppy.parkingppak.domain.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import java.time.LocalDateTime;
 
-@Data
 @Builder
-public class IParkingLotDto {
+@Data
+public class ParkingLotDto {
     private Long id;
+    private LocalDateTime modificationDate;
+    // 주차장 이름
     private String parkingName;
-    // 주차장 위치 좌표
-    private double lon;
-    private double lat;
     private String address;
+    // 고유 코드
+    private int parkingCode;
+    // 종류 e.g. 노외 주차장
+    private String type;
+    // 전화 번호
+    private String phoneNumber;
+    // 유무료 구분
     private Boolean payYN;
     // 주중 운영 시간
     private String weekdayBegin;
@@ -23,7 +29,8 @@ public class IParkingLotDto {
     // 공휴일 운영 시간
     private String holidayBegin;
     private String holidayEnd;
-
+    // 최종 데이터 동기화 시간
+    private LocalDateTime syncTime;
     // 기본 주차 요금
     private int rates;
     // 기본 주차 시간 (분 단위)
@@ -32,4 +39,7 @@ public class IParkingLotDto {
     private int addRates;
     // 추가 단위 시간 (분 단위)
     private int addTimeRates;
+    // 주차장 위치 좌표
+    private double xCoor;
+    private double yCoor;
 }

@@ -29,18 +29,23 @@ public class GasStation {
     private String compName;
     private String name;
     private String uniqueId;
-    private double lng;
+    private String address;
+    private double lon;
     private double lat;
     private int gasolinePrice;
     private int dieselPrice;
 
+    private boolean carWash;
+    private boolean cvsExist;
+    private String tel;
+
     public void gasStationMapper(GasStationData.Row row) {
         this.uniqueId = row.getUNI_ID();
         this.name = row.getOS_NM();
-        this.compName = row.getPOLL_DIV_CD();
+        this.compName = row.getPOLL_DIV_CO();
         GeoTrans geoTrans = new GeoTrans(Double.parseDouble(row.getGIS_X_COOR()), Double.parseDouble(row.getGIS_Y_COOR()));
         List<Double> geoPts = geoTrans.Katec2Geo();
-        this.lng = geoPts.get(0);
+        this.lon = geoPts.get(0);
         this.lat = geoPts.get(1);
     }
 

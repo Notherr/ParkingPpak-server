@@ -183,13 +183,18 @@ public class Response<T> {
                 .build();
     }
 
-    public static <T> Response<T> OAUTH_LOGIN_OK(T data){
+    public static <T> Response<T> OAUTH_LOGIN_OK(T data) {
         return (Response<T>) Response.builder()
                 .statusCode(200)
                 .data(data)
-                .message("OAUTH로그인이 정상적으로 되었습니다.")
+                .message("OAUTH로그인이 정상적으로 되었습니다.").build();
+    }
+    public static <T> Response<T> GET_MAP_DATA_OK(T data){
+        return (Response<T>) Response.builder()
+                .statusCode(200)
+                .data(data)
+                .message("정상적으로 데이터가 반환되었습니다.")
                 .build();
     }
-
 
 }

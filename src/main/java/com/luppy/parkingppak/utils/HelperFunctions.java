@@ -1,9 +1,9 @@
 package com.luppy.parkingppak.utils;
 
 import org.codehaus.jettison.json.JSONArray;
-import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
+import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
 
 public class HelperFunctions {
 
@@ -56,7 +56,20 @@ public class HelperFunctions {
                 "}";
     }
 
+    public static String searchGeoLocation(int distance, double lat, double lon) {
+        return "{\n" +
+                "\"query\": {\n" +
+                "      \"geo_distance\": {\n" +
+                "       \"distance\":      \"" + distance + "km\",\n" +
+                "       \"location\": {\n" +
+                "        \"lat\":" + lat + ",\n" +
+                "        \"lon\":" + lon + "\n" +
+                "     }\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
+    }
     public static String buildSearchUri(String elasticSearchUri, String elasticSearchIndex, String elasticSearchSearch) {
-        return elasticSearchUri + elasticSearchIndex + elasticSearchSearch;
+        return elasticSearchUri + elasticSearchIndex + "/" + elasticSearchSearch;
     }
 }

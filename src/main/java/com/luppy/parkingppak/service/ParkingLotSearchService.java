@@ -1,6 +1,7 @@
 package com.luppy.parkingppak.service;
 
 import com.luppy.parkingppak.domain.dto.IParkingLotDto;
+import com.luppy.parkingppak.utils.GasStationResultQuery;
 import com.luppy.parkingppak.utils.HelperFunctions;
 import com.luppy.parkingppak.utils.ParkingLotResultQuery;
 import lombok.extern.slf4j.Slf4j;
@@ -35,11 +36,16 @@ public class ParkingLotSearchService {
         String body = HelperFunctions.parkingLotbuildMuiltiIndexMatchBody(query);
         return executeHttpRequest(body);
     }
+    public ParkingLotResultQuery searchLocationFromQuery(int distance, double lat, double lon) throws IOException {
+        String body = HelperFunctions.searchGeoLocation(distance,lat, lon);
+        return executeHttpRequest(body);
+    }
 
     private ParkingLotResultQuery executeHttpRequest(String body) throws IOException{
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             ParkingLotResultQuery parkingLotResultQuery = new ParkingLotResultQuery();
-            HttpPost httpPost = new HttpPost(HelperFunctions.buildSearchUri(elasticSearchUri, "", elasticSearchPrefix));
+            HttpPost httpPost = new HttpPost(HelperFunctions.buildSearchUri(elasticSearchUri, "parking_lot",
+                    elasticSearchPrefix));
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
 
@@ -72,11 +78,12 @@ public class ParkingLotSearchService {
         for (Object hits : hitsArray) {
             JSONObject jsonObject = new JSONObject(hits.toString());
             JSONObject source = jsonObject.getJSONObject("_source");
+            JSONObject geoPoint = source.getJSONObject("location");
             IParkingLotDto parkingLotDto = IParkingLotDto.builder()
                     .id(source.getLong("id"))
                     .parkingName(source.getString("parkingName"))
-                    .lat(source.getDouble("lat"))
-                    .lng(source.getDouble(("lng")))
+                    .lat(geoPoint.getDouble("lat"))
+                    .lon(geoPoint.getDouble("lon"))
                     .address(source.getString("address"))
                     .payYN(source.getBoolean("payYN"))
                     .weekdayBegin(source.getString("weekdayBegin"))

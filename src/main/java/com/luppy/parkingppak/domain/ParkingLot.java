@@ -54,7 +54,7 @@ public class ParkingLot {
     private int addTimeRates;
     // 주차장 위치 좌표
     private double lat; // 경도
-    private double lng; // 위도
+    private double lon; // 위도
 
     public ParkingLot parkingLotMapper(ParkingLotData.Row row) {
         this.parkingName = row.getPARKING_NAME();
@@ -77,7 +77,7 @@ public class ParkingLot {
         this.timeRates = (int)Float.parseFloat(row.getTIME_RATE());
         this.addRates = (int)Float.parseFloat(row.getADD_RATES());
         this.addTimeRates = (int)Float.parseFloat(row.getADD_TIME_RATE());
-        this.lng = Double.parseDouble(row.getLNG());
+        this.lon = Double.parseDouble(row.getLNG());
         this.lat = Double.parseDouble(row.getLAT());
         this.modificationDate = LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter);
         return this;
