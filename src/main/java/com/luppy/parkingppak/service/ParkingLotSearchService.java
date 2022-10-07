@@ -1,7 +1,6 @@
 package com.luppy.parkingppak.service;
 
 import com.luppy.parkingppak.domain.dto.IParkingLotDto;
-import com.luppy.parkingppak.utils.GasStationResultQuery;
 import com.luppy.parkingppak.utils.HelperFunctions;
 import com.luppy.parkingppak.utils.ParkingLotResultQuery;
 import lombok.extern.slf4j.Slf4j;

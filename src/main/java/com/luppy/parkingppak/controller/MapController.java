@@ -35,4 +35,13 @@ public class MapController {
         return ResponseEntity.ok().body(dataList);
     }
 
+    @GetMapping("/detail")
+    public ResponseEntity getDataDetails(@RequestParam String type, @RequestParam Long id) {
+        Object data = mapService.getData(type, id);
+        if (data == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(data);
+    }
+
 }
