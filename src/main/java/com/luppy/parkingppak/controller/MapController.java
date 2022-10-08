@@ -1,11 +1,15 @@
 package com.luppy.parkingppak.controller;
 
 import com.luppy.parkingppak.domain.dto.MapRequestDto;
-
 import com.luppy.parkingppak.service.MapService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.ValidationException;
 import java.io.IOException;
 import java.util.List;
 
@@ -37,11 +41,16 @@ public class MapController {
 
     @GetMapping("/detail")
     public ResponseEntity getDataDetails(@RequestParam String type, @RequestParam Long id) {
-        Object data = mapService.getData(type, id);
-        if (data == null) {
-            return ResponseEntity.notFound().build();
+        try {
+            Object data = mapService.getData(type, id);
+            if (data == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok().body(data);
+        } catch (ValidationException exception) {
+            return ResponseEntity.badRequest().body("주어진 타입 파라미터가 올바르지 않습니다.\n gas_station or parking_lot");
         }
-        return ResponseEntity.ok().body(data);
+
     }
 
 }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ValidationException;
 import java.io.IOException;
 import java.util.List;
 
@@ -44,8 +45,10 @@ public class MapService {
     public Object getData(String type,  Long id) {
         if (type.equals("parking-lot")) {
             return parkingLotRepository.findById(id).orElse(null);
-        } else {
+        } else if (type.equals("gas_station")) {
             return gasStationRepository.findById(id).orElse(null);
+        } else {
+            throw new ValidationException("given type is not valid");
         }
     }
 }
