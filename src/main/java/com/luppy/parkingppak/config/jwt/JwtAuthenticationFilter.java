@@ -74,8 +74,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         PrintWriter writer = response.getWriter();
         ObjectMapper om= new ObjectMapper();
         String jsonString = om.writeValueAsString(Response.LOGIN_OK(loginResponseDto));
+        response.setHeader("Content-Type", "application/json");
         response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
         writer.print(jsonString);
         writer.flush();
 
@@ -96,9 +96,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }else{
             jsonString = om.writeValueAsString(Response.SYSTEM_ERROR());
         }
-        response.setHeader("Content-Type", "application/json;charset=UTF-8");
-        response.setContentType("application/json;charset=UTF-8");
-        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-Type", "application/json");
+        response.setContentType("application/json");
         writer.print(jsonString);
         writer.flush();
     }
