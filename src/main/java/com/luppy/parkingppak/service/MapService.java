@@ -43,7 +43,7 @@ public class MapService {
     }
 
     public Object getData(String type,  Long id) {
-        if (type.equals("parking-lot")) {
+        if (type.equals("parking_lot")) {
             return parkingLotRepository.findById(id).orElse(null);
         } else if (type.equals("gas_station")) {
             return gasStationRepository.findById(id).orElse(null);
