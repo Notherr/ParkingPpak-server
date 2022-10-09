@@ -60,7 +60,7 @@ public class Response<T> {
         return (Response<T>) Response.builder()
                 .statusCode(400)
                 .data(null)
-                .message("가입되지 않은 이메일입니다.")
+                .message("가입되지 않은 이메일입니다. email")
                 .build();
     }
 
@@ -68,7 +68,15 @@ public class Response<T> {
         return (Response<T>) Response.builder()
                 .statusCode(401)
                 .data(null)
-                .message("틀린 패스워드 입니다.")
+                .message("틀린 패스워드 입니다. password")
+                .build();
+    }
+
+    public static <T> Response<T> SYSTEM_ERROR(){
+        return (Response<T>) Response.builder()
+                .statusCode(500)
+                .data(null)
+                .message("시스템 문제로 인한 에러가 발생하였습니다. system")
                 .build();
     }
 
