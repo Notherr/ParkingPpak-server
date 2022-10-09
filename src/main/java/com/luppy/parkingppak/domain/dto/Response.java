@@ -32,11 +32,27 @@ public class Response<T> {
                 .build();
     }
 
+    public static <T> Response<T> INVALID_EMAIL_ERROR(){
+        return (Response<T>) Response.builder()
+                .statusCode(400)
+                .data(null)
+                .message("유효하지않은 이메일 형식입니다.")
+                .build();
+    }
+
+    public static <T> Response<T> INVALID_PASSWORD_ERROR(){
+        return (Response<T>) Response.builder()
+                .statusCode(400)
+                .data(null)
+                .message("유효하지않은 패스워드 형식입니다.")
+                .build();
+    }
+
     public static <T> Response<T> LOGIN_OK(T data){
         return (Response<T>) Response.builder()
                 .statusCode(200)
                 .data(data)
-                .message("Login succeeded.")
+                .message("정상적으로 로그인되었습니다.")
                 .build();
     }
 
@@ -53,6 +69,14 @@ public class Response<T> {
                 .statusCode(401)
                 .data(null)
                 .message("틀린 패스워드 입니다.")
+                .build();
+    }
+
+    public static <T> Response<T> SYSTEM_ERROR(){
+        return (Response<T>) Response.builder()
+                .statusCode(500)
+                .data(null)
+                .message("시스템 문제로 인한 에러가 발생하였습니다.")
                 .build();
     }
 

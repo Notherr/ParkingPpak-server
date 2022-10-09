@@ -3,6 +3,7 @@ package com.luppy.parkingppak.config.auth;
 import com.luppy.parkingppak.domain.Account;
 import com.luppy.parkingppak.domain.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,9 +19,8 @@ public class AccountDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         Account account = accountRepository.findByEmail(username)
-                .orElseThrow(()->new UsernameNotFoundException("등록된 이메일이 존재하지 않습니다."));
+                .orElseThrow(()->new AuthenticationServiceException("등록된 이메일이 존재하지 않습니다."));
 
         return new AccountDetails(account);
     }

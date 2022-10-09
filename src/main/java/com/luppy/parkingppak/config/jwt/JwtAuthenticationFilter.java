@@ -8,9 +8,12 @@ import com.luppy.parkingppak.domain.dto.LoginResponseDto;
 import com.luppy.parkingppak.domain.dto.Response;
 import com.luppy.parkingppak.utils.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -52,7 +55,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return null;
     }
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                            FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
         AccountDetails accountDetails = (AccountDetails) authResult.getPrincipal();
 
@@ -70,11 +74,31 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         PrintWriter writer = response.getWriter();
         ObjectMapper om= new ObjectMapper();
         String jsonString = om.writeValueAsString(Response.LOGIN_OK(loginResponseDto));
+        response.setHeader("Content-Type", "application/json");
         response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
         writer.print(jsonString);
         writer.flush();
 
 //        response.addHeader("Authorization", "Bearer "+jwtToken);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                              AuthenticationException failed) throws IOException, ServletException {
+
+        PrintWriter writer = response.getWriter();
+        ObjectMapper om= new ObjectMapper();
+        String jsonString = "";
+        if(failed instanceof AuthenticationServiceException) {
+            jsonString = om.writeValueAsString(Response.NOT_JOIN_ERROR());
+        }else if (failed instanceof BadCredentialsException){
+            jsonString = om.writeValueAsString(Response.PASSWORD_ERROR());
+        }else{
+            jsonString = om.writeValueAsString(Response.SYSTEM_ERROR());
+        }
+        response.setHeader("Content-Type", "application/json");
+        response.setContentType("application/json");
+        writer.print(jsonString);
+        writer.flush();
     }
 }
