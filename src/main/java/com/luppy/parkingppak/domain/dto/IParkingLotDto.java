@@ -32,4 +32,7 @@ public class IParkingLotDto {
     private int addRates;
     // 추가 단위 시간 (분 단위)
     private int addTimeRates;
+
+    // 검색 좌표에서 떨어진거리 (m)
+    private double distance;
 }

@@ -34,8 +34,8 @@ public class GasStationSearchService {
         String body = HelperFunctions.gasStationbuildMuiltiIndexMatchBody(query);
         return executeHttpRequest(body);
     }
-    public GasStationResultQuery searchLocationFromQuery(int distance, double lat, double lon) throws IOException {
-        String body = HelperFunctions.searchGeoLocation(distance,lat, lon);
+    public GasStationResultQuery searchLocationFromQuery(int distance, double lat, double lon, double searchAfter) throws IOException {
+        String body = HelperFunctions.searchGeoLocation(distance,lat, lon, searchAfter);
         return executeHttpRequest(body);
     }
 
@@ -84,6 +84,7 @@ public class GasStationSearchService {
             JSONObject jsonObject = new JSONObject(hits.toString());
             JSONObject source = jsonObject.getJSONObject("_source");
             JSONObject geoPoint = source.getJSONObject("location");
+            JSONArray sort = jsonObject.getJSONArray("sort");
             IGasStationDto gasStationDto = IGasStationDto.builder()
                     .id(source.getLong("id"))
                     .compName(source.getString("compName"))
@@ -97,6 +98,7 @@ public class GasStationSearchService {
                     .carWash(source.getBoolean("carWash"))
                     .cvsExist(source.getBoolean("cvsExist"))
                     .tel(source.getString("tel"))
+                    .distance(sort.getDouble(0))
                     .build();
 
             gasStationDtos.add(gasStationDto);

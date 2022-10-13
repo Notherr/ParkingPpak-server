@@ -3,15 +3,13 @@ package com.luppy.parkingppak.service;
 import com.luppy.parkingppak.domain.GasStationRepository;
 import com.luppy.parkingppak.domain.ParkingLotRepository;
 import com.luppy.parkingppak.domain.dto.MapRequestDto;
-import com.luppy.parkingppak.utils.GasStationResultQuery;
-import com.luppy.parkingppak.utils.ParkingLotResultQuery;
+import com.luppy.parkingppak.utils.ResultQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
 import java.io.IOException;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -27,18 +25,15 @@ public class MapService {
     private final GasStationSearchService gasStationSearchService;
     private final GasStationRepository gasStationRepository;
 
-    public List<?> getDataList(MapRequestDto dto) throws IOException {
+    public ResultQuery getDataList(MapRequestDto dto) throws IOException {
 
         // 요청받은 좌표값 기준 범위내 조회 쿼리메소드로 수정 필요.
         if (dto.getType().equals("parking_lot")) {
-            ParkingLotResultQuery parkingLotResultQuery = parkingLotSearchService.searchLocationFromQuery(dto.getDistance(),
-                    dto.getLat(), dto.getLon());
-            return parkingLotResultQuery.getData();
-
+            return parkingLotSearchService.searchLocationFromQuery(dto.getDistance(),
+                    dto.getLat(), dto.getLon(), dto.getSearchAfter());
         } else {
-            GasStationResultQuery gasStationResultQuery = gasStationSearchService.searchLocationFromQuery(dto.getDistance(),
-                    dto.getLat(), dto.getLon());
-            return gasStationResultQuery.getData();
+            return gasStationSearchService.searchLocationFromQuery(dto.getDistance(),
+                    dto.getLat(), dto.getLon(), dto.getSearchAfter());
         }
     }
 

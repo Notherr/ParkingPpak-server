@@ -19,4 +19,7 @@ public class IGasStationDto {
     private boolean carWash;
     private boolean cvsExist;
     private String tel;
+
+    // 검색 좌표에서 떨어진거리 (m)
+    private double distance;
 }
