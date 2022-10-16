@@ -1,14 +1,15 @@
 package com.luppy.parkingppak.service;
 
+import com.luppy.parkingppak.domain.GasStationRepository;
+import com.luppy.parkingppak.domain.ParkingLotRepository;
 import com.luppy.parkingppak.domain.dto.MapRequestDto;
-import com.luppy.parkingppak.utils.GasStationResultQuery;
-import com.luppy.parkingppak.utils.ParkingLotResultQuery;
+import com.luppy.parkingppak.utils.ResultQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ValidationException;
 import java.io.IOException;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -20,28 +21,29 @@ public class MapService {
     @Value("${api.elasticsearch.search}")
     private String elasticSearchPrefix;
     private final ParkingLotSearchService parkingLotSearchService;
+    private final ParkingLotRepository parkingLotRepository;
     private final GasStationSearchService gasStationSearchService;
+    private final GasStationRepository gasStationRepository;
 
-    public List<?> getDataList(MapRequestDto dto) throws IOException {
+    public ResultQuery getDataList(MapRequestDto dto) throws IOException {
 
         // 요청받은 좌표값 기준 범위내 조회 쿼리메소드로 수정 필요.
-        if(dto.getType().equals("parking_lot")) {
-            ParkingLotResultQuery parkingLotResultQuery = parkingLotSearchService.searchLocationFromQuery(dto.getDistance(),
-                    dto.getLat(), dto.getLon());
-            return parkingLotResultQuery.getData();
-
-        }else{
-            GasStationResultQuery gasStationResultQuery = gasStationSearchService.searchLocationFromQuery(dto.getDistance(),
-                    dto.getLat(), dto.getLon());
-            return gasStationResultQuery.getData();
+        if (dto.getType().equals("parking_lot")) {
+            return parkingLotSearchService.searchLocationFromQuery(dto.getDistance(),
+                    dto.getLat(), dto.getLon(), dto.getSearchAfter());
+        } else {
+            return gasStationSearchService.searchLocationFromQuery(dto.getDistance(),
+                    dto.getLat(), dto.getLon(), dto.getSearchAfter());
         }
     }
 
-//    public Object getData(MapRequestDto dto) {
-//        if(dto.getType().equals("parking-lot")){
-//            return parkingLotRepository.findById(dto.getId()).orElse(null);
-//        }else{
-//            return gasStationRepository.findById(dto.getId()).orElse(null);
-//        }
-//    }
+    public Object getData(String type,  Long id) {
+        if (type.equals("parking_lot")) {
+            return parkingLotRepository.findById(id).orElse(null);
+        } else if (type.equals("gas_station")) {
+            return gasStationRepository.findById(id).orElse(null);
+        } else {
+            throw new ValidationException("given type is not valid");
+        }
+    }
 }

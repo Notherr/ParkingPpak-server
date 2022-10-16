@@ -12,4 +12,5 @@ public class MapRequestDto {
     private double lat;
     private double lon;
     private int distance;
+    private double searchAfter;
 }

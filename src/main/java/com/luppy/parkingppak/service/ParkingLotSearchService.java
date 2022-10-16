@@ -1,7 +1,6 @@
 package com.luppy.parkingppak.service;
 
 import com.luppy.parkingppak.domain.dto.IParkingLotDto;
-import com.luppy.parkingppak.utils.GasStationResultQuery;
 import com.luppy.parkingppak.utils.HelperFunctions;
 import com.luppy.parkingppak.utils.ParkingLotResultQuery;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +35,8 @@ public class ParkingLotSearchService {
         String body = HelperFunctions.parkingLotbuildMuiltiIndexMatchBody(query);
         return executeHttpRequest(body);
     }
-    public ParkingLotResultQuery searchLocationFromQuery(int distance, double lat, double lon) throws IOException {
-        String body = HelperFunctions.searchGeoLocation(distance,lat, lon);
+    public ParkingLotResultQuery searchLocationFromQuery(int distance, double lat, double lon, double searchAfter) throws IOException {
+        String body = HelperFunctions.searchGeoLocation(distance,lat, lon, searchAfter);
         return executeHttpRequest(body);
     }
 
@@ -79,6 +78,7 @@ public class ParkingLotSearchService {
             JSONObject jsonObject = new JSONObject(hits.toString());
             JSONObject source = jsonObject.getJSONObject("_source");
             JSONObject geoPoint = source.getJSONObject("location");
+            JSONArray sort = jsonObject.getJSONArray("sort");
             IParkingLotDto parkingLotDto = IParkingLotDto.builder()
                     .id(source.getLong("id"))
                     .parkingName(source.getString("parkingName"))
@@ -96,6 +96,7 @@ public class ParkingLotSearchService {
                     .timeRates(source.getInt("timeRates"))
                     .addRates(source.getInt("addRates"))
                     .addTimeRates(source.getInt("addTimeRates"))
+                    .distance(sort.getDouble(0))
                     .build();
             parkingLotDtos.add(parkingLotDto);
         }
