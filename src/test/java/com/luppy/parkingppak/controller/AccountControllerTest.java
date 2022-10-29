@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luppy.parkingppak.domain.Account;
 import com.luppy.parkingppak.domain.AccountRepository;
 import com.luppy.parkingppak.utils.JwtUtil;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class AccountControllerTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Tag("IntegrationTest")
+@Disabled
+class AccountControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,14 +46,29 @@ public class AccountControllerTest {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @BeforeAll
+    void setUp() {
+        Account account = Account.builder()
+                .email("test@gmail.com")
+                .password(bCryptPasswordEncoder.encode("1234"))
+                .name("seongkyu")
+                .build();
+        accountRepository.save(account);
+    }
+
+    @AfterAll
+    void afterAll() {
+        accountRepository.deleteAll();
+    }
+
     @Test
     @Transactional
-    public void 회원가입이_정상적으로_되었습니다 () throws Exception {
+    void 회원가입이_정상적으로_되었습니다 () throws Exception {
 
         Map<String, String> joinContent = new HashMap<>();
-        joinContent.put("email", "test@gmail.com");
+        joinContent.put("email", "jointest@gmail.com");
         joinContent.put("password", "1234");
-        joinContent.put("name", "seongkyu");
+        joinContent.put("name", "joinseongkyu");
 
         mockMvc.perform(post("/api/join")
                 .content(objectMapper.writeValueAsString(joinContent))
@@ -62,15 +80,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    @Transactional
-    public void 이미_존재하는_이메일입니다 () throws Exception {
-
-        Account account = Account.builder()
-                .email("test@gmail.com")
-                .password("1234")
-                .name("seongkyu")
-                .build();
-        accountRepository.save(account);
+    void 이미_존재하는_이메일입니다 () throws Exception {
 
         Map<String, String> joinContent = new HashMap<>();
         joinContent.put("email", "test@gmail.com");
@@ -88,15 +98,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    @Transactional
-    public void 로그인이_정상적으로_되었습니다 () throws Exception {
-
-        Account account = Account.builder()
-                .email("test@gmail.com")
-                .password(bCryptPasswordEncoder.encode("1234"))
-                .name("seongkyu")
-                .build();
-        accountRepository.save(account);
+    void 로그인이_정상적으로_되었습니다 () throws Exception {
 
         Map<String, String> loginContent = new HashMap<>();
         loginContent.put("email", "test@gmail.com");
@@ -112,15 +114,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    @Transactional
-    public void 가입되지_않은_이메일입니다 () throws Exception {
-
-        Account account = Account.builder()
-                .email("test@gmail.com")
-                .password(bCryptPasswordEncoder.encode("1234"))
-                .name("seongkyu")
-                .build();
-        accountRepository.save(account);
+    void 가입되지_않은_이메일입니다 () throws Exception {
 
         Map<String, String> loginContent = new HashMap<>();
         loginContent.put("email", "test@naver.com");
@@ -137,15 +131,7 @@ public class AccountControllerTest {
     }
 
     @Test
-    @Transactional
-    public void 틀린_패스워드_입니다 () throws Exception {
-
-        Account account = Account.builder()
-                .email("test@gmail.com")
-                .password(bCryptPasswordEncoder.encode("1234"))
-                .name("seongkyu")
-                .build();
-        accountRepository.save(account);
+    void 틀린_패스워드_입니다 () throws Exception {
 
         Map<String, String> loginContent = new HashMap<>();
         loginContent.put("email", "test@gmail.com");
@@ -163,15 +149,9 @@ public class AccountControllerTest {
 
     @Test
     @Transactional
-    public void 카드정보가_정상적으로_등록되었습니다 () throws Exception {
+    void 카드정보가_정상적으로_등록되었습니다 () throws Exception {
 
-        Account account = Account.builder()
-                .email("test@gmail.com")
-                .password("1234")
-                .name("seongkyu")
-                .build();
-        Account savedAccount = accountRepository.save(account);
-
+        Account savedAccount = accountRepository.findByEmail("test@gmail.com").orElse(null);
         String jwt = "Bearer " + jwtUtil.createToken(savedAccount.getId(), savedAccount.getName());
 
         Map<String, String> content = new HashMap<>();
@@ -191,15 +171,9 @@ public class AccountControllerTest {
 
     @Test
     @Transactional
-    public void 정상적으로_유류정보가_등록되었습니다 () throws Exception {
+    void 정상적으로_유류정보가_등록되었습니다 () throws Exception {
 
-        Account account = Account.builder()
-                .email("test@gmail.com")
-                .password("1234")
-                .name("seongkyu")
-                .build();
-        Account savedAccount = accountRepository.save(account);
-
+        Account savedAccount = accountRepository.findByEmail("test@gmail.com").orElse(null);
         String jwt = "Bearer " + jwtUtil.createToken(savedAccount.getId(), savedAccount.getName());
 
         mockMvc.perform(put("/api/accounts/oil-type/LPG")
@@ -211,15 +185,8 @@ public class AccountControllerTest {
 
     @Test
     @Transactional
-    public void 정상적으로_내비앱_정보가_등록되었습니다 () throws Exception {
-
-        Account account = Account.builder()
-                .email("test@gmail.com")
-                .password("1234")
-                .name("seongkyu")
-                .build();
-        Account savedAccount = accountRepository.save(account);
-
+    void 정상적으로_내비앱_정보가_등록되었습니다 () throws Exception {
+        Account savedAccount = accountRepository.findByEmail("test@gmail.com").orElse(null);
         String jwt = "Bearer " + jwtUtil.createToken(savedAccount.getId(), savedAccount.getName());
 
         mockMvc.perform(put("/api/accounts/navi-type/KAKAOMAP")

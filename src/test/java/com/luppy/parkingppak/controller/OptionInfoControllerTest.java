@@ -1,5 +1,7 @@
 package com.luppy.parkingppak.controller;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,14 +16,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class OptionInfoControllerTest {
+@Tag("IntegrationTest")
+@Disabled
+class OptionInfoControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
 
     @Test
-    public void 정상적으로_카드_회사_이름_목록이_반환되었습니다 () throws Exception {
+    void 정상적으로_카드_회사_이름_목록이_반환되었습니다 () throws Exception {
 
         mockMvc.perform(get("/api/option-info/card-comp-name")
         )
@@ -30,7 +34,7 @@ public class OptionInfoControllerTest {
     }
 
     @Test
-    public void 정상적으로_유류_타입_목록이_반환되었습니다 () throws Exception {
+    void 정상적으로_유류_타입_목록이_반환되었습니다 () throws Exception {
 
         mockMvc.perform(get("/api/option-info/oil-type")
                 )
@@ -39,7 +43,7 @@ public class OptionInfoControllerTest {
     }
 
     @Test
-    public void 정상적으로_내비_앱_목록이_반환되었습니다 () throws Exception {
+    void 정상적으로_내비_앱_목록이_반환되었습니다 () throws Exception {
 
         mockMvc.perform(get("/api/option-info/navi-type")
                 )
