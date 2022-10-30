@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.luppy.parkingppak.domain.dto.Response.response;
+
 @RestController
 @RequestMapping("/api/option-info")
 public class OptionInfoController {
@@ -25,7 +27,7 @@ public class OptionInfoController {
         cardCompNameList.add(CardCompName.SAMSUNG);
         cardCompNameList.add(CardCompName.SINHAN);
 
-        return ResponseEntity.ok().body(Response.GET_CARD_COMP_NAME_LIST_OK(cardCompNameList));
+        return ResponseEntity.ok().body(response(200, cardCompNameList, "정상적으로 카드 회사 이름 목록이 반환되었습니다." ));
     }
 
     @GetMapping("/oil-type")
@@ -37,7 +39,7 @@ public class OptionInfoController {
         oilTypeList.add(OilType.PREMIUM);
         oilTypeList.add(OilType.LPG);
 
-        return ResponseEntity.ok().body(Response.GET_OIL_TYPE_LIST_OK(oilTypeList));
+        return ResponseEntity.ok().body(response(200, oilTypeList, "정상적으로 유류 타입 목록이 반환되었습니다."));
     }
 
     @GetMapping("/navi-type")
@@ -49,6 +51,6 @@ public class OptionInfoController {
         naviTypeList.add(NaviType.NAVER);
         naviTypeList.add(NaviType.TMAP);
 
-        return ResponseEntity.ok().body(Response.GET_NAVI_TYPE_LIST_OK(naviTypeList));
+        return ResponseEntity.ok().body(response(200, naviTypeList, "정상적으로 내비 앱 목록이 반환되었습니다."));
     }
 }

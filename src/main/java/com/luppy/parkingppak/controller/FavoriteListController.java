@@ -33,7 +33,7 @@ public class FavoriteListController {
 
             if(account == null) return ResponseEntity.badRequest().body(Response.INVALID_ACCOUNT_ID(null));
             if(parkingLot == null) return ResponseEntity.badRequest().body(Response.INVALID_PARKINGLOT_ID(null));
-            if ( account.getParkingLotList().contains(parkingLot)) return ResponseEntity.badRequest().body(Response.REDUNDANT_FAVORITE(null));
+            if (account.getParkingLotList().contains(parkingLot)) return ResponseEntity.badRequest().body(Response.REDUNDANT_FAVORITE(null));
 
             account.getParkingLotList().add(parkingLot);
             accountRepository.save(account);

@@ -73,7 +73,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         PrintWriter writer = response.getWriter();
         ObjectMapper om= new ObjectMapper();
-        String jsonString = om.writeValueAsString(Response.LOGIN_OK(loginResponseDto));
+        String jsonString = om.writeValueAsString(Response.response(200, loginResponseDto, "정상적으로 로그인되었습니다."));
         response.setHeader("Content-Type", "application/json");
         response.setContentType("application/json");
         writer.print(jsonString);
@@ -90,11 +90,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         ObjectMapper om= new ObjectMapper();
         String jsonString = "";
         if(failed instanceof AuthenticationServiceException) {
-            jsonString = om.writeValueAsString(Response.NOT_JOIN_ERROR());
+            jsonString = om.writeValueAsString(Response.response(400, null, "가입되지 않은 이메일입니다."));
         }else if (failed instanceof BadCredentialsException){
-            jsonString = om.writeValueAsString(Response.PASSWORD_ERROR());
+            jsonString = om.writeValueAsString(Response.response(401, null, "틀린 패스워드 입니다."));
         }else{
-            jsonString = om.writeValueAsString(Response.SYSTEM_ERROR());
+            jsonString = om.writeValueAsString(Response.response(500, null, "시스템 문제로 인한 에러가 발생하였습니다."));
         }
         response.setHeader("Content-Type", "application/json");
         response.setContentType("application/json");

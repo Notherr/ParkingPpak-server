@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.luppy.parkingppak.domain.dto.Response.response;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/oauth")
@@ -23,8 +25,8 @@ public class OauthController {
         입력받은 파라미터에 맞는 키값을 반환한다.
          */
         OauthKeyDto oauthKeyDto = oauthService.getOauthKey(resourceServer);
-        if(oauthKeyDto == null) return ResponseEntity.badRequest().body(Response.INVALID_RESOURCE_SERVER_NAME(null));
-        return ResponseEntity.ok().body(Response.GET_OAUTH_KEY_OK(oauthKeyDto));
+        if(oauthKeyDto == null) return ResponseEntity.badRequest().body(response(400, null, "등록되지 않은 리소스 서버 네임입니다."));
+        return ResponseEntity.ok().body(response(200, oauthKeyDto, "정상적으로 반환되었습니다."));
     }
 
     @PostMapping("/login")
@@ -35,6 +37,6 @@ public class OauthController {
          */
 
         LoginResponseDto loginResponseDto = oauthService.login(oauthDto);
-        return ResponseEntity.ok().body(Response.OAUTH_LOGIN_OK(loginResponseDto));
+        return ResponseEntity.ok().body(response(200, loginResponseDto, "OAUTH로그인이 정상적으로 되었습니다."));
     }
 }

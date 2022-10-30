@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+import static com.luppy.parkingppak.domain.dto.Response.response;
+
 @RequiredArgsConstructor
 @RequestMapping("/api")
 @RestController
@@ -23,33 +25,34 @@ public class AccountController {
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody AccountDto dto) {
 
-        if (!validationUtil.validate_email(dto.getEmail())) return ResponseEntity.badRequest().body(Response.INVALID_EMAIL_ERROR());
-        if (!validationUtil.validate_password(dto.getPassword())) return ResponseEntity.badRequest().body(Response.INVALID_PASSWORD_ERROR());
+        if (!validationUtil.validate_email(dto.getEmail())) return ResponseEntity.badRequest().body(response(400,null,"유효하지않은 이메일 형식입니다."));
+        if (!validationUtil.validate_password(dto.getPassword())) return ResponseEntity.badRequest().body(response(400,null,"유효하지않은 패스워드 형식입니다."));
 
         AccountDto registeredAccount = accountService.joinAccount(dto);
 
-        if(registeredAccount == null) return ResponseEntity.badRequest().body(Response.JOIN_ERROR());
-        else return ResponseEntity.ok().body(Response.JOIN_OK(registeredAccount));
+        if(registeredAccount == null) return ResponseEntity.badRequest().body(response(400, null, "이미 존재하는 이메일입니다."));
+        else return ResponseEntity.ok().body(response(200, registeredAccount, "회원가입이 정상적으로 되었습니다."));
+
     }
 
     @PutMapping("/accounts/card-type")
     public ResponseEntity<?> registerCard(@RequestHeader("Authorization") String jwt, @RequestBody CardDto cardDto) {
 
         CardDto registeredCard = accountService.registerCard(jwt, cardDto);
-         return ResponseEntity.ok().body(Response.REGISTER_CARD_OK(registeredCard));
+         return ResponseEntity.ok().body(response(200,registeredCard,"정상적으로 카드정보가 등록되었습니다."));
     }
 
     @PutMapping("/accounts/oil-type/{oilType}")
     public ResponseEntity<?> registerOilType(@RequestHeader("Authorization") String jwt, @PathVariable String oilType) {
 
         Optional<OilType> registeredOilType = accountService.registerOilType(jwt, oilType);
-        return ResponseEntity.ok().body(Response.REGISTER_OIL_TYPE_OK(registeredOilType));
+        return ResponseEntity.ok().body(response(200, registeredOilType, "정상적으로 유류정보가 등록되었습니다."));
     }
 
     @PutMapping("/accounts/navi-type/{naviType}")
     public ResponseEntity<?> registerNaviType(@RequestHeader("Authorization") String jwt, @PathVariable String naviType) {
 
         Optional<NaviType> registeredNaviType = accountService.registerNaviType(jwt ,naviType);
-        return ResponseEntity.ok().body(Response.REGISTER_NAVI_TYPE_OK(registeredNaviType));
+        return ResponseEntity.ok().body(response(200, registeredNaviType, "정상적으로 내비앱 정보가 등록되었습니다."));
     }
 }
