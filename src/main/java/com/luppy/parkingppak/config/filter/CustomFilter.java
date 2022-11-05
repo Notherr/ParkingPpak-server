@@ -25,14 +25,16 @@ public class CustomFilter implements Filter {
 
         String header = ((HttpServletRequest) request).getHeader("Authorization");
         if(header == null || !header.startsWith("Bearer ")){
-            chain.doFilter(request, response);
+            requestWrapper.addHeader("AccountId", null);
+            chain.doFilter(requestWrapper, response);
             return;
         }
 
         String jwt = ((HttpServletRequest) request).getHeader("Authorization").replace("Bearer ", "");
 
         if(!jwtUtil.validateToken(jwt)) {
-            chain.doFilter(request, response);
+            requestWrapper.addHeader("AccountId", null);
+            chain.doFilter(requestWrapper, response);
             return;
         }
 
