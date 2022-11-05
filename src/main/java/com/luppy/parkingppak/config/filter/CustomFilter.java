@@ -4,12 +4,13 @@ import com.luppy.parkingppak.utils.JwtUtil;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.util.*;
 
-@Component
+@WebFilter(urlPatterns = {"/api/search/*", "/api/accounts/*"})
 public class CustomFilter implements Filter {
 
     private final JwtUtil jwtUtil;
