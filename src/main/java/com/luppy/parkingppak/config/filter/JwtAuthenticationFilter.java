@@ -1,8 +1,7 @@
-package com.luppy.parkingppak.config.jwt;
+package com.luppy.parkingppak.config.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luppy.parkingppak.config.auth.AccountDetails;
-import com.luppy.parkingppak.domain.AccountRepository;
 import com.luppy.parkingppak.domain.dto.LoginRequestDto;
 import com.luppy.parkingppak.domain.dto.LoginResponseDto;
 import com.luppy.parkingppak.domain.dto.Response;
@@ -13,7 +12,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
