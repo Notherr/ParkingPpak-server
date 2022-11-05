@@ -36,23 +36,23 @@ public class AccountController {
     }
 
     @PutMapping("/accounts/card-type")
-    public ResponseEntity<?> registerCard(@RequestHeader("Authorization") String jwt, @RequestBody CardDto cardDto) {
+    public ResponseEntity<?> registerCard(@RequestHeader("AccountId") String accountId, @RequestBody CardDto cardDto) {
 
-        CardDto registeredCard = accountService.registerCard(jwt, cardDto);
+        CardDto registeredCard = accountService.registerCard(accountId, cardDto);
          return ResponseEntity.ok().body(response(200,registeredCard,"정상적으로 카드정보가 등록되었습니다."));
     }
 
     @PutMapping("/accounts/oil-type/{oilType}")
-    public ResponseEntity<?> registerOilType(@RequestHeader("Authorization") String jwt, @PathVariable String oilType) {
+    public ResponseEntity<?> registerOilType(@RequestHeader("AccountId") String accountId, @PathVariable String oilType) {
 
-        Optional<OilType> registeredOilType = accountService.registerOilType(jwt, oilType);
+        Optional<OilType> registeredOilType = accountService.registerOilType(accountId, oilType);
         return ResponseEntity.ok().body(response(200, registeredOilType, "정상적으로 유류정보가 등록되었습니다."));
     }
 
     @PutMapping("/accounts/navi-type/{naviType}")
-    public ResponseEntity<?> registerNaviType(@RequestHeader("Authorization") String jwt, @PathVariable String naviType) {
+    public ResponseEntity<?> registerNaviType(@RequestHeader("AccountId") String accountId, @PathVariable String naviType) {
 
-        Optional<NaviType> registeredNaviType = accountService.registerNaviType(jwt ,naviType);
+        Optional<NaviType> registeredNaviType = accountService.registerNaviType(accountId ,naviType);
         return ResponseEntity.ok().body(response(200, registeredNaviType, "정상적으로 내비앱 정보가 등록되었습니다."));
     }
 }

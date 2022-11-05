@@ -21,13 +21,11 @@ public class FavoriteListController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/")
-    public ResponseEntity<?> addFavorite(@RequestHeader("Authorization") String jwt, @RequestBody FavoriteRequestDto dto){
-
-        String jwtToken = jwt.replace("Bearer ", "");
+    public ResponseEntity<?> addFavorite(@RequestHeader("AccountId") String accountId, @RequestBody FavoriteRequestDto dto){
 
         if(dto.getType().equals("parking-lot")){
 
-            Account account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken))).orElse(null);
+            Account account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(accountId))).orElse(null);
             ParkingLot parkingLot = parkingLotRepository.findById(dto.getDataId()).orElse(null);
 
 
@@ -45,7 +43,7 @@ public class FavoriteListController {
 
         }else if(dto.getType().equals("gas-station")){
 
-            Account account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken))).orElse(null);
+            Account account = accountRepository.findById(Long.valueOf(accountId)).orElse(null);
             GasStation gasStation = gasStationRepository.findById(dto.getDataId()).orElse(null);
 
 
@@ -65,10 +63,9 @@ public class FavoriteListController {
     }
 
     @GetMapping("/{dataType}")
-    public ResponseEntity<?> getFavoriteList(@RequestHeader("Authorization") String jwt, @PathVariable String dataType){
-        String jwtToken = jwt.replace("Bearer ", "");
+    public ResponseEntity<?> getFavoriteList(@RequestHeader("AccountId") String accountId, @PathVariable String dataType){
 
-        Account account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken))).orElse(null);
+        Account account = accountRepository.findById(Long.valueOf(accountId)).orElse(null);
 
         if(account != null){
             if(dataType.equals("parking-lot")) {
@@ -84,10 +81,9 @@ public class FavoriteListController {
     }
 
     @DeleteMapping("/")
-    public ResponseEntity<?> deleteFavorite(@RequestHeader("Authorization") String jwt, @RequestBody FavoriteRequestDto dto){
-        String jwtToken = jwt.replace("Bearer ", "");
+    public ResponseEntity<?> deleteFavorite(@RequestHeader("AccountId") String accountId, @RequestBody FavoriteRequestDto dto){
 
-        Account account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken))).orElse(null);
+        Account account = accountRepository.findById(Long.valueOf(accountId)).orElse(null);
 
         if(account!=null){
             if(dto.getType().equals("gas-station")){

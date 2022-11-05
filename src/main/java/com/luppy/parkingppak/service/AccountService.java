@@ -50,10 +50,9 @@ public class AccountService {
     }
 
     @Transactional
-    public CardDto registerCard(String jwt, CardDto dto) {
-        String jwtToken = jwt.replace("Bearer ", "");
+    public CardDto registerCard(String accountId, CardDto dto) {
 
-        Account account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken))).orElse(null);
+        Account account = accountRepository.findById(Long.valueOf(accountId)).orElse(null);
         Card selectedCard = cardRepository.findByCardName(dto.getName());
 
         if(account == null) return null;
@@ -76,11 +75,9 @@ public class AccountService {
     }
 
     @Transactional
-    public Optional<OilType> registerOilType(String jwt, String oilType) {
+    public Optional<OilType> registerOilType(String accountId, String oilType) {
 
-        String jwtToken = jwt.replace("Bearer ", "");
-
-        Optional<Account> account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken)));
+        Optional<Account> account = accountRepository.findById(Long.valueOf(accountId));
 
         if(account.isEmpty()) return Optional.empty();
         else return account
@@ -93,11 +90,9 @@ public class AccountService {
     }
 
     @Transactional
-    public Optional<NaviType> registerNaviType(String jwt, String naviType) {
+    public Optional<NaviType> registerNaviType(String accountId, String naviType) {
 
-        String jwtToken = jwt.replace("Bearer ", "");
-
-        Optional<Account> account = accountRepository.findById(Long.valueOf(jwtUtil.getAccountId(jwtToken)));
+        Optional<Account> account = accountRepository.findById(Long.valueOf(accountId));
 
         if(account.isEmpty()) return Optional.empty();
         else return account
