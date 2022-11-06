@@ -1,27 +1,18 @@
 package com.luppy.parkingppak.controller;
 
-import com.luppy.parkingppak.domain.Account;
-import com.luppy.parkingppak.domain.AccountRepository;
-import com.luppy.parkingppak.domain.Card;
+
 import com.luppy.parkingppak.domain.dto.*;
 import com.luppy.parkingppak.domain.enumclass.NaviType;
 import com.luppy.parkingppak.domain.enumclass.OilType;
 import com.luppy.parkingppak.service.AccountService;
-import com.luppy.parkingppak.utils.JwtUtil;
 import com.luppy.parkingppak.utils.ValidationUtil;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static com.luppy.parkingppak.domain.dto.Response.response;
 
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -29,67 +20,39 @@ import java.util.regex.Pattern;
 public class AccountController {
 
     private final AccountService accountService;
-    private final AccountRepository accountRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JwtUtil jwtUtil;
     private final ValidationUtil validationUtil;
 
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody AccountDto dto) {
 
-        if (!validationUtil.validate_email(dto.getEmail())) return ResponseEntity.badRequest().body(Response.INVALID_EMAIL_ERROR());
-        if (!validationUtil.validate_password(dto.getPassword())) return ResponseEntity.badRequest().body(Response.INVALID_PASSWORD_ERROR());
+        if (!validationUtil.validate_email(dto.getEmail())) return ResponseEntity.badRequest().body(response(400,null,"유효하지않은 이메일 형식입니다."));
+        if (!validationUtil.validate_password(dto.getPassword())) return ResponseEntity.badRequest().body(response(400,null,"유효하지않은 패스워드 형식입니다."));
 
         AccountDto registeredAccount = accountService.joinAccount(dto);
 
-        if(registeredAccount == null) return ResponseEntity.badRequest().body(Response.JOIN_ERROR());
-        else return ResponseEntity.ok().body(Response.JOIN_OK(registeredAccount));
+        if(registeredAccount == null) return ResponseEntity.badRequest().body(response(400, null, "이미 존재하는 이메일입니다."));
+        else return ResponseEntity.ok().body(response(200, registeredAccount, "회원가입이 정상적으로 되었습니다."));
+
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody LoginRequestDto dto) {
-//
-//        Optional<Account> account = accountRepository.findByEmail(dto.getEmail());
-//
-//        if (account.isEmpty()) return ResponseEntity.status(400).body(Response.NOT_JOIN_ERROR());
-//        else {
-//            if (!bCryptPasswordEncoder.matches(dto.getPassword(), account.get().getPassword())) {
-//                return ResponseEntity.status(401).body(Response.PASSWORD_ERROR());
-//            }
-//
-//            String jwtToken = "Bearer " + jwtUtil.createToken(account.get().getId(), account.get().getName());
-//
-//            LoginResponseDto loginResponseDto = LoginResponseDto.builder()
-//                    .email(account.get().getEmail())
-//                    .name(account.get().getName())
-//                    .jwt(jwtToken)
-//                    .card(account.get().getCard())
-//                    .oilType(account.get().getOilType())
-//                    .naviType(account.get().getNaviType())
-//                    .build();
-//
-//            return ResponseEntity.ok().body(Response.LOGIN_OK(loginResponseDto));
-//        }
-//    }
-
     @PutMapping("/accounts/card-type")
-    public ResponseEntity<?> registerCard(@RequestHeader("Authorization") String jwt, @RequestBody CardDto cardDto) {
+    public ResponseEntity<?> registerCard(@RequestHeader("AccountId") String accountId, @RequestBody CardDto cardDto) {
 
-        CardDto registeredCard = accountService.registerCard(jwt, cardDto);
-         return ResponseEntity.ok().body(Response.REGISTER_CARD_OK(registeredCard));
+        CardDto registeredCard = accountService.registerCard(accountId, cardDto);
+         return ResponseEntity.ok().body(response(200,registeredCard,"정상적으로 카드정보가 등록되었습니다."));
     }
 
     @PutMapping("/accounts/oil-type/{oilType}")
-    public ResponseEntity<?> registerOilType(@RequestHeader("Authorization") String jwt, @PathVariable String oilType) {
+    public ResponseEntity<?> registerOilType(@RequestHeader("AccountId") String accountId, @PathVariable String oilType) {
 
-        Optional<OilType> registeredOilType = accountService.registerOilType(jwt, oilType);
-        return ResponseEntity.ok().body(Response.REGISTER_OIL_TYPE_OK(registeredOilType));
+        Optional<OilType> registeredOilType = accountService.registerOilType(accountId, oilType);
+        return ResponseEntity.ok().body(response(200, registeredOilType, "정상적으로 유류정보가 등록되었습니다."));
     }
 
     @PutMapping("/accounts/navi-type/{naviType}")
-    public ResponseEntity<?> registerNaviType(@RequestHeader("Authorization") String jwt, @PathVariable String naviType) {
+    public ResponseEntity<?> registerNaviType(@RequestHeader("AccountId") String accountId, @PathVariable String naviType) {
 
-        Optional<NaviType> registeredNaviType = accountService.registerNaviType(jwt ,naviType);
-        return ResponseEntity.ok().body(Response.REGISTER_NAVI_TYPE_OK(registeredNaviType));
+        Optional<NaviType> registeredNaviType = accountService.registerNaviType(accountId ,naviType);
+        return ResponseEntity.ok().body(response(200, registeredNaviType, "정상적으로 내비앱 정보가 등록되었습니다."));
     }
 }

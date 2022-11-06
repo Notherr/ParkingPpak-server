@@ -1,4 +1,4 @@
-package com.luppy.parkingppak.config.jwt;
+package com.luppy.parkingppak.config.filter;
 
 import com.luppy.parkingppak.config.auth.AccountDetails;
 import com.luppy.parkingppak.domain.Account;
@@ -9,14 +9,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.webjars.NotFoundException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
