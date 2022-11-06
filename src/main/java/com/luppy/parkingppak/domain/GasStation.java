@@ -1,5 +1,6 @@
 package com.luppy.parkingppak.domain;
 
+import com.luppy.parkingppak.domain.dto.GasStationDto;
 import com.luppy.parkingppak.init.data.GasStationData;
 import com.luppy.parkingppak.utils.GeoTrans;
 import lombok.AllArgsConstructor;
@@ -56,5 +57,22 @@ public class GasStation {
         } else {
             this.dieselPrice = newPrice;
         }
+    }
+
+    public GasStationDto entityToDto() {
+        return GasStationDto.builder()
+                .id(id)
+                .compName(compName)
+                .name(name)
+                .uniqueId(uniqueId)
+                .address(address)
+                .lon(lon)
+                .lat(lat)
+                .gasolinePrice(gasolinePrice)
+                .dieselPrice(dieselPrice)
+                .carWash(carWash)
+                .cvsExist(cvsExist)
+                .tel(tel)
+                .build();
     }
 }

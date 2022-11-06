@@ -1,5 +1,6 @@
 package com.luppy.parkingppak.domain;
 
+import com.luppy.parkingppak.domain.dto.ParkingLotDto;
 import com.luppy.parkingppak.init.data.ParkingLotData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -81,6 +82,32 @@ public class ParkingLot {
         this.lat = Double.parseDouble(row.getLAT());
         this.modificationDate = LocalDateTime.parse(LocalDateTime.now().format(formatter), formatter);
         return this;
+    }
+
+    public ParkingLotDto entityToDto(){
+        return ParkingLotDto.builder()
+                .id(id)
+                .modificationDate(modificationDate)
+                .parkingName(parkingName)
+                .address(address)
+                .parkingCode(parkingCode)
+                .type(type)
+                .phoneNumber(phoneNumber)
+                .payYN(payYN)
+                .weekdayBegin(weekdayBegin)
+                .weekdayEnd(weekdayEnd)
+                .weekendBegin(weekendBegin)
+                .weekendEnd(weekendEnd)
+                .holidayBegin(holidayBegin)
+                .holidayEnd(holidayEnd)
+                .syncTime(syncTime)
+                .rates(rates)
+                .timeRates(timeRates)
+                .addRates(addRates)
+                .addTimeRates(addTimeRates)
+                .xCoor(lat)
+                .yCoor(lon)
+                .build();
     }
 
 }
