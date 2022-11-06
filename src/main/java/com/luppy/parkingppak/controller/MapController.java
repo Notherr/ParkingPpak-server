@@ -5,10 +5,8 @@ import com.luppy.parkingppak.service.MapService;
 import com.luppy.parkingppak.utils.ResultQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -21,7 +19,8 @@ public class MapController {
     private final MapService mapService;
 
     @GetMapping
-    public ResponseEntity<?> getDataList(@RequestParam String type, @RequestParam double lat,
+    public ResponseEntity<?> getDataList(@RequestHeader("AccountId") Long accountId, @RequestParam String type,
+                                         @RequestParam double lat,
                                          @RequestParam double lon, @RequestParam(required = false) Integer distance,
                                          @RequestParam(required = false) Double searchAfter) throws IOException {
         /*
@@ -37,12 +36,17 @@ public class MapController {
             return ResponseEntity.badRequest().body("wrong type given. type is parking_lot or gas_station");
         }
 
-        MapRequestDto mapRequestDto = MapRequestDto.builder().type(type).lat(lat).lon(lon).distance(distance).build();
+        MapRequestDto mapRequestDto =
+                MapRequestDto.builder().type(type).lat(lat).lon(lon).distance(distance).accountId(accountId).build();
         if (searchAfter != null) {
             mapRequestDto.setSearchAfter(searchAfter);
         }
-        ResultQuery dataList = mapService.getDataList(mapRequestDto);
-        return ResponseEntity.ok().body(dataList);
+        try {
+            ResultQuery dataList = mapService.getDataList(mapRequestDto);
+            return ResponseEntity.ok().body(dataList);
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("/detail")

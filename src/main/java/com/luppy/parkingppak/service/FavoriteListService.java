@@ -7,7 +7,9 @@ import com.luppy.parkingppak.domain.dto.ParkingLotDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,41 +24,41 @@ public class FavoriteListService {
         Account account = accountRepository.findById(Long.valueOf(accountId)).orElse(null);
         ParkingLot parkingLot = parkingLotRepository.findById(dto.getDataId()).orElse(null);
 
-        if(account == null || parkingLot == null || account.getParkingLotList().contains(parkingLot)) return null;
+        if(account == null || parkingLot == null || account.getParkingLotSet().contains(parkingLot)) return null;
 
-        account.getParkingLotList().add(parkingLot);
+        account.getParkingLotSet().add(parkingLot);
         accountRepository.save(account);
 
-        List<ParkingLot> list = account.getParkingLotList();
-        list.add(parkingLot);
+        Set<ParkingLot> parkingLotSet = account.getParkingLotSet();
+        parkingLotSet.add(parkingLot);
 
-        return list.stream().map(ParkingLot::entityToDto).collect(Collectors.toList());
+        return parkingLotSet.stream().map(ParkingLot::entityToDto).collect(Collectors.toList());
     }
 
     public List<GasStationDto> addGasStationFavorite(String accountId, FavoriteRequestDto dto){
         Account account = accountRepository.findById(Long.valueOf(accountId)).orElse(null);
         GasStation gasStation = gasStationRepository.findById(dto.getDataId()).orElse(null);
 
-        if(account == null || gasStation == null || account.getGasStationList().contains(gasStation)) return null;
+        if(account == null || gasStation == null || account.getGasStationSet().contains(gasStation)) return null;
 
-        account.getGasStationList().add(gasStation);
+        account.getGasStationSet().add(gasStation);
         accountRepository.save(account);
 
-        List<GasStation> list = account.getGasStationList();
-        list.add(gasStation);
+        Set<GasStation> gasStationSet = account.getGasStationSet();
+        gasStationSet.add(gasStation);
 
-        return list.stream().map(GasStation::entityToDto).collect(Collectors.toList());
+        return gasStationSet.stream().map(GasStation::entityToDto).collect(Collectors.toList());
 
     }
 
     public List<ParkingLotDto> findParkingLotFavoriteList(String accountId){
         Account account = accountRepository.findById(Long.valueOf(accountId)).orElse(null);
-        return account.getParkingLotList().stream().map(ParkingLot::entityToDto).collect(Collectors.toList());
+        return account.getParkingLotSet().stream().map(ParkingLot::entityToDto).collect(Collectors.toList());
     }
 
     public List<GasStationDto> findGasStationFavoriteList(String accountId){
         Account account = accountRepository.findById(Long.valueOf(accountId)).orElse(null);
-        return account.getGasStationList().stream().map(GasStation::entityToDto).collect(Collectors.toList());
+        return account.getGasStationSet().stream().map(GasStation::entityToDto).collect(Collectors.toList());
     }
 
     public String removeFavorite(String accountId, FavoriteRequestDto dto){
@@ -65,13 +67,13 @@ public class FavoriteListService {
         if(dto.getType().equals("gas-station")){
             GasStation gasStation = gasStationRepository.findById(dto.getDataId()).orElse(null);
             if(gasStation == null) return null;
-            account.getGasStationList().remove(gasStation);
+            account.getGasStationSet().remove(gasStation);
             accountRepository.save(account);
             return "ok";
         }else if(dto.getType().equals("parking-lot")) {
             ParkingLot parkingLot = parkingLotRepository.findById(dto.getDataId()).orElse(null);
             if(parkingLot == null) return null;
-            account.getParkingLotList().remove(parkingLot);
+            account.getParkingLotSet().remove(parkingLot);
             accountRepository.save(account);
             return "ok";
         }else return null;

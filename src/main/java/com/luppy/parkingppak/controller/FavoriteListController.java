@@ -19,7 +19,7 @@ public class FavoriteListController {
 
     private final FavoriteListService favoriteListService;
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<?> favoriteAdd(@RequestHeader("AccountId") String accountId, @RequestBody FavoriteRequestDto dto){
 
         if(dto.getType().equals("parking-lot")){
