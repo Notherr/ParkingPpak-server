@@ -64,11 +64,6 @@ public class OauthService {
 
     public LoginResponseDto login(OauthDto oauthDto) {
 
-        /*
-        - 기존 유저 정보가 없으면 회원가입.
-        - 기존 유저 정보가 있으면 업데이트.
-         */
-
         Account account = accountRepository.findByEmail(oauthDto.getEmail()).orElse(null);
 
         if (account == null) {
