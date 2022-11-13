@@ -14,4 +14,5 @@ public class MapRequestDto {
     private int distance;
     private double searchAfter;
     private Long accountId;
+    private String keyword;
 }

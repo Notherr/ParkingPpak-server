@@ -41,10 +41,10 @@ public class MapService {
         // 요청받은 좌표값 기준 범위내 조회 쿼리메소드로 수정 필요.
         if (dto.getType().equals("parking_lot")) {
             resultQuery = parkingLotSearchService.searchLocationFromQuery(dto.getDistance(),
-                    dto.getLat(), dto.getLon(), dto.getSearchAfter());
+                    dto.getLat(), dto.getLon(), dto.getSearchAfter(), dto.getKeyword());
         } else {
             resultQuery = gasStationSearchService.searchLocationFromQuery(dto.getDistance(),
-                    dto.getLat(), dto.getLon(), dto.getSearchAfter());
+                    dto.getLat(), dto.getLon(), dto.getSearchAfter(), dto.getKeyword());
         }
 
         if (dto.getAccountId() != null) {

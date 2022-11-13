@@ -22,7 +22,8 @@ public class MapController {
     public ResponseEntity<?> getDataList(@RequestHeader("AccountId") Long accountId, @RequestParam String type,
                                          @RequestParam double lat,
                                          @RequestParam double lon, @RequestParam(required = false) Integer distance,
-                                         @RequestParam(required = false) Double searchAfter) throws IOException {
+                                         @RequestParam(required = false) Double searchAfter,
+                                         @RequestParam(required = false) String keyword) throws IOException {
         /*
          * 좌표를 받아서 해당 좌표의 범위내 데이터 반환.
          */
@@ -41,6 +42,10 @@ public class MapController {
         if (searchAfter != null) {
             mapRequestDto.setSearchAfter(searchAfter);
         }
+        if (keyword != null && !keyword.isBlank()) {
+            mapRequestDto.setKeyword(keyword);
+        }
+
         try {
             ResultQuery dataList = mapService.getDataList(mapRequestDto);
             return ResponseEntity.ok().body(dataList);

@@ -34,8 +34,9 @@ public class GasStationSearchService {
         String body = HelperFunctions.gasStationbuildMuiltiIndexMatchBody(query);
         return executeHttpRequest(body);
     }
-    public GasStationResultQuery searchLocationFromQuery(int distance, double lat, double lon, double searchAfter) throws IOException {
-        String body = HelperFunctions.searchGeoLocation(distance,lat, lon, searchAfter);
+    public GasStationResultQuery searchLocationFromQuery(int distance, double lat, double lon, double searchAfter,
+                                                         String keyword) throws IOException {
+        String body = HelperFunctions.searchGeoLocation(distance,lat, lon, searchAfter, keyword);
         return executeHttpRequest(body);
     }
 

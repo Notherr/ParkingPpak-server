@@ -35,8 +35,9 @@ public class ParkingLotSearchService {
         String body = HelperFunctions.parkingLotbuildMuiltiIndexMatchBody(query);
         return executeHttpRequest(body);
     }
-    public ParkingLotResultQuery searchLocationFromQuery(int distance, double lat, double lon, double searchAfter) throws IOException {
-        String body = HelperFunctions.searchGeoLocation(distance,lat, lon, searchAfter);
+    public ParkingLotResultQuery searchLocationFromQuery(int distance, double lat, double lon, double searchAfter,
+                                                         String keyword) throws IOException {
+        String body = HelperFunctions.searchGeoLocation(distance,lat, lon, searchAfter, keyword);
         return executeHttpRequest(body);
     }
 
