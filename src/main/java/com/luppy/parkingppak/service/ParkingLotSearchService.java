@@ -37,7 +37,7 @@ public class ParkingLotSearchService {
     }
     public ParkingLotResultQuery searchLocationFromQuery(int distance, double lat, double lon, double searchAfter,
                                                          String keyword) throws IOException {
-        String body = HelperFunctions.searchGeoLocation(distance,lat, lon, searchAfter, keyword);
+        String body = HelperFunctions.searchGeoLocation(distance,lat, lon, searchAfter, keyword, "parking_lot");
         return executeHttpRequest(body);
     }
 

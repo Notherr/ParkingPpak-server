@@ -58,8 +58,9 @@ public class HelperFunctions {
                 "}";
     }
 
-    public static String searchGeoLocation(int distance, double lat, double lon, double searchAfter, String keyword) {
-        JSONObject queryObject = getQueryString(distance, lat, lon);
+    public static String searchGeoLocation(int distance, double lat, double lon, double searchAfter, String keyword,
+                                           String searchType) {
+        JSONObject queryObject = getQueryString(distance, lat, lon, keyword, searchType);
         if (searchAfter == 0.0d) {
             return queryObject.toString();
         }
@@ -67,7 +68,7 @@ public class HelperFunctions {
         return queryObject.toString();
     }
 
-    private static JSONObject getQueryString(int distance, double lat, double lon) {
+    private static JSONObject getQueryString(int distance, double lat, double lon, String keyword, String searchType) {
         JSONObject queryObject = new JSONObject();
         JSONObject sortObject = new JSONObject();
         sortObject.put("_geo_distance",
@@ -76,13 +77,33 @@ public class HelperFunctions {
                         "order", "asc", "unit", "m", "mode", "min"));
         queryObject.put("sort", sortObject);
         queryObject.put("track_total_hits", true);
-        queryObject.put("query",
-                Map.of("geo_distance",
-                        Map.of("distance", distance + "km",
-                                "location", Map.of("lat", lat, "lon", lon)
-                                )
+        Map<String, Map<String, Object>> geo_distance = Map.of("geo_distance",
+                Map.of("distance", distance + "km",
+                        "location", Map.of("lat", lat, "lon", lon)
                 )
         );
+        Map<String, Map<String, Map<String, ? extends Map<? extends Object, Object>>>> default_match = Map.of("bool",
+                Map.of("must",
+                        Map.of("match_all", Map.of()),
+                        "filter", geo_distance
+                )
+        );
+        if (keyword == null) {
+            queryObject.put("query", default_match);
+        } else {
+            List<String> fieldList;
+            if (searchType == "gas_station") {
+                fieldList = Arrays.asList(GAS_STATION_FIELDS);
+            } else {
+                fieldList = Arrays.asList(PARKING_LOT_FIELDS);
+            }
+            queryObject.put("query",
+                    Map.of("query_string",
+                            Map.of("query", keyword, "fields", fieldList,
+                                    "default_operator", "AND")
+                    )
+            );
+        }
         return queryObject;
     }
 

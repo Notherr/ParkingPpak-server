@@ -36,7 +36,7 @@ public class GasStationSearchService {
     }
     public GasStationResultQuery searchLocationFromQuery(int distance, double lat, double lon, double searchAfter,
                                                          String keyword) throws IOException {
-        String body = HelperFunctions.searchGeoLocation(distance,lat, lon, searchAfter, keyword);
+        String body = HelperFunctions.searchGeoLocation(distance,lat, lon, searchAfter, keyword, "gas_station");
         return executeHttpRequest(body);
     }
 
