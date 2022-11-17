@@ -22,4 +22,6 @@ public class IGasStationDto {
 
     // 검색 좌표에서 떨어진거리 (m)
     private double distance;
+
+    private Boolean isFavorite;
 }

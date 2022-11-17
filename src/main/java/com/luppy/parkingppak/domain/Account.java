@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -40,9 +42,9 @@ public class Account {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="account_parkinglot_list")
-    private List<ParkingLot> parkingLotList = new ArrayList<>();
+    private Set<ParkingLot> parkingLotSet = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="account_gasstation_list")
-    private List<GasStation> gasStationList = new ArrayList<>();
+    private Set<GasStation> gasStationSet = new HashSet<>();
 }

@@ -1,6 +1,5 @@
 package com.luppy.parkingppak.domain.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -35,4 +34,6 @@ public class IParkingLotDto {
 
     // 검색 좌표에서 떨어진거리 (m)
     private double distance;
+
+    private Boolean isFavorite;
 }
