@@ -30,9 +30,9 @@ public class FavoriteListService {
         accountRepository.save(account);
 
         Set<ParkingLot> parkingLotSet = account.getParkingLotSet();
-        parkingLotSet.add(parkingLot);
-
-        return parkingLotSet.stream().map(ParkingLot::entityToDto).collect(Collectors.toList());
+        List<ParkingLotDto> parkingLotDtos = parkingLotSet.stream().map(ParkingLot::entityToDto).collect(Collectors.toList());
+        parkingLotDtos.forEach(data -> data.setIsFavorite(Boolean.TRUE));
+        return parkingLotDtos;
     }
 
     public List<GasStationDto> addGasStationFavorite(String accountId, FavoriteRequestDto dto){
@@ -45,20 +45,24 @@ public class FavoriteListService {
         accountRepository.save(account);
 
         Set<GasStation> gasStationSet = account.getGasStationSet();
-        gasStationSet.add(gasStation);
-
-        return gasStationSet.stream().map(GasStation::entityToDto).collect(Collectors.toList());
+        List<GasStationDto> gasStationDtos = gasStationSet.stream().map(GasStation::entityToDto).collect(Collectors.toList());
+        gasStationDtos.forEach(data -> data.setIsFavorite(Boolean.TRUE));
+        return gasStationDtos;
 
     }
 
     public List<ParkingLotDto> findParkingLotFavoriteList(String accountId){
         Account account = accountRepository.findById(Long.valueOf(accountId)).orElse(null);
-        return account.getParkingLotSet().stream().map(ParkingLot::entityToDto).collect(Collectors.toList());
+        List<ParkingLotDto> parkingLotDtos = account.getParkingLotSet().stream().map(ParkingLot::entityToDto).collect(Collectors.toList());
+        parkingLotDtos.forEach(data -> data.setIsFavorite(Boolean.TRUE));
+        return parkingLotDtos;
     }
 
     public List<GasStationDto> findGasStationFavoriteList(String accountId){
         Account account = accountRepository.findById(Long.valueOf(accountId)).orElse(null);
-        return account.getGasStationSet().stream().map(GasStation::entityToDto).collect(Collectors.toList());
+        List<GasStationDto> gasStationDtos = account.getGasStationSet().stream().map(GasStation::entityToDto).collect(Collectors.toList());
+        gasStationDtos.forEach(data -> data.setIsFavorite(Boolean.TRUE));
+        return gasStationDtos;
     }
 
     public String removeFavorite(String accountId, FavoriteRequestDto dto){
