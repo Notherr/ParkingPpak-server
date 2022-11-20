@@ -1,9 +1,7 @@
 package com.luppy.parkingppak.service;
 
 import com.luppy.parkingppak.domain.*;
-import com.luppy.parkingppak.domain.dto.IGasStationDto;
-import com.luppy.parkingppak.domain.dto.IParkingLotDto;
-import com.luppy.parkingppak.domain.dto.MapRequestDto;
+import com.luppy.parkingppak.domain.dto.*;
 import com.luppy.parkingppak.utils.ResultQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,19 +75,58 @@ public class MapService {
                     }
                 }
             }
+        }else{
+           for (Object place : resultQuery.getData()){
+               if (place instanceof IParkingLotDto){
+                   ((IParkingLotDto) place).setIsFavorite(Boolean.FALSE);
+               }
+               if (place instanceof IGasStationDto) {
+                   ((IGasStationDto) place).setIsFavorite(Boolean.FALSE);
+               }
+           }
         }
-
 
         return resultQuery;
     }
 
-    public Object getData(String type, Long id) {
-        if (type.equals("parking_lot")) {
-            return parkingLotRepository.findById(id).orElse(null);
-        } else if (type.equals("gas_station")) {
-            return gasStationRepository.findById(id).orElse(null);
-        } else {
-            throw new ValidationException("given type is not valid");
+    public Object getData(String type, Long id, Long accountId) {
+
+        if(accountId != null) {
+            Optional<Account> optionalAccount = accountRepository.findById(accountId);
+            Account account = optionalAccount.orElse(null);
+            if (account == null) {
+                throw new UsernameNotFoundException("MapRequestDto 의 accountId로 account를 찾을 수 없습니다." + accountId);
+            }
+
+            if (type.equals("parking_lot")) {
+                ParkingLot parkingLot = parkingLotRepository.findById(id).orElse(null);
+                if (parkingLot == null) return null;
+
+                if (account.getParkingLotSet().contains(parkingLot)) {
+                    ParkingLotDto parkingLotDto = parkingLot.entityToDto();
+                    parkingLotDto.setIsFavorite(Boolean.TRUE);
+                    return parkingLotDto;
+                } else {
+                    return parkingLot.entityToDto();
+                }
+            } else if (type.equals("gas_station")) {
+                GasStation gasStation = gasStationRepository.findById(id).orElse(null);
+                if (gasStation == null) return null;
+
+                if (account.getGasStationSet().contains(gasStation)) {
+                    GasStationDto gasStationDto = gasStation.entityToDto();
+                    gasStationDto.setIsFavorite(Boolean.TRUE);
+                    return gasStationDto;
+                } else {
+                    return gasStation.entityToDto();
+                }
+            } else {
+                throw new ValidationException("given type is not valid");
+            }
+        }else{
+            if(type.equals("parking_lot")) return parkingLotRepository.findById(id).orElse(null).entityToDto();
+            else if(type.equals("gas_station")) return gasStationRepository.findById(id).orElse(null).entityToDto();
+            else throw new ValidationException("given type is not valid");
         }
     }
 }
