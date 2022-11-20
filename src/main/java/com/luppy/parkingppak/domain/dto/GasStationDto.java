@@ -22,5 +22,6 @@ public class GasStationDto {
     private boolean carWash;
     private boolean cvsExist;
     private String tel;
+    private Boolean isFavorite;
 
 }

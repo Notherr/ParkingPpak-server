@@ -73,6 +73,7 @@ public class GasStation {
                 .carWash(carWash)
                 .cvsExist(cvsExist)
                 .tel(tel)
+                .isFavorite(Boolean.FALSE)
                 .build();
     }
 }

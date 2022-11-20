@@ -42,4 +42,6 @@ public class ParkingLotDto {
     // 주차장 위치 좌표
     private double xCoor;
     private double yCoor;
+    private Boolean isFavorite;
+
 }

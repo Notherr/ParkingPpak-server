@@ -57,8 +57,10 @@ public class MapController {
     }
 
     @GetMapping("/detail")
-    public ResponseEntity getDataDetails(@RequestParam String type, @RequestParam Long id) {
-        Object data = mapService.getData(type, id);
+    public ResponseEntity getDataDetails(@RequestHeader(value = "AccountId", required = false) Long accountId,
+                                         @RequestParam String type,
+                                         @RequestParam Long id) {
+        Object data = mapService.getData(type, id, accountId);
         return ResponseEntity.ok().body(data);
     }
 

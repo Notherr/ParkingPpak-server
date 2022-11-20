@@ -107,6 +107,7 @@ public class ParkingLot {
                 .addTimeRates(addTimeRates)
                 .xCoor(lat)
                 .yCoor(lon)
+                .isFavorite(Boolean.FALSE)
                 .build();
     }
 
