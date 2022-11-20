@@ -110,5 +110,4 @@ public class ParkingLot {
                 .isFavorite(Boolean.FALSE)
                 .build();
     }
-
 }
