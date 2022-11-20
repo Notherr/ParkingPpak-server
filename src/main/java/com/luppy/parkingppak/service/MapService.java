@@ -77,8 +77,16 @@ public class MapService {
                     }
                 }
             }
+        }else{
+           for (Object place : resultQuery.getData()){
+               if (place instanceof IParkingLotDto){
+                   ((IParkingLotDto) place).setIsFavorite(Boolean.FALSE);
+               }
+               if (place instanceof IGasStationDto) {
+                   ((IGasStationDto) place).setIsFavorite(Boolean.FALSE);
+               }
+           }
         }
-
 
         return resultQuery;
     }
