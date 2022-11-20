@@ -19,9 +19,11 @@ public class MapController {
     private final MapService mapService;
 
     @GetMapping
-    public ResponseEntity<?> getDataList(@RequestHeader("AccountId") Long accountId, @RequestParam String type,
+    public ResponseEntity<?> getDataList(@RequestHeader(value = "AccountId", required = false) Long accountId,
+                                         @RequestParam String type,
                                          @RequestParam double lat,
-                                         @RequestParam double lon, @RequestParam(required = false) Integer distance,
+                                         @RequestParam double lon,
+                                         @RequestParam(required = false) Integer distance,
                                          @RequestParam(required = false) Double searchAfter,
                                          @RequestParam(required = false) String keyword) throws IOException {
         /*
