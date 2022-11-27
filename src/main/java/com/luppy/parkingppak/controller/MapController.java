@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+import static com.luppy.parkingppak.domain.dto.Response.response;
+
 @RestController
 @RequiredArgsConstructor
 
@@ -50,6 +52,7 @@ public class MapController {
 
         try {
             ResultQuery dataList = mapService.getDataList(mapRequestDto);
+            if (dataList == null) return ResponseEntity.badRequest().body(response(400, "[]", "no search results"));
             return ResponseEntity.ok().body(dataList);
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.internalServerError().build();
