@@ -52,7 +52,7 @@ public class MapController {
 
         try {
             ResultQuery dataList = mapService.getDataList(mapRequestDto);
-            if (dataList == null) return ResponseEntity.badRequest().body(response(400, "[]", "no search results"));
+            if (dataList == null) return ResponseEntity.badRequest().body(response(400, null, "no search results"));
             return ResponseEntity.ok().body(dataList);
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.internalServerError().build();
